@@ -1003,6 +1003,7 @@ footer{
   <div class="loading-skip" id="loading-skip">SKIP</div>
   <div id="loading-gate"><span id="loading-gate-hint">tap anywhere to begin</span></div>
   <audio id="droplet-sfx" src="droplet.mp3" preload="auto"></audio>
+  <audio id="wind-sfx" src="wind.mp3" preload="auto" loop></audio>
 </div>
 
 <!-- NAVIGATION -->
@@ -1514,10 +1515,17 @@ function initLoading(){
 
   gsap.set(drop,{opacity:0,top:'0%',scaleY:1,scaleX:1,transformOrigin:'top center'});
 
+  const wind=document.getElementById('wind-sfx');
+
   function startDrop(){
     // Unlock audio: play+pause in response to the user gesture so a later play() is allowed
     sfx.volume=0;
     sfx.play().then(()=>{sfx.pause();sfx.currentTime=0;sfx.volume=0.7;}).catch(()=>{});
+
+    // Start wind immediately at tap — fade in gently
+    wind.volume=0;
+    wind.play().catch(()=>{});
+    gsap.to(wind,{volume:.55,duration:1.2,ease:'power2.out'});
 
     // Hide gate
     gate.style.display='none';
@@ -1539,6 +1547,7 @@ function initLoading(){
     gsap.killTweensOf(drop);
     if(_loadingTl)_loadingTl.kill();
     gsap.killTweensOf('#blood-splash');
+    gsap.to(wind,{volume:0,duration:0.4,onComplete:()=>{wind.pause();wind.currentTime=0;}});
     finishLoading();
   });
 }
@@ -1691,6 +1700,11 @@ function onDropLand(){
 
 function finishLoading(){
   const loading=document.getElementById('loading');
+  const wind=document.getElementById('wind-sfx');
+  // Fade wind out in sync with the loading screen fade
+  if(wind&&!wind.paused){
+    gsap.to(wind,{volume:0,duration:1,ease:'power2.in',onComplete:()=>{wind.pause();wind.currentTime=0;}});
+  }
   gsap.to(loading,{opacity:0,duration:1,ease:'power2.inOut',onComplete:()=>{
     loading.style.display='none';
     document.getElementById('nav').classList.add('visible');
