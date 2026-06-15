@@ -1021,12 +1021,29 @@ footer{
   .timeline-container{position:relative}
   .ending-words{gap:1.5rem}
   .cork-board{padding:1.5rem}
-  .modal-content{padding:2rem 1.5rem}
+  /* Modal: reduce padding so text is readable */
+  .modal-content{padding:1.5rem 1.25rem}
+  /* Side glows: narrower so they don't swallow small screens */
+  .hero-glow-left,.hero-glow-right{width:80px}
+  /* Loading hint: larger tap target and readable size */
+  #loading-gate-hint{font-size:.78rem;letter-spacing:.2em}
+  /* Loading text: tighter width so long Sinhala lines don't overflow */
+  .loading-text{width:96%;font-size:clamp(.9rem,4vw,1.2rem)}
+  /* Character cards: ensure no horizontal overflow */
+  #char-cards-container{overflow:hidden}
 }
 @media(max-width:480px){
   .hero-title-si{font-size:2.2rem}
+  .hero-title-en{font-size:1rem}
   .char-grid{grid-template-columns:repeat(2,1fr)}
   .evidence-grid{grid-template-columns:1fr}
+  /* Modal close button: bigger tap area */
+  .modal-close{font-size:2rem;top:1.2rem;right:1.2rem;padding:.5rem}
+  /* Side glows: minimal on very small screens */
+  .hero-glow-left,.hero-glow-right{width:55px}
+  /* Scan line stays — it's a 1px element, no issue */
+  /* Loading skip: bigger tap target */
+  .loading-skip{font-size:.85rem;padding:.5rem 1rem;bottom:1.5rem;right:1.5rem}
 }
 </style>
 </head>
