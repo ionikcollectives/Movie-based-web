@@ -1081,6 +1081,7 @@ footer{
 <audio id="droplet-sfx" src="droplet.mp3" preload="auto"></audio>
 <audio id="wind-sfx" src="wind.mp3" preload="auto" loop></audio>
 <audio id="chime-sfx" src="chime.mp3" preload="auto" loop></audio>
+<audio id="oracle-sfx" src="THE ORACLE.mp3" preload="auto" loop></audio>
 
 <!-- NAVIGATION -->
 <nav id="nav">
@@ -1504,7 +1505,7 @@ function initGrain(){
 }
 
 // ─── AUDIO ────────────────────────────────────────────────────────────────────
-let audioCtx=null,audioPlaying=false,masterGain=null;
+let audioCtx=null,audioPlaying=true,masterGain=null;
 
 function initAudio(){
   const btn=document.getElementById('audio-toggle');
@@ -1549,18 +1550,23 @@ function buildAudio(){
 }
 
 function toggleAudio(){
-  buildAudio();
   const btn=document.getElementById('audio-toggle');
-  if(!audioPlaying){
-    masterGain.gain.setTargetAtTime(1,audioCtx.currentTime,.5);
-    btn.textContent='♪';
+  const oracle=document.getElementById('oracle-sfx');
+  audioPlaying=!audioPlaying;
+  if(audioPlaying){
+    // Resume oracle
+    if(oracle){
+      oracle.play().catch(()=>{});
+      gsap.to({v:oracle.volume},{v:.72,duration:.8,ease:'power2.out',onUpdate:function(){oracle.volume=this.targets()[0].v;}});
+    }
     btn.style.color='var(--dusty-rose)';
   } else {
-    masterGain.gain.setTargetAtTime(0,audioCtx.currentTime,.5);
-    btn.textContent='♪';
+    // Pause oracle
+    if(oracle){
+      gsap.to({v:oracle.volume},{v:0,duration:.6,ease:'power2.in',onUpdate:function(){oracle.volume=this.targets()[0].v;},onComplete:()=>{oracle.pause();}});
+    }
     btn.style.color='rgba(196,132,154,.4)';
   }
-  audioPlaying=!audioPlaying;
 }
 
 // ─── PARTICLES ────────────────────────────────────────────────────────────────
@@ -1831,6 +1837,7 @@ function finishLoading(){
   const loading=document.getElementById('loading');
   const wind=document.getElementById('wind-sfx');
   const chime=document.getElementById('chime-sfx');
+  const oracle=document.getElementById('oracle-sfx');
   // Wind fades with the loading screen
   if(wind&&!wind.paused){
     gsap.to({v:wind.volume},{v:0,duration:1,ease:'power2.in',onUpdate:function(){wind.volume=this.targets()[0].v;},onComplete:()=>{wind.pause();}});
@@ -1839,10 +1846,19 @@ function finishLoading(){
   if(chime&&!chime.paused){
     gsap.to({v:chime.volume},{v:0,duration:1.4,ease:'power2.in',delay:2.5,onUpdate:function(){chime.volume=this.targets()[0].v;},onComplete:()=>{chime.pause();}});
   }
+  // Oracle fades in as wind fades out — crossfade handoff
+  if(oracle){
+    oracle.volume=0;
+    oracle.play().catch(()=>{});
+    gsap.to({v:0},{v:.72,duration:3,ease:'power2.out',onUpdate:function(){oracle.volume=this.targets()[0].v;}});
+  }
   gsap.to(loading,{opacity:0,duration:1,ease:'power2.inOut',onComplete:()=>{
     loading.style.display='none';
+    const btn=document.getElementById('audio-toggle');
+    btn.classList.add('visible');
+    btn.textContent='♪';
+    btn.style.color='var(--dusty-rose)';
     document.getElementById('nav').classList.add('visible');
-    document.getElementById('audio-toggle').classList.add('visible');
     initAfterLoad();
   }});
 }
@@ -1916,6 +1932,19 @@ function initHero(){
 
   // h2 fades up after typing completes
   gsap.to(h2,{opacity:1,y:0,duration:1.1,delay:START+TYPE_DUR+.2,ease:'power2.out'});
+
+  // Occasional glitch after typing settles — random interval, stops when hero scrolls out
+  function scheduleRandomGlitch(){
+    const delay=5+Math.random()*9; // every 5–14s, unpredictably
+    gsap.delayedCall(delay,()=>{
+      if(!document.getElementById('hero').getBoundingClientRect().bottom>0) return;
+      flashGlitch();
+      // 30% chance of a quick double-flash
+      if(Math.random()<.3) gsap.delayedCall(.18,flashGlitch);
+      scheduleRandomGlitch();
+    });
+  }
+  gsap.delayedCall(START+TYPE_DUR+1.5, scheduleRandomGlitch);
 
   // Parallax on scroll
   gsap.to('.hero-bg',{
@@ -2169,20 +2198,32 @@ function buildChipEl(chip, CW, CH, rgb, uid){
   }
 
   const outer=document.createElement('div');
-  outer.style.cssText=`position:absolute;left:0;top:0;will-change:transform;filter:drop-shadow(0 0 6px rgba(${rgb},.95)) drop-shadow(0 0 14px rgba(${rgb},.4));`;
+  outer.style.cssText=`position:absolute;left:0;top:0;will-change:transform;`;
   const inner=document.createElement('div');
   inner.style.cssText='position:relative;will-change:transform;';
-  inner.innerHTML=`<svg width="${Math.ceil(w)}" height="${Math.ceil(h)}" xmlns="http://www.w3.org/2000/svg">
+  // Glow lives inside the SVG as feDropShadow — rendered once into the SVG texture,
+  // so GPU can composite the whole thing without a CSS filter repaint on every frame
+  const pad=18; // padding so the glow isn't clipped by the SVG viewport
+  inner.innerHTML=`<svg width="${Math.ceil(w)+pad*2}" height="${Math.ceil(h)+pad*2}" xmlns="http://www.w3.org/2000/svg" style="margin:-${pad}px">
     <defs>
+      <filter id="glow_${uid}" x="-60%" y="-60%" width="220%" height="220%">
+        <feDropShadow dx="0" dy="0" stdDeviation="2.5" flood-color="rgba(${rgb},1)"  flood-opacity=".7" result="s1"/>
+        <feDropShadow dx="0" dy="0" stdDeviation="7"   flood-color="rgba(${rgb},.3)" flood-opacity="1"  result="s2"/>
+        <feMerge><feMergeNode in="s2"/><feMergeNode in="s1"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <!-- Dark glass gradient matching card: near-black body, thin bright edge catch at corners -->
       <linearGradient id="${uid}" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%"   stop-color="rgba(255,255,255,.92)"/>
-        <stop offset="18%"  stop-color="rgba(${rgb},.58)"/>
-        <stop offset="62%"  stop-color="rgba(${rgb},.2)"/>
-        <stop offset="100%" stop-color="rgba(255,255,255,.5)"/>
+        <stop offset="0%"   stop-color="rgba(255,255,255,.55)"/>
+        <stop offset="8%"   stop-color="rgba(${rgb},.18)"/>
+        <stop offset="45%"  stop-color="rgba(8,4,10,.72)"/>
+        <stop offset="88%"  stop-color="rgba(${rgb},.12)"/>
+        <stop offset="100%" stop-color="rgba(255,255,255,.32)"/>
       </linearGradient>
     </defs>
-    <polygon points="${pts}" fill="url(#${uid})" stroke="rgba(${rgb},.55)" stroke-width="1"/>
-    <polygon points="${pts}" fill="rgba(${rgb},.16)" stroke="none"/>
+    <g transform="translate(${pad},${pad})" filter="url(#glow_${uid})">
+      <polygon points="${pts}" fill="url(#${uid})" stroke="rgba(${rgb},.4)" stroke-width="0.8"/>
+      <polygon points="${pts}" fill="rgba(${rgb},.06)" stroke="none"/>
+    </g>
   </svg>`;
   outer.appendChild(inner);
   return {outer,inner,w,h};
@@ -2440,21 +2481,29 @@ function initCharacters(){
     });
   });
 
-  // Mouse parallax on inner elements (separate from the float tween on outer)
+  // Mouse parallax — throttled to one rAF per frame, cached rect updated on resize
+  let stageRect=stage.getBoundingClientRect();
+  window.addEventListener('resize',()=>{stageRect=stage.getBoundingClientRect();},{passive:true});
+  let rafPending=false;
+  let pendingMX=0,pendingMY=0;
   stage.addEventListener('mousemove',e=>{
-    const rect=stage.getBoundingClientRect();
-    const mx=(e.clientX-rect.left)/rect.width-.5;
-    const my=(e.clientY-rect.top)/rect.height-.5;
-    // Subtle parallax on the inner SVG layer for depth
-    if(activeChipIdx>=0&&charEls[activeChipIdx]){
-      charEls[activeChipIdx].forEach((item,ki)=>{
-        if(!item.active)return;
-        const px=8+((activeChipIdx*7+ki*11)%14);
-        const py=6+((activeChipIdx*5+ki*9)%10);
-        gsap.to(item.inner,{x:mx*px,y:my*py,duration:1.4,ease:'power2.out',overwrite:'auto'});
-      });
-    }
-  });
+    pendingMX=e.clientX;pendingMY=e.clientY;
+    if(rafPending)return;
+    rafPending=true;
+    requestAnimationFrame(()=>{
+      rafPending=false;
+      const mx=(pendingMX-stageRect.left)/stageRect.width-.5;
+      const my=(pendingMY-stageRect.top)/stageRect.height-.5;
+      if(activeChipIdx>=0&&charEls[activeChipIdx]){
+        charEls[activeChipIdx].forEach((item,ki)=>{
+          if(!item.active)return;
+          const px=8+((activeChipIdx*7+ki*11)%14);
+          const py=6+((activeChipIdx*5+ki*9)%10);
+          gsap.to(item.inner,{x:mx*px,y:my*py,duration:1.4,ease:'power2.out',overwrite:'auto'});
+        });
+      }
+    });
+  },{passive:true});
 
   const tl=gsap.timeline({
     scrollTrigger:{
