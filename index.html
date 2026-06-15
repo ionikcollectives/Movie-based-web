@@ -270,6 +270,52 @@ nav.visible{opacity:1}
 .hero-scroll-cue span{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dusty-rose)}
 .hero-scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--dusty-rose),transparent)}
 
+/* SIDE GLOW */
+.hero-glow-left,.hero-glow-right{
+  position:absolute;top:0;bottom:0;
+  width:180px;pointer-events:none;z-index:1;
+  animation:sideGlowBreathe 4s ease-in-out infinite;
+}
+.hero-glow-left{
+  left:0;
+  background:linear-gradient(to right,rgba(139,26,42,.28) 0%,transparent 100%);
+}
+.hero-glow-right{
+  right:0;
+  background:linear-gradient(to left,rgba(139,26,42,.28) 0%,transparent 100%);
+  animation-delay:2s;
+}
+@keyframes sideGlowBreathe{
+  0%,100%{opacity:.4}
+  50%{opacity:1}
+}
+
+/* 3. SCAN LINE */
+.hero-scanline{
+  position:absolute;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent 0%,rgba(237,232,227,.055) 25%,rgba(237,232,227,.055) 75%,transparent 100%);
+  pointer-events:none;z-index:3;
+  animation:scanDrift 12s linear infinite;
+}
+@keyframes scanDrift{
+  0%{top:-1px}
+  100%{top:100%}
+}
+
+/* 2. CURSOR */
+.hero-cursor{
+  display:inline-block;
+  width:2px;height:.75em;
+  background:rgba(237,232,227,.65);
+  vertical-align:middle;margin-left:.1em;
+  animation:cursorBlink .65s step-end infinite;
+}
+@keyframes cursorBlink{
+  0%,100%{opacity:1}
+  50%{opacity:0}
+}
+
+
 /* EVIDENCE FILE - STORY */
 #story{
   padding:8rem 0;
@@ -1014,13 +1060,13 @@ footer{
   </div>
   <div class="loading-skip" id="loading-skip">SKIP</div>
   <div id="loading-gate"><span id="loading-gate-hint">tap anywhere to begin</span></div>
-  <audio id="droplet-sfx" src="droplet.mp3" preload="auto"></audio>
-  <audio id="wind-sfx" src="wind.mp3" preload="auto" loop></audio>
 </div>
+<audio id="droplet-sfx" src="droplet.mp3" preload="auto"></audio>
+<audio id="wind-sfx" src="wind.mp3" preload="auto" loop></audio>
+<audio id="chime-sfx" src="chime.mp3" preload="auto" loop></audio>
 
 <!-- NAVIGATION -->
 <nav id="nav">
-  <div class="nav-logo sinhala">මාව ඇහෙනවද?</div>
   <ul class="nav-links" id="nav-links">
     <li><a href="#characters">Characters</a></li>
     <li><a href="#trailer">Trailer</a></li>
@@ -1034,6 +1080,8 @@ footer{
 <section id="hero">
   <div class="hero-bg"></div>
   <div class="hero-fog"></div>
+  <div class="hero-glow-left"></div>
+  <div class="hero-glow-right"></div>
   <div class="hero-particles" id="particles"></div>
 
   <!-- University silhouette SVG -->
@@ -1046,12 +1094,8 @@ footer{
   </svg>
 
   <div class="hero-content" id="hero-content">
-<h1 class="hero-title-si">මාව ඇහෙනවද?</h1>
+    <h1 class="hero-title-si"></h1>
     <h2 class="hero-title-en">Do You Hear Me?</h2>
-    <p class="hero-tagline sinhala">
-      ඇය ගියාය... නමුත් ඇයගේ කතාව ඉතිරිව ඇත.<br>
-      <span style="font-size:.85em;color:rgba(196,132,154,.5)">She is gone... but her story remains.</span>
-    </p>
   </div>
 
   <div class="hero-scroll-cue">
@@ -1528,6 +1572,7 @@ function initLoading(){
   gsap.set(drop,{opacity:0,top:'0%',scaleY:1,scaleX:1,transformOrigin:'top center'});
 
   const wind=document.getElementById('wind-sfx');
+  const chime=document.getElementById('chime-sfx');
 
   function startDrop(){
     // Unlock audio: play+pause in response to the user gesture so a later play() is allowed
@@ -1538,6 +1583,11 @@ function initLoading(){
     wind.volume=0;
     wind.play().catch(()=>{});
     gsap.to({v:0},{v:.55,duration:1.2,ease:'power2.out',onUpdate:function(){wind.volume=this.targets()[0].v;}});
+
+    // Start chime alongside wind — slightly softer, slower fade-in
+    chime.volume=0;
+    chime.play().catch(()=>{});
+    gsap.to({v:0},{v:.38,duration:2.5,ease:'power2.out',onUpdate:function(){chime.volume=this.targets()[0].v;}});
 
     // Hide gate
     gate.style.display='none';
@@ -1559,7 +1609,8 @@ function initLoading(){
     gsap.killTweensOf(drop);
     if(_loadingTl)_loadingTl.kill();
     gsap.killTweensOf('#blood-splash');
-    gsap.to({v:wind.volume},{v:0,duration:0.4,onUpdate:function(){wind.volume=this.targets()[0].v;},onComplete:()=>{wind.pause();wind.currentTime=0;}});
+    gsap.to({v:wind.volume},{v:0,duration:0.4,onUpdate:function(){wind.volume=this.targets()[0].v;},onComplete:()=>{wind.pause();}});
+    gsap.to({v:chime.volume},{v:0,duration:0.4,onUpdate:function(){chime.volume=this.targets()[0].v;},onComplete:()=>{chime.pause();}});
     finishLoading();
   });
 }
@@ -1762,9 +1813,14 @@ function onDropLand(){
 function finishLoading(){
   const loading=document.getElementById('loading');
   const wind=document.getElementById('wind-sfx');
-  // Fade wind out in sync with the loading screen fade
+  const chime=document.getElementById('chime-sfx');
+  // Wind fades with the loading screen
   if(wind&&!wind.paused){
-    gsap.to({v:wind.volume},{v:0,duration:1,ease:'power2.in',onUpdate:function(){wind.volume=this.targets()[0].v;},onComplete:()=>{wind.pause();wind.currentTime=0;}});
+    gsap.to({v:wind.volume},{v:0,duration:1,ease:'power2.in',onUpdate:function(){wind.volume=this.targets()[0].v;},onComplete:()=>{wind.pause();}});
+  }
+  // Chime lingers 2.5s after loading screen is gone, then fades out
+  if(chime&&!chime.paused){
+    gsap.to({v:chime.volume},{v:0,duration:1.4,ease:'power2.in',delay:2.5,onUpdate:function(){chime.volume=this.targets()[0].v;},onComplete:()=>{chime.pause();}});
   }
   gsap.to(loading,{opacity:0,duration:1,ease:'power2.inOut',onComplete:()=>{
     loading.style.display='none';
@@ -1784,9 +1840,67 @@ function initAfterLoad(){
 
 // ─── HERO ─────────────────────────────────────────────────────────────────────
 function initHero(){
-  gsap.set('#hero-content',{opacity:0,y:40});
-  gsap.to('#hero-content',{opacity:1,y:0,duration:1.5,ease:'power3.out',delay:.3});
+  const hero=document.getElementById('hero');
+  const heroContent=document.getElementById('hero-content');
+  const h1=heroContent.querySelector('.hero-title-si');
+  const h2=heroContent.querySelector('.hero-title-en');
 
+  // 3. Scan line — barely perceptible, continuous
+  const scanline=document.createElement('div');
+  scanline.className='hero-scanline';
+  hero.appendChild(scanline);
+
+  // Prep
+  gsap.set(h2,{opacity:0,y:8});
+  gsap.set(heroContent,{opacity:1,y:0});
+
+  // Helper: flash RGB glitch on h1
+  function flashGlitch(){
+    gsap.to(h1,{
+      textShadow:'-6px 0 rgba(0,210,255,.75), 6px 0 rgba(255,30,30,.75)',
+      x:-4, duration:.06, ease:'none',
+      onComplete(){
+        gsap.to(h1,{textShadow:'0 0 60px rgba(139,26,42,.3)',x:0,duration:.25,ease:'power2.out'});
+      }
+    });
+  }
+
+  // Title types in letter by letter
+  const titleText='මාව ඇහෙනවද?';
+  const TYPE_DUR=2.6;
+  const seg=new Intl.Segmenter();
+  const chars=[...seg.segment(titleText)].map(s=>s.segment);
+  const charDelay=TYPE_DUR/chars.length;
+
+  h1.innerHTML='';
+  gsap.set(h1,{opacity:1,textShadow:'0 0 60px rgba(139,26,42,.3)'});
+
+  const START=0.35;
+  chars.forEach((ch,i)=>{
+    const span=document.createElement('span');
+    span.textContent=ch;
+    span.style.cssText='display:inline-block;opacity:0;white-space:pre;';
+    h1.appendChild(span);
+    gsap.to(span,{opacity:1,duration:.04,delay:START+i*charDelay,ease:'none'});
+  });
+
+  // RGB glitch flashes during typing
+  gsap.delayedCall(START+TYPE_DUR*.32, flashGlitch);
+  gsap.delayedCall(START+TYPE_DUR*.67, flashGlitch);
+  gsap.delayedCall(START+TYPE_DUR*.92, flashGlitch);
+
+  // Cursor after typing, stays ~8s then fades
+  gsap.delayedCall(START+TYPE_DUR+.05,()=>{
+    const cursor=document.createElement('span');
+    cursor.className='hero-cursor';
+    h1.appendChild(cursor);
+    gsap.to(cursor,{opacity:0,duration:.4,delay:8,onComplete:()=>cursor.remove()});
+  });
+
+  // h2 fades up after typing completes
+  gsap.to(h2,{opacity:1,y:0,duration:1.1,delay:START+TYPE_DUR+.2,ease:'power2.out'});
+
+  // Parallax on scroll
   gsap.to('.hero-bg',{
     scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:1},
     y:60,ease:'none'
