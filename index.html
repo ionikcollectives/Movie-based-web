@@ -81,6 +81,18 @@ body::after{
   width:90%;
   line-height:2;
 }
+#lt-blink{
+  position:absolute;
+  width:6px;height:6px;
+  border-radius:50%;
+  background:var(--bone-white);
+  box-shadow:0 0 8px rgba(237,232,227,.7);
+  opacity:0;
+  transform:translateY(-50%);
+}
+@keyframes ltBlink{
+  0%,100%{opacity:0} 40%,60%{opacity:.9}
+}
 .loading-text.glitching{
   animation:loadTextGlitch .28s ease forwards;
 }
@@ -994,7 +1006,7 @@ footer{
   </div>
   <div id="blood-splash"></div>
   <div id="loading-texts">
-    <div class="loading-text" id="lt1">සමහර කතා... අවසන් වෙන්නේ නැහැ.</div>
+    <div class="loading-text" id="lt1"><span id="lt-blink"></span></div>
     <div class="loading-text" id="lt2">සමහර ඇත්තන්... වළලන්න බැහැ.</div>
     <div class="loading-text" id="lt3">ඔබ දැන් ඇතුල් වන්නේ මතකයකට නොවේ.</div>
     <div class="loading-text" id="lt4">ඔබ ඇතුල් වන්නේ සාක්ෂියකට.</div>
@@ -1525,7 +1537,7 @@ function initLoading(){
     // Start wind immediately at tap — fade in gently
     wind.volume=0;
     wind.play().catch(()=>{});
-    gsap.to(wind,{volume:.55,duration:1.2,ease:'power2.out'});
+    gsap.to({v:0},{v:.55,duration:1.2,ease:'power2.out',onUpdate:function(){wind.volume=this.targets()[0].v;}});
 
     // Hide gate
     gate.style.display='none';
@@ -1547,7 +1559,7 @@ function initLoading(){
     gsap.killTweensOf(drop);
     if(_loadingTl)_loadingTl.kill();
     gsap.killTweensOf('#blood-splash');
-    gsap.to(wind,{volume:0,duration:0.4,onComplete:()=>{wind.pause();wind.currentTime=0;}});
+    gsap.to({v:wind.volume},{v:0,duration:0.4,onUpdate:function(){wind.volume=this.targets()[0].v;},onComplete:()=>{wind.pause();wind.currentTime=0;}});
     finishLoading();
   });
 }
@@ -1562,28 +1574,42 @@ function triggerGlitch(sel){
 }
 
 function startTyping(el,text,duration){
-  // Build word spans
   el.innerHTML='';
-  gsap.set(el,{opacity:1,clearProps:'filter,clipPath,textShadow'});
+  gsap.set(el,{opacity:1,clearProps:'filter,clipPath,textShadow,transform'});
 
-  const words=text.split(' ');
-  const wordDur=1.6;
-  const stagger=wordDur*.3; // next word begins while previous is still 30% into reveal
+  // Intl.Segmenter keeps Sinhala combining chars together as one grapheme cluster
+  const seg=new Intl.Segmenter();
+  const chars=[...seg.segment(text)].map(s=>s.segment);
+  const delay=duration/chars.length;
 
-  words.forEach((word,i)=>{
+  chars.forEach((ch,i)=>{
     const span=document.createElement('span');
-    span.textContent=word;
-    span.style.cssText='display:inline-block;opacity:0;filter:blur(24px);'+
-      'text-shadow:0 0 28px rgba(139,26,42,.9);margin:0 .18em;';
+    span.textContent=ch;
+    // inline-block required so CSS transforms work (for dust effect)
+    span.style.cssText='display:inline-block;opacity:0;white-space:pre;';
     el.appendChild(span);
+    gsap.to(span,{opacity:1,duration:0.06,delay:i*delay,ease:'none'});
+  });
+}
 
+function dustBlowAway(el){
+  const chars=el.querySelectorAll('span');
+  const W=window.innerWidth;
+  chars.forEach((span,i)=>{
+    const rect=span.getBoundingClientRect();
+    const toEdge=W-rect.left+100; // px needed to reach past right edge
+    const dy=(Math.random()-.6)*70;
+    const rot=(Math.random()-.5)*60;
     gsap.to(span,{
-      opacity:1,
-      filter:'blur(0px)',
-      textShadow:'0 0 0px rgba(139,26,42,0)',
-      duration:wordDur,
-      delay:i*stagger,
-      ease:'power3.out'
+      x:toEdge+Math.random()*160,
+      y:dy,
+      rotation:rot,
+      opacity:0,
+      scale:0.1+Math.random()*.25,
+      filter:'blur(5px)',
+      duration:0.85+Math.random()*.55,
+      delay:i*0.025,
+      ease:'power2.in'
     });
   });
 }
@@ -1672,24 +1698,59 @@ function onDropLand(){
   _loadingTl=gsap.timeline({delay:.85});
 
   const textData=[
-    {sel:'#lt1',text:'සමහර කතා... අවසන් වෙන්නේ නැහැ.',   dur:6.5},
-    {sel:'#lt2',text:'සමහර ඇත්තන්... වළලන්න බැහැ.',       dur:6.0},
-    {sel:'#lt3',text:'ඔබ දැන් ඇතුල් වන්නේ මතකයකට නොවේ.',dur:7.2},
-    {sel:'#lt4',text:'ඔබ ඇතුල් වන්නේ සාක්ෂියකට.',         dur:5.5},
+    {sel:'#lt1',text:'සමහර කතා... අවසන් වෙන්නේ නැහැ.',   dur:4.5},
+    {sel:'#lt2',text:'සමහර ඇත්තන්... වළලන්න බැහැ.',       dur:4.2},
+    {sel:'#lt3',text:'ඔබ දැන් ඇතුල් වන්නේ මතකයකට නොවේ.',dur:5.0},
+    {sel:'#lt4',text:'ඔබ ඇතුල් වන්නේ සාක්ෂියකට.',         dur:3.8,dust:true},
   ];
-  const hold=0.9,gap=0.4;
 
-  let cur=0,lastFadeEnd=0;
-  textData.forEach(({sel,text,dur})=>{
+  // Blinking dot: measure where centered text starts, place dot there, blink 3x
+  const blinkDot=document.getElementById('lt-blink');
+  const lt1El=document.getElementById('lt1');
+  const BLINK_DUR=2.4;
+  if(blinkDot&&lt1El){
+    // measure how wide the first phrase will render so we can find its left edge
+    const mSpan=document.createElement('span');
+    mSpan.style.cssText='visibility:hidden;position:fixed;top:-999px;'+
+      'font-family:"Noto Serif Sinhala",serif;'+
+      'font-size:clamp(1rem,2.5vw,1.4rem);letter-spacing:.05em;white-space:nowrap;';
+    mSpan.textContent=textData[0].text;
+    document.body.appendChild(mSpan);
+    const textW=mSpan.getBoundingClientRect().width;
+    document.body.removeChild(mSpan);
+
+    // left edge of centered text within lt1
+    const lt1W=lt1El.offsetWidth;
+    const dotLeft=Math.max(0,(lt1W-textW)/2);
+    blinkDot.style.left=dotLeft+'px';
+    blinkDot.style.top='50%';
+
+    _loadingTl.set(lt1El,{opacity:1},0);
+    const blinkSeq=[0,.4,.8,1.2,1.6,2.0];
+    blinkSeq.forEach((t,i)=>{
+      _loadingTl.to(blinkDot,{opacity:i%2===0?.9:0,duration:.18,ease:'none'},t);
+    });
+    _loadingTl.to(blinkDot,{opacity:0,duration:.15,ease:'none'},2.25);
+  }
+  const hold=0.6,gap=0.3;
+
+  let cur=BLINK_DUR,lastFadeEnd=0;
+  textData.forEach(({sel,text,dur,dust},idx)=>{
     const el=document.querySelector(sel);
     const glitchAt=cur+dur+(hold*0.78);
     const fadeStart=cur+dur+hold;
-    lastFadeEnd=fadeStart+.8;
+    lastFadeEnd=fadeStart+(dust?1.7:.8);
 
-    _loadingTl
-      .call(()=>startTyping(el,text,dur),null,cur)
-      .to(sel,{opacity:0,duration:.8,ease:'power2.in'},fadeStart)
-      .call(()=>triggerGlitch(sel),null,glitchAt);
+    _loadingTl.call(()=>startTyping(el,text,dur),null,cur);
+
+    if(dust){
+      // last line blows away instead of fading
+      _loadingTl.call(()=>dustBlowAway(el),null,fadeStart);
+    } else {
+      _loadingTl
+        .to(sel,{opacity:0,duration:.8,ease:'power2.in'},fadeStart)
+        .call(()=>triggerGlitch(sel),null,glitchAt);
+    }
 
     cur+=dur+hold+gap;
   });
@@ -1703,7 +1764,7 @@ function finishLoading(){
   const wind=document.getElementById('wind-sfx');
   // Fade wind out in sync with the loading screen fade
   if(wind&&!wind.paused){
-    gsap.to(wind,{volume:0,duration:1,ease:'power2.in',onComplete:()=>{wind.pause();wind.currentTime=0;}});
+    gsap.to({v:wind.volume},{v:0,duration:1,ease:'power2.in',onUpdate:function(){wind.volume=this.targets()[0].v;},onComplete:()=>{wind.pause();wind.currentTime=0;}});
   }
   gsap.to(loading,{opacity:0,duration:1,ease:'power2.inOut',onComplete:()=>{
     loading.style.display='none';
@@ -2045,6 +2106,7 @@ function activateChips(items,ci,card){
   if(!items||!items.length)return;
   const W=window.innerWidth, H=window.innerHeight;
   items.forEach((item,ki)=>{
+    if(item.flyTween){item.flyTween.kill();item.flyTween=null;}
     if(item.tween){item.tween.kill();item.tween=null;}
     if(item.spinTween){item.spinTween.kill();item.spinTween=null;}
     item.active=true;
@@ -2060,8 +2122,8 @@ function activateChips(items,ci,card){
     item.bScale=0.55+r()*.65;
     gsap.set(item.outer,{x:sx,y:sy,rotation:r()*360,rotateY:0,opacity:0,scale:0.35});
     gsap.set(item.inner,{x:0,y:0});
-    // Fly in
-    gsap.to(item.outer,{
+    // Fly in — stored so deactivate can kill it if scroll reverses mid-flight
+    item.flyTween=gsap.to(item.outer,{
       x:item.bx, y:item.by,
       rotation:item.bRot,
       opacity:.35+r()*.5,
@@ -2069,7 +2131,7 @@ function activateChips(items,ci,card){
       duration:0.8+ki*.07,
       delay:ki*.06,
       ease:'power2.out',
-      onComplete(){floatChip(item,ci,ki);}
+      onComplete(){item.flyTween=null;floatChip(item,ci,ki);}
     });
     // Continuous 3D axis spin — independent of position tween
     const spinDir=(r()>.5?1:-1);
@@ -2088,6 +2150,7 @@ function activateChips(items,ci,card){
 function deactivateChips(items,ci){
   if(!items||!items.length)return;
   items.forEach((item,ki)=>{
+    if(item.flyTween){item.flyTween.kill();item.flyTween=null;}
     if(item.tween){item.tween.kill();item.tween=null;}
     item.active=false;
     const r=mkRng(ci*53+ki*89+200);
