@@ -347,20 +347,6 @@ nav.visible{opacity:1}
 .hero-scroll-cue span{font-size:1.04rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dusty-rose)}
 .hero-scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--dusty-rose),transparent)}
 
-/* SIDE GLOW */
-.hero-glow-left,.hero-glow-right{
-  position:absolute;top:0;bottom:0;
-  width:180px;pointer-events:none;z-index:1;
-  opacity:.55;
-}
-.hero-glow-left{
-  left:0;
-  background:linear-gradient(to right,rgba(139,26,42,.28) 0%,transparent 100%);
-}
-.hero-glow-right{
-  right:0;
-  background:linear-gradient(to left,rgba(139,26,42,.28) 0%,transparent 100%);
-}
 
 /* 3. SCAN LINE */
 .hero-scanline{
@@ -1296,8 +1282,6 @@ footer{
   .cork-board{padding:1.5rem}
   /* Modal: reduce padding so text is readable */
   .modal-content{padding:1.5rem 1.25rem}
-  /* Side glows: narrower so they don't swallow small screens */
-  .hero-glow-left,.hero-glow-right{width:80px}
   /* Loading hint: larger tap target and readable size */
   #loading-gate-hint{font-size:1.31rem;letter-spacing:.2em}
   /* Loading text: tighter width so long Sinhala lines don't overflow */
@@ -1318,8 +1302,6 @@ footer{
   .evidence-grid{grid-template-columns:1fr}
   /* Modal close button: bigger tap area */
   .modal-close{font-size:2.71rem;top:1.2rem;right:1.2rem;padding:.5rem}
-  /* Side glows: minimal on very small screens */
-  .hero-glow-left,.hero-glow-right{width:55px}
   /* Scan line stays — it's a 1px element, no issue */
   /* Loading skip: bigger tap target */
   .loading-skip{font-size:1.38rem;padding:.5rem 1rem;bottom:1.5rem;right:1.5rem}
@@ -1391,8 +1373,6 @@ footer{
   <canvas id="star-canvas"></canvas>
   <div class="hero-bg"></div>
   <div class="hero-fog"></div>
-  <div class="hero-glow-left"></div>
-  <div class="hero-glow-right"></div>
   <div class="hero-particles" id="particles"></div>
 
   <!-- University silhouette SVG -->
