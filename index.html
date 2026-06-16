@@ -730,79 +730,7 @@ nav.visible{opacity:1}
 }
 
 /* BREAKDOWN */
-#breakdown{
-  padding:10rem 0;
-  text-align:center;
-  position:relative;
-  overflow:hidden;
-  min-height:100vh;
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-}
-.breakdown-bg{
-  position:absolute;inset:0;
-  background:radial-gradient(ellipse at center,rgba(139,26,42,.08) 0%,var(--near-black) 70%);
-}
-.breakdown-text{
-  font-family:'Noto Serif Sinhala',serif;
-  font-size:clamp(1.5rem,4vw,3rem);
-  color:var(--bone-white);
-  position:relative;z-index:2;
-  line-height:1.6;
-  padding:0 2rem;
-  opacity:0;
-}
-.glitch{
-  position:relative;
-  display:inline-block;
-}
-.glitch::before,.glitch::after{
-  content:attr(data-text);
-  position:absolute;top:0;left:0;
-  width:100%;height:100%;
-}
-.glitch::before{
-  color:var(--deep-crimson);
-  animation:glitchA .3s infinite linear alternate-reverse;
-  clip-path:polygon(0 0,100% 0,100% 35%,0 35%);
-}
-.glitch::after{
-  color:rgba(28,43,58,.8);
-  animation:glitchB .3s infinite linear alternate-reverse;
-  clip-path:polygon(0 65%,100% 65%,100% 100%,0 100%);
-}
-@keyframes glitchA{
-  0%{transform:translate(-2px,-1px) skew(.5deg)}
-  100%{transform:translate(1px,1px) skew(-.5deg)}
-}
-@keyframes glitchB{
-  0%{transform:translate(2px,1px)}
-  100%{transform:translate(-1px,-2px)}
-}
-.breakdown-static{
-  position:absolute;inset:0;
-  background:repeating-linear-gradient(
-    90deg,
-    transparent,transparent 2px,
-    rgba(237,232,227,.01) 2px,rgba(237,232,227,.01) 4px
-  );
-  animation:staticShift 8s linear infinite;
-  pointer-events:none;
-}
-@keyframes staticShift{
-  0%{background-position:0 0}
-  100%{background-position:100px 0}
-}
-.breakdown-fragments{
-  position:absolute;inset:0;pointer-events:none;overflow:hidden;
-}
-.fragment{
-  position:absolute;
-  font-family:'Noto Serif Sinhala',serif;
-  font-size:clamp(.7rem,1.5vw,.9rem);
-  color:rgba(196,132,154,.15);
-  white-space:nowrap;
-}
+/* ── AWARENESS ── */
 
 /* INVESTIGATION */
 #investigation{
@@ -874,88 +802,242 @@ nav.visible{opacity:1}
   margin-top:.8rem;
 }
 
-/* AWARENESS */
+/* ── AWARENESS ── */
 #awareness{
-  padding:8rem 2rem;
-  text-align:center;
   position:relative;
+  padding:10rem 2rem 8rem;
   overflow:hidden;
+  background:var(--near-black);
 }
 .awareness-bg{
   position:absolute;inset:0;
-  background:radial-gradient(ellipse at center top,rgba(196,132,154,.06) 0%,transparent 60%);
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%,rgba(139,26,42,.06) 0%,transparent 70%),
+    radial-gradient(ellipse 60% 40% at 50% 100%,rgba(196,132,154,.04) 0%,transparent 70%);
+  pointer-events:none;
 }
-.awareness-intro{
-  max-width:700px;margin:0 auto 5rem;
-  opacity:0;
-}
-.awareness-intro p{
-  font-family:'Noto Serif Sinhala',serif;
-  font-size:clamp(1.1rem,2.5vw,1.5rem);
-  color:rgba(237,232,227,.7);
-  line-height:2.2;margin-bottom:1rem;
-}
-.awareness-cards{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:1.5rem;max-width:1000px;margin:0 auto;
-}
-.awareness-card{
-  padding:2rem 1.5rem;
-  border:1px solid rgba(74,37,53,.3);
-  background:rgba(26,16,21,.5);
-  text-align:left;
-  opacity:0;transform:translateY(20px);
-  transition:all .4s;
-}
-.awareness-card:hover{
-  border-color:rgba(196,132,154,.3);
-  background:rgba(74,37,53,.2);
-}
-.awareness-icon{
-  font-size:1.5rem;margin-bottom:1rem;
-  display:block;
-}
-.awareness-card-title{
-  font-family:'Noto Serif Sinhala',serif;
-  font-size:1rem;color:var(--bone-white);
-  margin-bottom:.5rem;
-}
-.awareness-card-text{
-  font-size:.8rem;color:rgba(237,232,227,.5);
-  line-height:1.8;
-}
-.awareness-hotline{
-  margin-top:5rem;
-  padding:2.5rem;
-  border:1px solid rgba(139,26,42,.3);
-  max-width:600px;margin:5rem auto 0;
-  background:rgba(139,26,42,.05);
-  opacity:0;
-}
-.awareness-hotline p{
-  font-family:'Noto Serif Sinhala',serif;
-  font-size:1rem;color:rgba(237,232,227,.7);
-  line-height:2;margin-bottom:.5rem;
-}
-.awareness-hotline .hotline-number{
-  font-family:'Cormorant Garamond',serif;
-  font-size:2rem;color:var(--dusty-rose);
-  font-weight:500;letter-spacing:.1em;
+.awareness-inner{
+  max-width:900px;
+  margin:0 auto;
+  position:relative;z-index:1;
 }
 
-/* TRAILER */
-#trailer{
-  padding:8rem 2rem;
+/* Header */
+.awareness-header{
   text-align:center;
+  margin-bottom:5rem;
+}
+.awareness-eyebrow{
+  display:block;
+  font-family:'Inter',sans-serif;
+  font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;
+  color:rgba(196,132,154,.45);
+  margin-bottom:1.4rem;
+}
+.awareness-title{
+  font-size:clamp(1.8rem,4vw,2.8rem);
+  color:var(--bone-white);
+  font-weight:400;margin:0 0 .6rem;
+}
+.awareness-subtitle{
+  font-size:clamp(.9rem,1.6vw,1.1rem);
+  font-style:italic;font-weight:300;
+  color:rgba(196,132,154,.5);
+  margin:0 0 2.5rem;
+}
+.awareness-divider{
+  width:40px;height:1px;
+  background:rgba(139,26,42,.5);
+  margin:0 auto 2.5rem;
+}
+.awareness-lead{
+  font-size:clamp(1rem,2vw,1.25rem);
+  line-height:2;color:rgba(237,232,227,.65);
+  margin:0 auto 6rem;max-width:620px;
+  text-align:center;
+}
+.awareness-lead span{
+  color:rgba(237,232,227,.45);
+}
+
+/* Stat cards */
+.aw-stats{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:1px;
+  background:rgba(74,37,53,.2);
+  border:1px solid rgba(74,37,53,.2);
+  margin-bottom:6rem;
+  opacity:0;transform:translateY(24px);
+}
+.aw-stat{
+  padding:3rem 2.5rem;
+  background:var(--near-black);
   position:relative;
+  transition:background .4s;
 }
-.trailer-wrapper{
-  max-width:900px;margin:0 auto;
-  opacity:0;transform:scale(.97);
-  transition:all .6s;
+.aw-stat:hover{background:rgba(26,16,21,.8);}
+.aw-stat-num{
+  display:block;
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2.4rem,5vw,3.6rem);
+  font-weight:300;
+  color:var(--dusty-rose);
+  letter-spacing:-.02em;
+  line-height:1;
+  margin-bottom:1rem;
 }
-.trailer-wrapper.revealed{opacity:1;transform:scale(1)}
+.aw-stat-label{
+  font-family:'Inter',sans-serif;
+  font-size:.82rem;line-height:1.75;
+  color:rgba(237,232,227,.6);
+  margin:0 0 1rem;
+}
+.aw-stat-src{
+  font-size:.65rem;letter-spacing:.08em;
+  color:rgba(196,132,154,.3);
+  font-family:'Inter',sans-serif;
+  font-style:italic;
+}
+
+/* Pull quote */
+.aw-quote{
+  display:flex;align-items:center;gap:2rem;
+  margin:0 auto 6rem;max-width:680px;
+  opacity:0;
+}
+.aw-quote-line{
+  flex:1;height:1px;
+  background:linear-gradient(to right,transparent,rgba(139,26,42,.35),transparent);
+}
+.aw-quote-text{
+  font-size:clamp(1rem,2vw,1.2rem);
+  line-height:1.9;
+  color:rgba(237,232,227,.6);
+  text-align:center;
+  flex:3;
+  font-weight:300;
+}
+
+/* Hotline */
+.awareness-hotline{
+  text-align:center;
+  padding:3rem 2rem;
+  border:1px solid rgba(139,26,42,.25);
+  background:rgba(139,26,42,.04);
+  max-width:520px;margin:0 auto;
+  opacity:0;transform:translateY(16px);
+}
+.aw-hotline-label{
+  font-size:.95rem;
+  color:rgba(237,232,227,.55);
+  line-height:1.9;margin-bottom:1.2rem;
+}
+.aw-hotline-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:3rem;font-weight:300;
+  color:var(--dusty-rose);
+  letter-spacing:.12em;
+  margin:0 0 .6rem;
+}
+.aw-hotline-sub{
+  font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(196,132,154,.3);
+  font-family:'Inter',sans-serif;
+}
+
+@media(max-width:768px){
+  .aw-stats{grid-template-columns:1fr;}
+  .aw-quote{flex-direction:column;gap:1rem;}
+  .aw-quote-line{width:40px;height:1px;flex:none;
+    background:rgba(139,26,42,.35);}
+}
+
+/* ── TRAILER ── */
+#trailer{
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+  background:var(--near-black);
+  overflow:hidden;
+}
+#trailer::before{
+  content:'';
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(139,26,42,.06) 0%,transparent 70%);
+  pointer-events:none;
+}
+.trailer-inner{
+  position:relative;z-index:1;
+  text-align:center;
+  padding:4rem 2rem;
+}
+.trailer-coming{
+  display:flex;flex-direction:column;align-items:center;gap:0;
+  opacity:0;transform:translateY(20px);
+}
+.trailer-eye{
+  display:block;width:80px;margin-bottom:2.5rem;
+  animation:eyeBreathe 4s ease-in-out infinite;
+}
+@keyframes eyeBreathe{
+  0%,100%{opacity:.5;transform:scale(1)}
+  50%{opacity:1;transform:scale(1.06)}
+}
+.trailer-coming-title{
+  font-size:clamp(2rem,5vw,3.5rem);
+  font-weight:400;color:var(--bone-white);
+  margin:0 0 .6rem;
+}
+.trailer-coming-en{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(.95rem,1.8vw,1.2rem);
+  font-style:italic;font-weight:300;
+  color:rgba(196,132,154,.5);
+  margin:0 0 2.5rem;
+}
+.trailer-coming-rule{
+  width:1px;height:48px;
+  background:linear-gradient(to bottom,rgba(139,26,42,.5),transparent);
+  margin:0 auto 2.5rem;
+}
+.trailer-coming-hint{
+  font-family:'Inter',sans-serif;
+  font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(237,232,227,.3);
+  margin:0 0 2.5rem;
+}
+.trailer-notify{
+  display:flex;align-items:center;gap:.75rem;
+  font-family:'Inter',sans-serif;
+  font-size:.78rem;letter-spacing:.06em;
+  color:rgba(196,132,154,.5);
+  margin-bottom:2rem;
+}
+.trailer-notify-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--dusty-rose);
+  animation:notifyPulse 2s ease-in-out infinite;
+}
+@keyframes notifyPulse{
+  0%,100%{opacity:.4;transform:scale(1)}
+  50%{opacity:1;transform:scale(1.4)}
+}
+.trailer-socials{
+  display:flex;align-items:center;gap:1.2rem;
+  justify-content:center;
+}
+.trailer-social-link{
+  font-family:'Inter',sans-serif;
+  font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(237,232,227,.35);
+  text-decoration:none;
+  transition:color .3s;
+}
+.trailer-social-link:hover{color:var(--dusty-rose);}
+.trailer-social-sep{color:rgba(139,26,42,.4);}
+
+/* keep old .trailer-frame class for any leftover refs */
 .trailer-frame{
   aspect-ratio:16/9;
   background:var(--near-black);
@@ -1257,83 +1339,84 @@ footer{
 </div>
 
 <!-- BREAKDOWN -->
-<section id="breakdown">
-  <div class="breakdown-bg"></div>
-  <div class="breakdown-static"></div>
-  <div class="breakdown-fragments" id="breakdown-fragments"></div>
-  <div class="breakdown-text sinhala" id="breakdown-text">
-    ඇය ලිව්වා...<br>
-    <span class="glitch" data-text='"කිසිවෙකු නොඅසයි."'>"කිසිවෙකු නොඅසයි."</span>
-  </div>
-</section>
-
 <!-- AWARENESS -->
 <section id="awareness">
   <div class="awareness-bg"></div>
-  <div class="section-header reveal">
-    <p class="section-tag">Beyond The Film</p>
-    <h2 class="section-title-si sinhala">නිහඬකම කිවයුතු ය</h2>
-    <p class="section-title-en serif">Silence Must Speak</p>
-  </div>
-  <div class="awareness-intro reveal" id="awareness-intro">
-    <p>මෙය සිනමා කතාවක් පමණක් නොවේ.</p>
-    <p>ශ්‍රී ලංකාවේ විශ්වවිද්‍යාල ජීවිතයේ<br>නිහඬ කෙළවරට ඉහළ ද ශ්‍රාව්‍ය ඇත.</p>
-  </div>
-  <div class="awareness-cards">
-    <div class="awareness-card reveal">
-      <span class="awareness-icon">◉</span>
-      <h3 class="awareness-card-title sinhala">ඒකාකීය ස්වභාවය</h3>
-      <p class="awareness-card-text">Loneliness does not announce itself. It builds in the spaces between unanswered messages.</p>
+  <div class="awareness-inner">
+
+    <div class="awareness-header">
+      <span class="awareness-eyebrow">Beyond The Film</span>
+      <h2 class="awareness-title sinhala">නිහඬකම කිවයුතු ය</h2>
+      <p class="awareness-subtitle serif">The reality behind the screen</p>
+      <div class="awareness-divider"></div>
+      <p class="awareness-lead sinhala">
+        මෙය සිනමා කතාවක් පමණක් නොවේ.<br>
+        <span>මෙය ශ්‍රී ලංකාවේ ජනරාශියකගේ නිහඬ යථාර්ථයයි.</span>
+      </p>
     </div>
-    <div class="awareness-card reveal">
-      <span class="awareness-icon">◈</span>
-      <h3 class="awareness-card-title sinhala">බිය</h3>
-      <p class="awareness-card-text">Fear of being seen. Fear of not being seen. Both can silence someone completely.</p>
+
+    <!-- Stat cards — placeholder data, replace with real stats -->
+    <div class="aw-stats">
+      <div class="aw-stat">
+        <span class="aw-stat-num">58%</span>
+        <p class="aw-stat-label">of Sri Lankan university students report experiencing cyberbullying in some form</p>
+        <span class="aw-stat-src">Placeholder — replace with source</span>
+      </div>
+      <div class="aw-stat">
+        <span class="aw-stat-num">1 in 3</span>
+        <p class="aw-stat-label">young people in Sri Lanka say they would not tell anyone if they were being bullied online</p>
+        <span class="aw-stat-src">Placeholder — replace with source</span>
+      </div>
+      <div class="aw-stat">
+        <span class="aw-stat-num">72%</span>
+        <p class="aw-stat-label">of reported cybercrime victims in Sri Lanka are between the ages of 18 and 30</p>
+        <span class="aw-stat-src">Placeholder — replace with source</span>
+      </div>
     </div>
-    <div class="awareness-card reveal">
-      <span class="awareness-icon">◇</span>
-      <h3 class="awareness-card-title sinhala">ගෙරවීම</h3>
-      <p class="awareness-card-text">Bullying leaves no visible scars — only echoes that replay in the mind at 3am.</p>
+
+    <div class="aw-quote">
+      <div class="aw-quote-line"></div>
+      <p class="aw-quote-text sinhala">
+        "නිහඬ කෙනෙකු ගැන ප්‍රශ්න කරන්න.<br>
+        නිහඬකම සෑම විටම ශාන්තිය නොවේ."
+      </p>
+      <div class="aw-quote-line"></div>
     </div>
-    <div class="awareness-card reveal">
-      <span class="awareness-icon">○</span>
-      <h3 class="awareness-card-title sinhala">තේරුම් ගැනීම</h3>
-      <p class="awareness-card-text">Empathy is not a feeling. It is a choice. Ask someone how they are — and wait for the real answer.</p>
+
+    <div class="awareness-hotline" id="awareness-hotline">
+      <p class="aw-hotline-label sinhala">ඔබට හෝ ඔබ දන්නා කෙනෙකුට සහයෝගය අවශ්‍ය නම්</p>
+      <p class="aw-hotline-num">1926</p>
+      <p class="aw-hotline-sub">Sri Lanka Suicide Prevention Hotline &nbsp;—&nbsp; 24 / 7</p>
     </div>
-    <div class="awareness-card reveal">
-      <span class="awareness-icon">●</span>
-      <h3 class="awareness-card-title sinhala">ශ්‍රවණය</h3>
-      <p class="awareness-card-text">To truly hear someone is to give them the rarest gift — the feeling that they exist.</p>
-    </div>
-    <div class="awareness-card reveal">
-      <span class="awareness-icon">◆</span>
-      <h3 class="awareness-card-title sinhala">නිහඬකම</h3>
-      <p class="awareness-card-text">Silence is not peace. Sometimes silence is a scream no one was trained to hear.</p>
-    </div>
-  </div>
-  <div class="awareness-hotline reveal" id="awareness-hotline">
-    <p class="sinhala">ඔබට හෝ ඔබ දන්නා කෙනෙකුට සහයෝගය අවශ්‍ය නම්:</p>
-    <p class="hotline-number">1926</p>
-    <p style="font-size:.75rem;color:rgba(237,232,227,.3);margin-top:.5rem;font-family:'Inter',sans-serif">Sri Lanka Suicide Prevention Hotline — 24/7</p>
+
   </div>
 </section>
 
 <!-- TRAILER -->
 <section id="trailer">
-  <div class="section-header reveal">
-    <p class="section-tag">Evidence // Recovered Footage</p>
-    <h2 class="section-title-si sinhala">ට්‍රේලරය</h2>
-    <p class="section-title-en serif">The Trailer</p>
-  </div>
-  <div class="trailer-wrapper" id="trailer-wrapper">
-    <div class="trailer-frame" id="trailer-frame">
-      <div class="trailer-evidence-mark">EVIDENCE #VHS-2024-KVY // RECOVERED</div>
-      <div class="trailer-date-mark">REC ● 2024</div>
-      <div class="trailer-placeholder">
-        <div class="trailer-play-btn">
-          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-        </div>
-        <p class="trailer-label sinhala">ට්‍රේලරය නරඹන්න</p>
+  <div class="trailer-inner">
+    <div class="trailer-coming">
+      <span class="trailer-eye" id="trailer-eye">
+        <svg viewBox="0 0 80 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 20 C20 4, 60 4, 76 20 C60 36, 20 36, 4 20Z" stroke="rgba(196,132,154,.5)" stroke-width="1" fill="none"/>
+          <circle cx="40" cy="20" r="8" stroke="rgba(196,132,154,.6)" stroke-width="1" fill="rgba(139,26,42,.15)"/>
+          <circle cx="40" cy="20" r="3" fill="rgba(196,132,154,.4)"/>
+        </svg>
+      </span>
+      <h2 class="trailer-coming-title sinhala">ඉදිරියේදී...</h2>
+      <p class="trailer-coming-en serif">The trailer is coming.</p>
+      <div class="trailer-coming-rule"></div>
+      <p class="trailer-coming-hint">Stay tuned — something is being uncovered.</p>
+      <div class="trailer-notify" id="trailer-notify">
+        <span class="trailer-notify-dot"></span>
+        <span>Follow us to know when it drops</span>
+      </div>
+      <div class="trailer-socials">
+        <a href="#" class="trailer-social-link">Instagram</a>
+        <span class="trailer-social-sep">·</span>
+        <a href="#" class="trailer-social-link">Facebook</a>
+        <span class="trailer-social-sep">·</span>
+        <a href="#" class="trailer-social-link">YouTube</a>
       </div>
     </div>
   </div>
@@ -1983,22 +2066,20 @@ function finishLoading(){
 
 function initAfterLoad(){
   initHero();
-  const synopsis=initSynopsis(); // returns {play, reset}
-  initScrollStory(synopsis);
+  const triggerSynopsis=initSynopsis(); // set up spans, returns reveal fn
+  initScrollStory(triggerSynopsis);     // pin + content transitions
   initScrollAnimations();
   initCharacters();
-  initBreakdown();
   initEnding();
 }
 
 // ─── SYNOPSIS ─────────────────────────────────────────────────────────────────
-// Builds word spans and returns {play, reset} so initScrollStory can
-// replay the blur reveal every time the user scrolls back and forth.
+// Sets up word spans, returns a trigger fn called by initScrollStory
+// when the synopsis panel is in position (no ScrollTrigger here).
 function initSynopsis(){
-  const noop={play:()=>{},reset:()=>{}};
   const line=document.querySelector('.synopsis-line');
   const rule=document.querySelector('.synopsis-rule');
-  if(!line||line.dataset.ready) return noop;
+  if(!line||line.dataset.ready) return ()=>{};
   line.dataset.ready='1';
 
   const parts=[
@@ -2024,28 +2105,27 @@ function initSynopsis(){
 
   if(rule) gsap.set(rule,{opacity:0});
 
-  // Replayable timeline — play(0) always restarts from the beginning
-  const revealTl=gsap.timeline({paused:true});
-  allSpans.forEach((span,i)=>{
-    revealTl.to(span,{opacity:1,filter:'blur(0px)',duration:1.4,ease:'power2.out'},i*0.22);
-  });
-  if(rule) revealTl.to(rule,{opacity:1,duration:1.2,ease:'power2.out'},allSpans.length*0.22+0.3);
-
-  return {
-    play (){revealTl.play(0);},
-    reset(){revealTl.pause(0); gsap.set(allSpans,{opacity:0,filter:'blur(14px)'}); if(rule) gsap.set(rule,{opacity:0});}
+  return function triggerReveal(){
+    allSpans.forEach((span,i)=>{
+      gsap.to(span,{opacity:1,filter:'blur(0px)',duration:1.4,delay:i*.22,ease:'power2.out'});
+    });
+    if(rule){
+      gsap.to(rule,{opacity:1,duration:1.2,delay:allSpans.length*.13+.3,ease:'power2.out'});
+    }
   };
 }
 
 // ─── SCROLL STORY (hero pin + content transitions) ────────────────────────────
-function initScrollStory(synopsis){
+function initScrollStory(triggerSynopsis){
   const H=window.innerHeight;
   const heroContent=document.getElementById('hero-content');
   const synopsisSection=document.getElementById('synopsis');
   const synopsisInner=document.querySelector('.synopsis-inner');
   if(!synopsisInner||!heroContent) return;
 
-  // Fixed panel so it can travel over the pinned hero (escapes overflow:hidden)
+  // Lift synopsis-inner into a fixed full-viewport panel appended to body.
+  // Fixed positioning escapes hero's overflow:hidden so it can start below
+  // the fold and rise freely over the pinned hero background.
   const synPanel=document.createElement('div');
   synPanel.style.cssText=
     'position:fixed;top:0;left:0;width:100%;height:100%;'+
@@ -2053,14 +2133,13 @@ function initScrollStory(synopsis){
     'pointer-events:none;z-index:6;';
   synPanel.appendChild(synopsisInner);
   document.body.appendChild(synPanel);
-  gsap.set(synPanel,{yPercent:100});
+  gsap.set(synPanel,{yPercent:100}); // starts one viewport below
 
+  // Empty synopsis section is no longer needed in the flow
   gsap.set(synopsisSection,{display:'none'});
 
   // ── Scrubbed timeline during hero pin ─────────────────────────────────────
-  // onUpdate fires on every scroll tick — use progress thresholds with a small
-  // hysteresis gap (0.38 vs 0.41) so reveal/reset don't toggle rapidly.
-  let active=false;
+  let revealed=false;
 
   const tl=gsap.timeline({
     scrollTrigger:{
@@ -2071,28 +2150,37 @@ function initScrollStory(synopsis){
       pin:true,
       pinSpacing:true,
       anticipatePin:1,
-      onUpdate(self){
-        if(self.progress>=0.41&&!active){
-          active=true;
-          synopsis.play();
-        } else if(self.progress<0.38&&active){
-          active=false;
-          synopsis.reset();
-        }
-      }
     }
   });
 
   // 0 → 40 %: hero heading drifts up and fades out
-  tl.to(heroContent,{y:-Math.round(H*0.35),opacity:0,ease:'power2.in',duration:0.4});
+  tl.to(heroContent,{
+    y:-Math.round(H*0.35),
+    opacity:0,
+    ease:'power2.in',
+    duration:0.4,
+  });
 
-  // 40 → 100 %: synopsis panel rises from below
-  tl.to(synPanel,{yPercent:0,ease:'power3.out',duration:0.6},0.4);
+  // 40 → 100 %: synopsis panel rises from below into centre
+  tl.to(synPanel,{
+    yPercent:0,
+    ease:'power3.out',
+    duration:0.6,
+    onStart(){
+      if(!revealed){revealed=true; triggerSynopsis&&triggerSynopsis();}
+    }
+  },0.4);
 
   // ── Fade synopsis out as characters scrolls in ────────────────────────────
   gsap.to(synPanel,{
-    opacity:0,ease:'none',
-    scrollTrigger:{trigger:'#characters',start:'top bottom',end:'top 30%',scrub:true}
+    opacity:0,
+    ease:'none',
+    scrollTrigger:{
+      trigger:'#characters',
+      start:'top bottom',
+      end:'top 30%',
+      scrub:true,
+    }
   });
 }
 
@@ -2348,28 +2436,37 @@ function initScrollAnimations(){
     });
   });
 
-  // Awareness cards
-  document.querySelectorAll('.awareness-card').forEach((el,i)=>{
-    gsap.to(el,{
-      scrollTrigger:{trigger:el,start:'top 88%'},
-      opacity:1,y:0,duration:.7,delay:i*.1,ease:'power3.out'
-    });
+  // Awareness — stats grid
+  gsap.to('.aw-stats',{
+    scrollTrigger:{trigger:'.aw-stats',start:'top 82%'},
+    opacity:1,y:0,duration:1.1,ease:'power3.out'
   });
-
+  // Awareness — pull quote
+  gsap.to('.aw-quote',{
+    scrollTrigger:{trigger:'.aw-quote',start:'top 85%'},
+    opacity:1,duration:1.3,ease:'power2.out'
+  });
+  // Awareness — hotline
   gsap.to('#awareness-hotline',{
     scrollTrigger:{trigger:'#awareness-hotline',start:'top 85%'},
-    opacity:1,y:0,duration:.9,ease:'power3.out'
+    opacity:1,y:0,duration:1,ease:'power3.out'
+  });
+  // Awareness — header block
+  gsap.from('.awareness-header',{
+    scrollTrigger:{trigger:'#awareness',start:'top 75%'},
+    opacity:0,y:30,duration:1.2,ease:'power3.out'
+  });
+  // Trailer — fade in
+  gsap.to('.trailer-coming',{
+    scrollTrigger:{trigger:'#trailer',start:'top 70%'},
+    opacity:1,y:0,duration:1.2,ease:'power3.out'
   });
 
-  // Trailer reveal
-  ScrollTrigger.create({
-    trigger:'#trailer',start:'top 70%',
-    onEnter:()=>document.getElementById('trailer-wrapper').classList.add('revealed')
-  });
-
-  // Breakdown text
-  gsap.to('#breakdown-text',{
-    scrollTrigger:{trigger:'#breakdown',start:'top 60%',end:'center center',scrub:.5},
+  // (breakdown removed)
+  // placeholder to avoid syntax error
+  void 0;
+  gsap.to('#__removed__',{
+    scrollTrigger:{trigger:'body',start:'top top'},
     opacity:1,ease:'none'
   });
 }
@@ -2945,36 +3042,6 @@ function closeModal(){
 }
 
 // ─── BREAKDOWN ────────────────────────────────────────────────────────────────
-function initBreakdown(){
-  const frags=['නිහඬකම','ඇය ලිව්වා','13 ×','missing','2024','කාව්‍යා','silence','unheard','◈','██','she called'];
-  const container=document.getElementById('breakdown-fragments');
-  frags.forEach(text=>{
-    const f=document.createElement('div');
-    f.className='fragment sinhala';
-    f.textContent=text;
-    f.style.cssText=`left:${Math.random()*95}%;top:${Math.random()*95}%;transform:rotate(${(Math.random()-0.5)*30}deg);`;
-    container.appendChild(f);
-  });
-
-  gsap.to('.fragment',{
-    scrollTrigger:{trigger:'#breakdown',start:'top 70%',end:'bottom 30%',scrub:1},
-    opacity:gsap.utils.random(.05,.25),
-    y:gsap.utils.random(-20,20),
-    stagger:{each:.1,from:'random'},
-    ease:'none'
-  });
-
-  ScrollTrigger.create({
-    trigger:'#breakdown',start:'top 40%',end:'bottom 60%',
-    onEnter:()=>{
-      document.querySelectorAll('.glitch').forEach(el=>{
-        el.style.animation='none';
-        void el.offsetWidth;
-        el.style.animation='';
-      });
-    }
-  });
-}
 
 // ─── TIMELINE ─────────────────────────────────────────────────────────────────
 function initTimeline(){
@@ -3036,10 +3103,7 @@ function initNav(){
 
 // ─── TRAILER ─────────────────────────────────────────────────────────────────
 function initTrailer(){
-  document.getElementById('trailer-frame').addEventListener('click',()=>{
-    // Replace src with actual YouTube embed when available
-    alert('Trailer coming soon.\nTV නෙළීම ළඟදී.');
-  });
+  // trailer-frame removed — placeholder "stay tuned" screen has no click target
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
