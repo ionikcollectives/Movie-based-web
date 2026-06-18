@@ -12,7 +12,7 @@
 :root{
   --near-black:#0A0509;
   --deep-crimson:#8B1A2A;
-  --dusty-rose:#C4849A;
+  --dusty-rose:#7EB3C4;
   --bone-white:#EDE8E3;
   --muted-mauve:#4A2535;
   --steel-blue:#1C2B3A;
@@ -164,9 +164,10 @@ body::after{
 .loading-line{
   width:200px;height:1px;
   background:linear-gradient(90deg,transparent,var(--deep-crimson),transparent);
-  position:absolute;bottom:43%;
+  position:absolute;bottom:43%;left:calc(50% - 100px);
   opacity:0;
   transform:scaleX(0);
+  transform-origin:center center;
 }
 .loading-skip{
   position:absolute;bottom:2rem;right:2rem;
@@ -1259,6 +1260,204 @@ footer{
   color:rgba(237,232,227,.38);font-family:'Inter',sans-serif;
 }
 
+/* ═══════════════════════════════════════════════════════
+   CREW — Film Contact Sheet
+═══════════════════════════════════════════════════════ */
+#crew{
+  position:relative;
+  padding:8rem 0 9rem;
+  background:var(--near-black);
+  overflow:hidden;
+}
+#crew::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 100% 50% at 50% 0%,rgba(20,36,52,.5) 0%,transparent 65%),
+    radial-gradient(ellipse 70% 35% at 50% 100%,rgba(139,26,42,.09) 0%,transparent 60%);
+  pointer-events:none;
+}
+.crew-inner{
+  position:relative;z-index:1;
+  max-width:1160px;
+  margin:0 auto;
+  padding:0 3rem;
+}
+
+/* ── Section header ──────────────────────────────────── */
+.crew-header{text-align:center;margin-bottom:4.5rem;}
+.crew-header-eyebrow{
+  display:block;
+  font-family:'Inter',sans-serif;
+  font-size:.72rem;letter-spacing:.5em;text-transform:uppercase;
+  color:var(--dusty-rose);
+  margin-bottom:1.2rem;
+}
+.crew-title-si{
+  font-family:'Gemunu Libre','Abhaya Libre','Noto Serif Sinhala',serif;
+  font-size:clamp(2.2rem,5.4vw,3.8rem);
+  font-weight:800;color:var(--bone-white);
+  margin:0 0 .45rem;
+}
+.crew-title-en{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(.95rem,1.8vw,1.22rem);
+  font-style:italic;font-weight:300;
+  color:rgba(237,232,227,.3);
+  margin:0 0 1.8rem;
+  letter-spacing:.04em;
+}
+.crew-header-holes{
+  display:flex;align-items:center;justify-content:center;gap:5px;
+}
+.crew-header-hole{
+  width:9px;height:7px;border-radius:1.5px;
+  background:rgba(237,232,227,.09);
+  border:1px solid rgba(237,232,227,.07);
+}
+
+/* ── Featured row: Director + Producer ─────────────── */
+.crew-featured{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1.4rem;
+  margin-bottom:1.4rem;
+}
+
+/* ── Main crew grid ──────────────────────────────────── */
+.crew-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1.2rem;
+}
+
+/* ── Card shell ──────────────────────────────────────── */
+.crew-card{
+  display:flex;flex-direction:column;
+  background:rgb(9,6,12);
+  border:1px solid rgba(237,232,227,.06);
+  position:relative;
+  opacity:0;transform:translateY(22px);
+  transition:border-color .4s,transform .45s,box-shadow .45s;
+}
+.crew-card:hover{
+  border-color:rgba(237,232,227,.17);
+  transform:translateY(-5px);
+  box-shadow:0 18px 48px rgba(0,0,0,.65);
+}
+
+/* ── Film perforations ───────────────────────────────── */
+.crew-perf{
+  display:flex;align-items:center;
+  background:rgb(3,2,5);
+  padding:4px 7px;gap:5px;min-height:18px;
+}
+.crew-perf--top{border-bottom:1px solid rgba(237,232,227,.04);}
+.crew-perf--bot{border-top:1px solid rgba(237,232,227,.04);}
+.crew-perf-hole{
+  width:8px;height:6px;border-radius:1px;
+  background:rgb(15,11,19);
+  border:1px solid rgba(237,232,227,.05);
+  flex-shrink:0;
+}
+.crew-perf-counter{
+  margin-left:auto;
+  font-family:'Inter',sans-serif;
+  font-size:.5rem;letter-spacing:.18em;
+  color:rgba(237,232,227,.15);
+  white-space:nowrap;
+}
+
+/* ── Photo area ──────────────────────────────────────── */
+.crew-photo{
+  position:relative;overflow:hidden;
+  background:rgb(5,3,8);
+  display:flex;align-items:center;justify-content:center;
+  aspect-ratio:3/4;
+}
+.crew-card--featured .crew-photo{aspect-ratio:16/10;}
+
+/* Chemical vignette */
+.crew-photo::after{
+  content:'';position:absolute;inset:0;
+  background:
+    linear-gradient(to bottom,rgba(3,2,5,.55) 0%,transparent 28%,transparent 55%,rgba(3,2,5,.82) 100%),
+    radial-gradient(ellipse at 50% 50%,transparent 38%,rgba(3,2,5,.45) 100%);
+  z-index:2;pointer-events:none;
+}
+
+/* Placeholder initial */
+.crew-photo-initial{
+  font-family:'Cormorant Garamond',serif;
+  font-weight:300;font-style:italic;
+  font-size:clamp(2.4rem,4.5vw,3.8rem);
+  color:rgba(237,232,227,.09);
+  position:relative;z-index:3;
+  transition:color .5s;user-select:none;
+  letter-spacing:.02em;
+}
+.crew-card--featured .crew-photo-initial{font-size:clamp(3.2rem,6vw,5.5rem);}
+.crew-card:hover .crew-photo-initial{color:rgba(237,232,227,.17);}
+
+/* img element (for when real photos are added) */
+.crew-photo img{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:top center;
+  z-index:1;opacity:0;
+  transition:opacity .6s;
+}
+.crew-photo img.loaded{opacity:1;}
+
+/* Scan line on hover */
+.crew-scanline{
+  position:absolute;left:0;right:0;height:1px;
+  background:linear-gradient(to right,transparent,rgba(237,232,227,.07),transparent);
+  top:-1px;z-index:4;pointer-events:none;opacity:0;
+}
+.crew-card:hover .crew-scanline{
+  opacity:1;
+  animation:crewScan 3.2s linear infinite;
+}
+@keyframes crewScan{0%{top:-1px}100%{top:100%}}
+
+/* ── Info bar ────────────────────────────────────────── */
+.crew-info{
+  padding:.68rem .9rem .78rem;
+  background:rgb(7,5,10);
+  border-top:1px solid rgba(237,232,227,.04);
+  flex:1;display:flex;flex-direction:column;justify-content:center;
+}
+.crew-role-text{
+  display:block;
+  font-family:'Inter',sans-serif;
+  font-size:.6rem;letter-spacing:.36em;text-transform:uppercase;
+  color:var(--dusty-rose);
+  margin-bottom:.3rem;opacity:.88;
+}
+.crew-name-text{
+  display:block;
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(.86rem,1.35vw,1.03rem);
+  font-weight:400;color:var(--bone-white);
+  letter-spacing:.02em;line-height:1.3;
+}
+.crew-card--featured .crew-role-text{font-size:.66rem;letter-spacing:.42em;}
+.crew-card--featured .crew-name-text{font-size:clamp(1.05rem,1.85vw,1.3rem);}
+
+/* ── Responsive ──────────────────────────────────────── */
+@media(max-width:960px){
+  .crew-grid{grid-template-columns:repeat(3,1fr);}
+}
+@media(max-width:768px){
+  .crew-inner{padding:0 1.5rem;}
+  .crew-featured{grid-template-columns:1fr 1fr;}
+  .crew-grid{grid-template-columns:repeat(2,1fr);gap:1rem;}
+  .crew-card--featured .crew-photo{aspect-ratio:4/3;}
+}
+@media(max-width:480px){
+  .crew-featured{grid-template-columns:1fr;}
+  .crew-grid{grid-template-columns:repeat(2,1fr);gap:.75rem;}
+}
+
 /* SCROLL REVEAL BASE */
 .reveal{opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .8s ease}
 .reveal.visible{opacity:1;transform:translateY(0)}
@@ -1360,9 +1559,10 @@ footer{
   <ul class="nav-links" id="nav-links">
     <li><a href="#synopsis">Story</a></li>
     <li><a href="#characters">Characters</a></li>
+    <li><a href="#crew">Crew</a></li>
     <li><a href="#trailer">Trailer</a></li>
   </ul>
-  <div class="nav-hamburger" id="hamburger" role="button" aria-label="Menu">
+  <div class="nav-hamburger" id="hamburger" role="button" aria-label="Menu" tabindex="0">
     <span></span><span></span><span></span>
   </div>
 </nav>
@@ -1429,10 +1629,36 @@ footer{
 <!-- CHARACTER MODAL -->
 <div id="char-modal" role="dialog" aria-modal="true">
   <div class="modal-content" id="modal-content">
-    <button class="modal-close" id="modal-close">×</button>
+    <button class="modal-close" id="modal-close" aria-label="Close">×</button>
     <div id="modal-body"></div>
   </div>
 </div>
+
+<!-- CREW -->
+<section id="crew">
+  <div class="crew-inner">
+
+    <div class="crew-header">
+      <span class="crew-header-eyebrow">Behind the Lens</span>
+      <h2 class="crew-title-si sinhala">නිෂ්පාදන කණ්ඩායම</h2>
+      <p class="crew-title-en">The hands that shaped the truth</p>
+      <div class="crew-header-holes">
+        <div class="crew-header-hole"></div><div class="crew-header-hole"></div>
+        <div class="crew-header-hole"></div><div class="crew-header-hole"></div>
+        <div class="crew-header-hole"></div><div class="crew-header-hole"></div>
+        <div class="crew-header-hole"></div><div class="crew-header-hole"></div>
+        <div class="crew-header-hole"></div><div class="crew-header-hole"></div>
+      </div>
+    </div>
+
+    <!-- Director + Producer — wider featured frames -->
+    <div class="crew-featured" id="crew-featured"></div>
+
+    <!-- Remaining crew — 4-column contact sheet -->
+    <div class="crew-grid" id="crew-grid"></div>
+
+  </div>
+</section>
 
 <!-- BREAKDOWN -->
 <!-- AWARENESS -->
@@ -1547,7 +1773,7 @@ footer{
 </section>
 
 <footer>
-  <p>© 2025 IONIK. All rights reserved. | "මාව ඇහෙනවද?" is a work of fiction.</p>
+  <p>© <span id="footer-year">2025</span> IONIK. All rights reserved. | "මාව ඇහෙනවද?" is a work of fiction.</p>
 </footer>
 
 <!-- GSAP -->
@@ -1732,6 +1958,25 @@ const CHARACTERS = [
   }
 ];
 
+// ─── CREW DATA ────────────────────────────────────────────────────────────────
+// Ordered by standard film credit hierarchy
+const CREW=[
+  {role:'Director',          name:'ෂර්ලි පී දෙලංකාවල',      featured:true},
+  {role:'Producer',          name:'රිම්ෂාන් සහීඩ්',          featured:true},
+  {role:'Script Writer',     name:'Priyanath Vidanapathirana'},
+  {role:'Script Writer',     name:'විශ්ව විජේවර්ධන'},
+  {role:'Director of Photography', name:'Chandana Jayasinghe'},
+  {role:'Music Director',    name:'Charitha Attalage'},
+  {role:'Art Director',      name:'Sampath Wanniarachchi'},
+  {role:'Costume Designer',  name:'Suresh Madusanka'},
+  {role:'Editor',            name:'Rangana Sinharage'},
+  {role:'Colourist',         name:'Dinidu Jagoda'},
+  {role:'Production Manager',name:'Janaka B Rathnayaka'},
+  {role:'Make-up Artist',    name:'Priyantha S Wanninayake'},
+  {role:'Still Photography', name:'Dammika Pathirathna'},
+  {role:'Assistant Director',name:'Chaminda Udawela'},
+];
+
 const TIMELINE = [
   {year:'2016',
    eventSi:'පාසල් මතකය — කාව්‍යා සහ මිලාන් ගේ පළමු ආදරය',
@@ -1787,7 +2032,11 @@ function initGrain(){
   function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight}
   resize();
   window.addEventListener('resize',resize);
-  function draw(){
+  let lastGrainTime=0;
+  function draw(ts){
+    requestAnimationFrame(draw);
+    if(ts-lastGrainTime<120)return; // ~8 fps — same cadence as before
+    lastGrainTime=ts;
     const w=canvas.width,h=canvas.height;
     const data=ctx.createImageData(w,h);
     const buf=data.data;
@@ -1798,8 +2047,7 @@ function initGrain(){
     }
     ctx.putImageData(data,0,0);
   }
-  draw();
-  setInterval(draw,120);
+  requestAnimationFrame(draw);
 }
 
 // ─── AUDIO ────────────────────────────────────────────────────────────────────
@@ -2168,6 +2416,7 @@ function initAfterLoad(){
   initScrollStory(triggerSynopsis);     // pin + content transitions
   initScrollAnimations();
   initCharacters();
+  initCrew();
   initEnding();
   initFilmProgress();
   // Several init fns above resize sections (e.g. initCharacters sets an
@@ -2184,7 +2433,7 @@ function initFilmProgress(){
   const ticksWrap=document.getElementById('film-progress-ticks');
   if(!fill||!frame||!ticksWrap) return;
 
-  const sectionIds=['hero','synopsis','characters','awareness','trailer','ending'];
+  const sectionIds=['hero','synopsis','characters','crew','awareness','trailer','ending'];
 
   function maxScroll(){
     return Math.max(1,document.documentElement.scrollHeight-window.innerHeight);
@@ -2487,6 +2736,7 @@ function initHero(){
   chars.forEach((ch,i)=>{
     const span=document.createElement('span');
     span.textContent=ch;
+    span.dataset.char=ch; // source-of-truth for restore
     span.style.cssText='display:inline-block;opacity:0;white-space:pre;';
     h1.appendChild(span);
     gsap.to(span,{opacity:1,duration:.04,delay:START+i*charDelay,ease:'none'});
@@ -2512,7 +2762,7 @@ function initHero(){
   function scheduleRandomGlitch(){
     const delay=5+Math.random()*9; // every 5–14s, unpredictably
     gsap.delayedCall(delay,()=>{
-      if(!document.getElementById('hero').getBoundingClientRect().bottom>0) return;
+      if(document.getElementById('hero').getBoundingClientRect().bottom<=0) return;
       flashGlitch();
       // 30% chance of a quick double-flash
       if(Math.random()<.3) gsap.delayedCall(.18,flashGlitch);
@@ -2524,17 +2774,19 @@ function initHero(){
   // Character scramble — one random span blitzes through !@#$%^&*() then snaps back
   const SCRAMBLE='!@#$%^&*()';
   function runScramble(){
-    const spans=[...h1.querySelectorAll('span')].filter(s=>!s.classList.contains('hero-cursor')&&s.textContent.trim()!=='');
+    // Only pick spans that aren't already mid-scramble (data-scrambling flag)
+    const spans=[...h1.querySelectorAll('span')].filter(s=>!s.classList.contains('hero-cursor')&&s.dataset.char&&!s.dataset.scrambling);
     if(!spans.length)return;
     const target=spans[Math.floor(Math.random()*spans.length)];
-    const original=target.textContent;
+    target.dataset.scrambling='1';
     const frames=12+Math.floor(Math.random()*10); // 12–22 rapid frames
     let f=0;
     const tick=setInterval(()=>{
       f++;
       if(f>=frames){
         clearInterval(tick);
-        target.textContent=original;
+        target.textContent=target.dataset.char; // always restore from source of truth
+        delete target.dataset.scrambling;
       } else {
         target.textContent=SCRAMBLE[Math.floor(Math.random()*SCRAMBLE.length)];
       }
@@ -2617,13 +2869,6 @@ function initScrollAnimations(){
     opacity:1,y:0,duration:1.2,ease:'power3.out'
   });
 
-  // (breakdown removed)
-  // placeholder to avoid syntax error
-  void 0;
-  gsap.to('#__removed__',{
-    scrollTrigger:{trigger:'body',start:'top top'},
-    opacity:1,ease:'none'
-  });
 }
 
 // ─── CHARACTERS ───────────────────────────────────────────────────────────────
@@ -3168,7 +3413,6 @@ function initCharacters(){
     }
   },0);
 
-  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
 }
 
 function openModal(c){
@@ -3201,6 +3445,7 @@ function closeModal(){
 // ─── TIMELINE ─────────────────────────────────────────────────────────────────
 function initTimeline(){
   const container=document.getElementById('timeline-items');
+  if(!container)return;
   TIMELINE.forEach((ev,i)=>{
     const item=document.createElement('div');
     item.className='timeline-item';
@@ -3214,6 +3459,52 @@ function initTimeline(){
         ${ev.redacted?`<span class="timeline-redacted"></span><div class="timeline-classified">CLASSIFIED // EVIDENCE PENDING</div>`:''}
       </div>`;
     container.appendChild(item);
+  });
+}
+
+// ─── CREW ─────────────────────────────────────────────────────────────────────
+function initCrew(){
+  const featuredWrap=document.getElementById('crew-featured');
+  const gridWrap=document.getElementById('crew-grid');
+  if(!featuredWrap||!gridWrap)return;
+
+  const seg=new Intl.Segmenter();
+  const holes=(n)=>Array(n).fill('<div class="crew-perf-hole"></div>').join('');
+
+  CREW.forEach((member,i)=>{
+    const card=document.createElement('div');
+    card.className='crew-card'+(member.featured?' crew-card--featured':'');
+
+    // First grapheme cluster as placeholder initial
+    const initial=[...seg.segment(member.name)][0]?.segment||'?';
+    const frame=String(i+1).padStart(3,'0');
+    const holeCount=member.featured?12:8;
+
+    card.innerHTML=`
+      <div class="crew-perf crew-perf--top">${holes(holeCount)}<span class="crew-perf-counter">${frame} ▲</span></div>
+      <div class="crew-photo">
+        <img alt="${member.name}" data-src="">
+        <span class="crew-photo-initial">${initial}</span>
+        <div class="crew-scanline"></div>
+      </div>
+      <div class="crew-perf crew-perf--bot">${holes(holeCount)}<span class="crew-perf-counter">EXP·${frame}</span></div>
+      <div class="crew-info">
+        <span class="crew-role-text">${member.role}</span>
+        <span class="crew-name-text">${member.name}</span>
+      </div>`;
+
+    (member.featured?featuredWrap:gridWrap).appendChild(card);
+  });
+
+  // Staggered scroll reveal
+  const allCards=[...document.querySelectorAll('.crew-card')];
+  ScrollTrigger.create({
+    trigger:'#crew',start:'top 78%',once:true,
+    onEnter(){
+      allCards.forEach((card,i)=>{
+        gsap.to(card,{opacity:1,y:0,duration:.75,delay:i*.055,ease:'power3.out'});
+      });
+    }
   });
 }
 
@@ -3251,6 +3542,7 @@ function initNav(){
   const ham=document.getElementById('hamburger');
   const links=document.getElementById('nav-links');
   ham.addEventListener('click',()=>links.classList.toggle('mobile-open'));
+  ham.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();links.classList.toggle('mobile-open');}});
   links.querySelectorAll('a').forEach(a=>{
     a.addEventListener('click',()=>links.classList.remove('mobile-open'));
   });
@@ -3278,6 +3570,8 @@ if(document.fonts&&document.fonts.ready){
 // Reset before unload so there is nothing to restore on next visit
 window.addEventListener('beforeunload',()=>window.scrollTo(0,0));
 document.addEventListener('DOMContentLoaded',()=>{
+  const yr=document.getElementById('footer-year');
+  if(yr)yr.textContent=new Date().getFullYear();
   initGrain();
   initParticles();
   initAudio();
@@ -3285,6 +3579,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   initEvidenceFiles();
   initTrailer();
   initLoading();
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 });
 </script>
 </body>
