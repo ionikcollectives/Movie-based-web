@@ -245,7 +245,7 @@ nav{
   padding:1.5rem 3rem;
   display:flex;align-items:center;justify-content:space-between;
   background:linear-gradient(to bottom,rgba(10,5,9,.8),transparent);
-  opacity:0;transition:opacity .5s;
+  opacity:0;
 }
 nav.visible{opacity:1}
 .nav-logo{
@@ -253,13 +253,18 @@ nav.visible{opacity:1}
   font-size:1.54rem;letter-spacing:.05em;
   color:var(--dusty-rose);
 }
-.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links{display:flex;gap:2rem;list-style:none;align-items:center;}
 .nav-links a{
   font-size:1.16rem;letter-spacing:.12em;text-transform:uppercase;
-  color:rgba(237,232,227,.6);text-decoration:none;transition:color .3s;
+  color:rgba(237,232,227,.6);text-decoration:none;
+  transition:color .3s,transform .25s ease,opacity .3s;
+  display:inline-block;
 }
-.nav-links a:hover{color:var(--bone-white)}
-.nav-links a.active{color:var(--bone-white);}
+.nav-links a:hover{color:var(--bone-white);transform:scale(1.12);}
+.nav-links a.active{color:var(--deep-crimson);}
+.nav-icon-link{display:flex;align-items:center;text-decoration:none;}
+.nav-icon-link img{height:48px;width:auto;opacity:.75;transition:opacity .3s,filter .3s;}
+.nav-icon-link:hover img,.nav-icon-link.active img{opacity:1;filter:drop-shadow(0 0 6px var(--deep-crimson));}
 .nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
 .nav-hamburger span{display:block;width:24px;height:1px;background:var(--bone-white);transition:all .3s}
 
@@ -355,8 +360,8 @@ nav.visible{opacity:1}
   0%,100%{opacity:.4;transform:translateX(-50%) translateY(0)}
   50%{opacity:.8;transform:translateX(-50%) translateY(4px)}
 }
-.hero-scroll-cue span{font-size:1.04rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dusty-rose)}
-.hero-scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--dusty-rose),transparent)}
+.hero-scroll-cue span{font-size:1.04rem;letter-spacing:.2em;text-transform:uppercase;color:var(--deep-crimson)}
+.hero-scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--deep-crimson),transparent)}
 
 
 /* 3. SCAN LINE */
@@ -645,32 +650,30 @@ nav.visible{opacity:1}
   opacity:0;
   transition:background 1.4s ease,opacity .7s ease;
 }
-/* Stage spotlights — lit from bottom-left and bottom-right */
+/* Stage spotlights — radial cone from each bottom corner upward */
 .char-spotlight{
   position:absolute;bottom:0;
-  width:58%;height:100%;
+  width:72%;height:100%;
   pointer-events:none;z-index:1;
   transition:opacity 1.2s ease;
+  filter:blur(14px);
 }
 .char-spotlight-left{
   left:0;
-  background:conic-gradient(from 325deg at 0% 105%,
-    transparent 0deg,
-    rgba(255,240,200,.0) 4deg,
-    rgba(255,240,200,.18) 20deg,
-    rgba(255,240,200,.08) 36deg,
-    transparent 50deg);
-  filter:blur(8px);
+  background:radial-gradient(ellipse 90% 75% at 0% 100%,
+    rgba(255,240,200,.45) 0%,
+    rgba(255,235,185,.2)  30%,
+    rgba(255,220,160,.06) 60%,
+    transparent          80%);
 }
 .char-spotlight-right{
   right:0;
-  background:conic-gradient(from 307deg at 100% 105%,
-    transparent 0deg,
-    rgba(255,240,200,.08) 14deg,
-    rgba(255,240,200,.18) 30deg,
-    rgba(255,240,200,.0) 46deg,
-    transparent 50deg);
-  filter:blur(8px);
+  background:radial-gradient(ellipse 90% 75% at 100% 100%,
+    rgba(255,240,200,.45) 0%,
+    rgba(255,235,185,.2)  30%,
+    rgba(255,220,160,.06) 60%,
+    transparent          80%);
+  filter:blur(14px);
 }
 /* Characters section header starts hidden; GSAP fades it in */
 .char-stage-header{opacity:0;}
@@ -1708,7 +1711,7 @@ footer::after{
 <!-- NAVIGATION -->
 <nav id="nav">
   <ul class="nav-links" id="nav-links">
-    <li><a href="#hero">Synopsis</a></li>
+    <li><a href="#" class="nav-icon-link" aria-label="Home" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;"><img src="icon.png" alt="IONIK"></a></li>
     <li><a href="#characters">Characters</a></li>
     <li><a href="#crew">Crew</a></li>
     <li><a href="#trailer">Trailer</a></li>
@@ -2134,20 +2137,20 @@ const CHARACTERS = [
 // ─── CREW DATA ────────────────────────────────────────────────────────────────
 // Ordered by standard film credit hierarchy
 const CREW=[
-  {role:'Produced by',                             name:'Rimzan Shaheed',             featured:true, photo:'crew/Producer.jpeg'},
-  {role:'Directed by',                             name:'Shirly P. Delankawala',      featured:true, photo:'crew/Director.jpeg'},
-  {role:'Written by',                              name:'Vishwa Vijewardana',                        photo:'crew/Writer2.jpeg'},
-  {role:'Written by',                              name:'Priyanath Vidanapathirana',                 photo:'crew/Writer.jpeg'},
-  {role:'Director of Photography',                 name:'Chandana Jayasinghe',                       photo:'crew/DOP.jpeg'},
-  {role:'Edited by',                               name:'Rangana Sinharage',                         photo:'crew/Editor.jpeg'},
-  {role:'Original Score by',                       name:'Amith Guru',                                photo:'crew/Music Director.jpeg'},
-  {role:'Makeup Design by',                        name:'Priyantha S. Wanninayake',                  photo:'crew/Makeup Artist.jpeg'},
-  {role:'Production Design by',                    name:'Sampath Wanniarachchi',                     photo:'crew/Art Director.jpeg'},
-  {role:'Assistant Director',                      name:'Chaminda Udawela',                          photo:'crew/Assistant Director.jpeg'},
-  {role:'Production Manager',                      name:'Janaka B. Rathnayaka',                      photo:'crew/Production Manager.jpeg'},
-  {role:'Costume Design by',                       name:'Suresh Madusanka',                          photo:'crew/Costume Designer.jpeg'},
-  {role:'Still Photography by',                    name:'Dammika Pathirathna',                       photo:'crew/Still  Photography.jpeg'},
-  {role:'Colour Grading & Digital Intermediate',   name:'Dinidu Jagoda',                             photo:'crew/Colorist.jpeg'},
+  {role:'Produced by',                             name:'Rimzan Shaheed',             featured:true, photo:'Crew/Producer.jpeg'},
+  {role:'Directed by',                             name:'Shirly P. Delankawala',      featured:true, photo:'Crew/Director.jpeg'},
+  {role:'Written by',                              name:'Vishwa Vijewardana',                        photo:'Crew/Writer2.jpeg'},
+  {role:'Written by',                              name:'Priyanath Vidanapathirana',                 photo:'Crew/Writer.jpeg'},
+  {role:'Director of Photography',                 name:'Chandana Jayasinghe',                       photo:'Crew/DOP.jpeg'},
+  {role:'Edited by',                               name:'Rangana Sinharage',                         photo:'Crew/Editor.jpeg'},
+  {role:'Original Score by',                       name:'Amith Guru',                                photo:'Crew/Music Director.jpeg'},
+  {role:'Makeup Design by',                        name:'Priyantha S. Wanninayake',                  photo:'Crew/Makeup Artist.jpeg'},
+  {role:'Production Design by',                    name:'Sampath Wanniarachchi',                     photo:'Crew/Art Director.jpeg'},
+  {role:'Assistant Director',                      name:'Chaminda Udawela',                          photo:'Crew/Assistant Director.jpeg'},
+  {role:'Production Manager',                      name:'Janaka B. Rathnayaka',                      photo:'Crew/Production Manager.jpeg'},
+  {role:'Costume Design by',                       name:'Suresh Madusanka',                          photo:'Crew/Costume Designer.jpeg'},
+  {role:'Still Photography by',                    name:'Dammika Pathirathna',                       photo:'Crew/Still  Photography.jpeg'},
+  {role:'Colour Grading & Digital Intermediate',   name:'Dinidu Jagoda',                             photo:'Crew/Colorist.jpeg'},
 ];
 
 const TIMELINE = [
@@ -2588,7 +2591,20 @@ function finishLoading(){
     btn.classList.add('visible');
     btn.textContent='♪';
     btn.style.color='var(--dusty-rose)';
-    document.getElementById('nav').classList.add('visible');
+    // Nav blows into position — slide + blur from above, items stagger left→right
+    const nav=document.getElementById('nav');
+    nav.style.opacity='1'; // make it part of layout
+    const navItems=[...nav.querySelectorAll('.nav-icon-link img, .nav-links a:not(.nav-icon-link)')];
+    gsap.set(nav,{opacity:1});
+    gsap.fromTo(nav,
+      {y:-18,filter:'blur(6px)'},
+      {y:0,filter:'blur(0px)',duration:.9,ease:'power3.out'}
+    );
+    gsap.fromTo(navItems,
+      {opacity:0,y:-12,filter:'blur(4px)'},
+      {opacity:1,y:0,filter:'blur(0px)',duration:.7,ease:'power2.out',stagger:.08,delay:.15,
+        onComplete(){gsap.set(navItems,{clearProps:'filter'});}}
+    );
     initAfterLoad();
   }});
 }
@@ -2773,6 +2789,76 @@ function initScrollStory(triggerSynopsis){
   });
 }
 
+// ─── LIGHT RAYS ───────────────────────────────────────────────────────────────
+function initLightRays(){
+  const hero=document.getElementById('hero');
+  const c=document.createElement('canvas');
+  // No mix-blend-mode — draw directly with low canvas opacity so starfield shows through
+  c.style.cssText='position:absolute;inset:0;pointer-events:none;z-index:3;filter:blur(10px);opacity:.55;';
+  hero.insertBefore(c,hero.querySelector('.hero-bg'));
+
+  const ctx=c.getContext('2d');
+  let W,H;
+
+  function resize(){
+    // Use window dimensions — offsetWidth returns 0 before first paint
+    W=c.width=window.innerWidth;
+    H=c.height=window.innerHeight;
+  }
+
+  // 10 rays fanning from a point above-center, biased downward
+  const NUM=10;
+  const rays=Array.from({length:NUM},(_,i)=>{
+    const spread=Math.PI*0.75;
+    const base=Math.PI/2; // pointing downward
+    return {
+      angle: base + (i/(NUM-1)-.5)*spread,
+      halfW: 0.055+Math.random()*0.055,
+      drift: (Math.random()<.5?1:-1)*(0.00008+Math.random()*0.00014),
+      opacity: 0.55+Math.random()*0.35,
+      phase: Math.random()*Math.PI*2,
+      phaseSpd: 0.0003+Math.random()*0.0007,
+    };
+  });
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    const cx=W*.5, cy=0; // focal point at top-center edge
+    const len=Math.hypot(W,H)*1.2;
+
+    rays.forEach(r=>{
+      r.angle+=r.drift;
+      r.phase+=r.phaseSpd;
+      const pulse=0.5+0.5*Math.sin(r.phase);
+      const op=r.opacity*pulse;
+
+      const a1=r.angle-r.halfW, a2=r.angle+r.halfW;
+      const ex=cx+Math.cos(r.angle)*len;
+      const ey=cy+Math.sin(r.angle)*len;
+      const x1=cx+Math.cos(a1)*len, y1=cy+Math.sin(a1)*len;
+      const x2=cx+Math.cos(a2)*len, y2=cy+Math.sin(a2)*len;
+
+      const g=ctx.createLinearGradient(cx,cy,ex,ey);
+      g.addColorStop(0,   `rgba(255,230,170,${op})`);
+      g.addColorStop(0.45,`rgba(210,160,110,${op*.45})`);
+      g.addColorStop(1,   'rgba(150,80,80,0)');
+
+      ctx.beginPath();
+      ctx.moveTo(cx,cy);
+      ctx.lineTo(x1,y1);
+      ctx.lineTo(x2,y2);
+      ctx.closePath();
+      ctx.fillStyle=g;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  window.addEventListener('resize',resize);
+  draw();
+}
+
 // ─── STARFIELD ────────────────────────────────────────────────────────────────
 function initStarfield(){
   const hero=document.getElementById('hero');
@@ -2886,6 +2972,7 @@ function initHero(){
 
   // Draw night sky starfield on canvas
   initStarfield();
+  initLightRays();
 
   // 3. Scan line — barely perceptible, continuous
   const scanline=document.createElement('div');
@@ -3832,19 +3919,23 @@ function initNav(){
     }
   });
 
-  // Nav active state via IntersectionObserver
+  // Nav active state — scroll position based so it reliably clears on leave
   const navAnchors=[...links.querySelectorAll('a[href^="#"]')];
-  const sectionEls=navAnchors.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
-  const observer=new IntersectionObserver(entries=>{
-    entries.forEach(entry=>{
-      if(entry.isIntersecting){
-        navAnchors.forEach(a=>a.classList.remove('active'));
-        const active=navAnchors.find(a=>a.getAttribute('href')==='#'+entry.target.id);
-        if(active)active.classList.add('active');
-      }
+  const sectionIds=navAnchors.map(a=>a.getAttribute('href').slice(1));
+  function updateActiveNav(){
+    const mid=window.scrollY+window.innerHeight*0.4;
+    let current='';
+    sectionIds.forEach(id=>{
+      const el=document.getElementById(id);
+      if(!el) return;
+      if(el.offsetTop<=mid) current=id;
     });
-  },{threshold:.25,rootMargin:'-10% 0px -60% 0px'});
-  sectionEls.forEach(el=>observer.observe(el));
+    navAnchors.forEach(a=>{
+      a.classList.toggle('active',a.getAttribute('href')==='#'+current);
+    });
+  }
+  window.addEventListener('scroll',updateActiveNav,{passive:true});
+  updateActiveNav();
 }
 
 // ─── TRAILER ─────────────────────────────────────────────────────────────────
