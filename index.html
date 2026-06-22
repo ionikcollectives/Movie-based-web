@@ -1708,7 +1708,7 @@ footer::after{
 <!-- NAVIGATION -->
 <nav id="nav">
   <ul class="nav-links" id="nav-links">
-    <li><a href="#synopsis">Story</a></li>
+    <li><a href="#hero">Synopsis</a></li>
     <li><a href="#characters">Characters</a></li>
     <li><a href="#crew">Crew</a></li>
     <li><a href="#trailer">Trailer</a></li>
@@ -2936,8 +2936,8 @@ function initHero(){
 
   h1.appendChild(line1);
   h1.appendChild(line2);
-  // Cursor and dots are anchors in line2 — chars are inserted before cursor as they type
-  line2.appendChild(cursorEl);
+  // Cursor starts in line1; dots sit in line2 waiting
+  line1.appendChild(cursorEl);
   line2.appendChild(dotsEl);
 
   const START=0.35;
@@ -2948,11 +2948,15 @@ function initHero(){
       span.textContent=ch;
       span.dataset.char=ch;
       span.style.cssText='display:inline-block;white-space:pre;';
-      line1.appendChild(span);
+      line1.insertBefore(span,cursorEl); // insert before cursor so cursor stays at end
     });
   });
   chars2.forEach((ch,i)=>{
     gsap.delayedCall(START+(chars1.length+i)*charDelay,()=>{
+      if(i===0){
+        // First char of line2 — move cursor to line2 first
+        line2.insertBefore(cursorEl,dotsEl);
+      }
       const span=document.createElement('span');
       span.textContent=ch;
       span.dataset.char=ch;
@@ -2966,12 +2970,25 @@ function initHero(){
   gsap.delayedCall(START+TYPE_DUR*.67, flashGlitch);
   gsap.delayedCall(START+TYPE_DUR*.92, flashGlitch);
 
-  // Cursor: solid bar during typing, then disappears as dots fade in
-  cursorEl.style.animationPlayState='paused'; // no blink while typing
-  gsap.to(cursorEl,{opacity:1,duration:.05,delay:START});
-  const dotsDelay=START+TYPE_DUR+.35;
-  gsap.to(dotsEl,{opacity:1,duration:.5,delay:dotsDelay,ease:'power2.out'});
-  gsap.to(cursorEl,{opacity:0,duration:.3,delay:dotsDelay});
+  // Cursor blinks during typing, then morphs into a dot and crossfades into the three dots
+  gsap.to(cursorEl,{opacity:1,duration:.05,delay:START,onComplete(){
+    gsap.set(cursorEl,{clearProps:'opacity'}); // release GSAP's hold so CSS blink animation runs freely
+  }});
+  const dotsDelay=START+TYPE_DUR+.3;
+  // Stop blinking and morph bar → dot
+  gsap.delayedCall(dotsDelay,()=>{
+    cursorEl.style.animationPlayState='paused';
+    gsap.to(cursorEl,{
+      width:'5px',height:'5px',borderRadius:'50%',
+      marginLeft:'.06em',verticalAlign:'.12em',
+      duration:.22,ease:'power2.inOut',
+      onComplete(){
+        // Crossfade: cursor dot out, three dots in
+        gsap.to(cursorEl,{opacity:0,duration:.25});
+        gsap.to(dotsEl,{opacity:1,duration:.35,ease:'power2.out'});
+      }
+    });
+  });
 
   // h2 fades up after typing completes
   gsap.to(h2,{opacity:1,y:0,duration:1.1,delay:START+TYPE_DUR+.2,ease:'power2.out'});
