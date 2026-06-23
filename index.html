@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>හන්තානට ඇහෙනවද | අහන්න ඕන කතාවක්</title>
+<title>හන්තානට ඇහෙනවද | අහන්නම ඕන කතාවක්</title>
 <link rel="icon" type="image/png" href="icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1230,7 +1230,7 @@ nav.visible{opacity:1}
 }
 .aw-hotline-label{
   font-family:'Abhaya Libre','Noto Serif Sinhala',serif;
-  font-size:clamp(.78rem,1.3vw,.92rem);
+  font-size:clamp(.78rem,1.3vw,1.1rem);
   color:rgba(237,232,227,.6);
   line-height:1.65;margin-bottom:.8rem;
   font-weight:300;
@@ -1910,7 +1910,7 @@ footer::after{
 
   <div class="hero-content" id="hero-content">
     <h1 class="hero-title-si"></h1>
-    <h2 class="hero-title-en sinhala">අහන්න ඕන කතාවක්</h2>
+    <h2 class="hero-title-en sinhala">අහන්නම ඕන කතාවක්</h2>
   </div>
 
   <div class="hero-scroll-cue">
@@ -1930,7 +1930,7 @@ footer::after{
     </div>
     <div class="synopsis-body">
       <p class="synopsis-line sinhala" data-index="0">
-        සියල්ල අවබෝධ කරගන්න උත්සාහ කළ ලෝකයක,<br>නොදක්නා ලද අඳුරු නිහඬතාවයක් ඉතිරිව තිබුණා.
+        සියල්ල තේරුම් ගැනීමට 'ලෝකය' උත්සාහ කළද,,<br>නොදකින ලද අඳුරු 'නිහඬතාවයක්' තවමත් ඉතිරිව තිබුණි
       </p>
     </div>
     <div class="synopsis-rule"></div>
@@ -2001,12 +2001,12 @@ footer::after{
       <div class="aw-text-layer" id="aw-text-layer">
         <div class="awareness-header">
           <span class="awareness-eyebrow">Beyond The Film</span>
-          <h2 class="awareness-title sinhala">නිහඬකම කිවයුතු ය</h2>
+          <h2 class="awareness-title sinhala">නිහඬකමක් නොව, ඇසිය යුතු හඬකි.</h2>
           <p class="awareness-subtitle serif">The reality behind the screen</p>
           <div class="awareness-divider"></div>
           <p class="awareness-lead sinhala">
-            මෙය සිනමා කතාවක් පමණක් නොවේ.<br>
-            <span>මෙය ශ්‍රී ලංකාවේ ජනරාශියකගේ නිහඬ යථාර්ථයයි.</span>
+            මෙය තිරය මත දිගහැරෙන කතාවක් පමණක් නොව,<br>
+            <span>ශ්‍රී ලාංකීය ජනතාවගේ නොකියැවුණු, "නිහඬ යථාර්ථයයි.</span>
           </p>
         </div>
       </div>
@@ -2647,10 +2647,10 @@ function onDropLand(){
   _loadingTl=gsap.timeline({delay:.85});
 
   const textData=[
-    {sel:'#lt1',text:'සමහර කතා... අවසන් වෙන්නේ නැහැ.',   dur:4.5},
-    {sel:'#lt2',text:'සමහර ඇත්තන්... වළලන්න බැහැ.',       dur:4.2},
-    {sel:'#lt3',text:'ඔබ දැන් ඇතුල් වන්නේ මතකයකට නොවේ.',dur:5.0},
-    {sel:'#lt4',text:'ඔබ ඇතුල් වන්නේ සාක්ෂියකට.',         dur:3.8,dust:true},
+    {sel:'#lt1',text:'සමහර කතා අවසානය සොයා නොගනී.',   dur:4.5},
+    {sel:'#lt2',text:'සමහර සත්‍යයන් මිහිදන් කළ නොහැක.',       dur:4.2},
+    {sel:'#lt3',text:'ඔබ දැන් පිය නගන්නේ මතකයක් තුළට නොවේ...',dur:5.0},
+    {sel:'#lt4',text:'තවමත් ජීවමාන සාක්ෂියක් තුළටය.',         dur:3.8,dust:true},
   ];
 
   // Blinking dot: measure where centered text starts, place dot there, blink 3x
@@ -2828,8 +2828,8 @@ function initSynopsis(){
   line.dataset.ready='1';
 
   const parts=[
-    'සියල්ල අවබෝධ කරගන්න උත්සාහ කළ ලෝකයක,',
-    'නොදක්නා ලද අඳුරු නිහඬතාවයක් ඉතිරිව තිබුණා.'
+    'සියල්ල තේරුම් ගැනීමට ලෝකය උත්සාහ කළද,',
+    'නොදකින ලද අඳුරු නිහඬතාවයක් තවමත් ඉතිරිව තිබුණි'
   ];
 
   line.innerHTML='';
