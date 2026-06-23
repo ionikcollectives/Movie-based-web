@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>හන්තානට ඇහෙනවද | අහන්න ඕන කතාවක්</title>
+<link rel="icon" type="image/png" href="icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Abhaya+Libre:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Gemunu+Libre:wght@700;800&family=Inter:wght@300;400;500&family=Noto+Serif+Sinhala:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -925,116 +926,263 @@ nav.visible{opacity:1}
 /* ── AWARENESS ── */
 #awareness{
   position:relative;
-  padding:10rem 2rem 8rem;
-  overflow:hidden;
-  background:var(--near-black);
+  /* background-attachment:fixed keeps image stationary while content scrolls */
+  background:url('background.jpg') center/cover fixed;
 }
 .awareness-bg{
-  position:absolute;inset:0;
+  position:absolute;inset:0;pointer-events:none;
   background:
-    radial-gradient(ellipse 80% 50% at 50% 0%,rgba(139,26,42,.06) 0%,transparent 70%),
-    radial-gradient(ellipse 60% 40% at 50% 100%,rgba(196,132,154,.04) 0%,transparent 70%);
-  pointer-events:none;
+    radial-gradient(ellipse 60% 55% at 10% 70%, rgba(130,8,22,.42) 0%, transparent 62%),
+    radial-gradient(ellipse 50% 45% at 90% 30%, rgba(80,4,16,.14) 0%, transparent 55%),
+    linear-gradient(to bottom, rgba(4,2,6,.82) 0%, rgba(4,2,6,.18) 40%, rgba(4,2,6,.72) 100%);
 }
-.awareness-inner{
-  max-width:900px;
-  margin:0 auto;
-  position:relative;z-index:1;
+/* Dark vignette crushing the edges */
+#awareness::after{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:radial-gradient(ellipse 90% 85% at 50% 50%, transparent 35%, rgba(2,1,4,.88) 100%);
 }
 
-/* Header */
+.aw-scene{position:relative;}
+.aw-text-layer{
+  position:absolute;inset:0;
+  display:flex;align-items:flex-start;justify-content:center;
+  z-index:1;padding:96px 2rem 0;
+  pointer-events:none;
+}
+/* Subtle scanline overlay gives digital/screen feel */
+.awareness-scanlines{
+  position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:repeating-linear-gradient(
+    to bottom,transparent,transparent 3px,
+    rgba(0,0,0,.04) 3px,rgba(0,0,0,.04) 4px
+  );
+}
+
+.aw-track{
+  position:sticky;top:0;
+  height:100vh;
+  overflow:hidden;
+}
 .awareness-header{
   text-align:center;
-  margin-bottom:5rem;
+  max-width:700px;
+  margin:0 auto;
 }
 .awareness-eyebrow{
   display:block;
   font-family:'Inter',sans-serif;
-  font-size:1.04rem;letter-spacing:.28em;text-transform:uppercase;
-  color:rgba(196,132,154,.45);
-  margin-bottom:1.4rem;
+  font-size:.8rem;letter-spacing:.42em;text-transform:uppercase;
+  color:rgba(196,132,154,.6);
+  margin-bottom:1.6rem;
 }
 .awareness-title{
   font-family:'Gemunu Libre','Abhaya Libre','Noto Serif Sinhala',serif;
-  font-size:clamp(2.44rem,5.45vw,3.74rem);
+  font-size:clamp(2.8rem,6.5vw,4.8rem);
   color:var(--bone-white);
-  font-weight:800;margin:0 0 .6rem;
+  font-weight:800;margin:0 0 .7rem;
+  line-height:1.15;
+  text-shadow:0 0 120px rgba(139,26,42,.55), 0 4px 12px rgba(0,0,0,.5);
 }
 .awareness-subtitle{
-  font-size:clamp(1.27rem,2.36vw,1.54rem);
+  font-size:clamp(1rem,1.8vw,1.3rem);
   font-style:italic;font-weight:300;
   color:rgba(196,132,154,.5);
-  margin:0 0 2.5rem;
+  margin:0 0 2.4rem;
+  letter-spacing:.06em;
 }
 .awareness-divider{
-  width:40px;height:1px;
-  background:rgba(139,26,42,.5);
-  margin:0 auto 2.5rem;
+  width:1px;height:56px;
+  background:linear-gradient(to bottom,rgba(225,55,75,.7),rgba(139,26,42,.3),transparent);
+  margin:0 auto 2.4rem;
+  box-shadow:0 0 8px rgba(225,55,75,.4);
 }
 .awareness-lead{
-  font-size:clamp(1.2rem,3.5vw,1.94rem);
-  line-height:2;color:rgba(237,232,227,.65);
-  margin:0 auto 6rem;max-width:620px;
+  font-size:clamp(1.1rem,2.6vw,1.6rem);
+  line-height:2.1;color:rgba(237,232,227,.9);
+  margin:0 auto;max-width:540px;
   text-align:center;
 }
-.awareness-lead span{
-  color:rgba(237,232,227,.45);
-}
+.awareness-lead span{color:rgba(237,232,227,.72);}
 
-/* Stat cards */
-.aw-stats{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:1px;
-  background:rgba(74,37,53,.2);
-  border:1px solid rgba(74,37,53,.2);
-  margin-bottom:6rem;
+.aw-stack-card{
+  position:absolute;
+  z-index:2;
+  width:min(1020px,94vw);
+  padding:2rem 3rem;
+  background:linear-gradient(135deg, rgba(14,5,14,.92) 0%, rgba(6,3,8,.88) 100%);
+  backdrop-filter:blur(28px) saturate(1.8);
+  -webkit-backdrop-filter:blur(28px) saturate(1.8);
+  border:none;
+  box-shadow:
+    0 0 0 1px rgba(139,26,42,.22),
+    inset 0 1px 0 rgba(255,255,255,.06),
+    inset 0 -1px 0 rgba(0,0,0,.4),
+    0 0 80px rgba(100,8,18,.18),
+    0 20px 60px rgba(0,0,0,.7);
+  will-change:transform,opacity;
+  opacity:0;
 }
-.aw-stat{
-  padding:3rem 2.5rem;
-  background:var(--near-black);
-  position:relative;
-  transition:background .4s;
-  opacity:0;transform:translateY(24px);
+/* Subtle left-zone crimson breath — draws eye to the number */
+.aw-stack-card::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(ellipse 55% 70% at 18% 50%, rgba(139,20,35,.22) 0%, transparent 70%);
 }
-.aw-stat:hover{background:rgba(26,16,21,.8);}
-.aw-stat-num{
+/* Two opposite glow spots travel along the border simultaneously.
+   Technique: conic-gradient clipped to a 1.5px border ring via mask-composite. */
+@property --aw-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+@keyframes aw-border-run {
+  to { --aw-angle: 360deg; }
+}
+.aw-stack-card::before {
+  content:'';
+  position:absolute;
+  /* Extend 1.5px beyond card edge — that becomes the visible border ring */
+  inset:-1.5px;
+  border-radius:inherit;
+  /* padding defines the ring width; mask hides everything inside the padding box */
+  padding:1.5px;
+  background:conic-gradient(
+    from var(--aw-angle),
+    /* Spot 1 — at 0° */
+    rgba(225,55,75,1)    0deg,
+    rgba(160,30,50,.65) 12deg,
+    rgba(100,15,30,.2)  22deg,
+    transparent          32deg,
+    /* Gap (transparent for ~116°) */
+    transparent         148deg,
+    /* Spot 2 — at 180° (opposite) */
+    rgba(100,15,30,.2)  158deg,
+    rgba(160,30,50,.65) 168deg,
+    rgba(225,55,75,1)   180deg,
+    rgba(160,30,50,.65) 192deg,
+    rgba(100,15,30,.2)  202deg,
+    transparent         212deg,
+    /* Gap (transparent for ~116°) */
+    transparent         328deg,
+    rgba(100,15,30,.2)  338deg,
+    rgba(160,30,50,.65) 348deg,
+    rgba(225,55,75,1)   360deg
+  );
+  /* Clip gradient to border ring only — hides it inside the card */
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  animation:aw-border-run 3s linear infinite;
+  pointer-events:none;
+}
+.aw-card-idx{
   display:block;
-  font-family:'Cormorant Garamond',serif;
-  font-size:clamp(3.22rem,6.74vw,4.76rem);
-  font-weight:300;
-  color:var(--dusty-rose);
-  letter-spacing:-.02em;
+  font-family:'Inter',sans-serif;
+  font-size:.62rem;letter-spacing:.42em;text-transform:uppercase;
+  color:rgba(196,132,154,.45);
+  margin-bottom:1.4rem;
+}
+.aw-card-body{
+  display:flex;
+  align-items:center;
+  gap:0;
+}
+.aw-card-left{
+  flex-shrink:0;
+  padding-right:3rem;
+  text-align:right;
+  min-width:200px;
+}
+.aw-card-sep{
+  width:1px;
+  height:68px;
+  background:linear-gradient(to bottom,transparent,rgba(225,55,75,.9) 25%,rgba(225,55,75,.9) 75%,transparent);
+  box-shadow:0 0 8px rgba(225,55,75,.5);
+  flex-shrink:0;
+  transform:scaleY(0);
+  transform-origin:center;
+}
+.aw-card-right{
+  flex:1;
+  padding-left:3rem;
+}
+.aw-row-num{
+  display:block;
+  font-family:'Inter',sans-serif;
+  font-size:clamp(3rem,5.8vw,5rem);
+  font-weight:800;
+  color:rgba(237,232,227,.96);
   line-height:1;
-  margin-bottom:1rem;
+  letter-spacing:-.03em;
+  text-shadow:
+    0 0 40px rgba(225,55,75,.45),
+    0 0 100px rgba(196,132,154,.2),
+    0 2px 8px rgba(0,0,0,.6);
+  margin:0;
 }
-.aw-stat-label{
-  font-family:'Inter',sans-serif;
-  font-size:1.18rem;line-height:1.75;
-  color:rgba(237,232,227,.85);
-  margin:0 0 1rem;
+/* Data fill bar — width animates from 0 to the stat % */
+.aw-data-bar{
+  width:100%;height:2px;
+  background:rgba(139,26,42,.15);
+  margin-top:.9rem;position:relative;overflow:hidden;border-radius:1px;
 }
-.aw-stat-src{
-  font-size:0.97rem;letter-spacing:.08em;
-  color:rgba(196,132,154,.55);
+.aw-data-bar::after{
+  content:'';position:absolute;left:0;top:0;bottom:0;
+  width:0%;
+  background:linear-gradient(to right, rgba(139,26,42,.5), rgba(225,55,75,1));
+  box-shadow:0 0 6px rgba(225,55,75,.6);
+  border-radius:1px;
+}
+.aw-data-bar.filled::after{
+  width:var(--fill);
+  transition:width 1.8s cubic-bezier(.16,1,.3,1);
+}
+/* 1-in-3 dots for card 2 */
+.aw-fraction-dots{
+  display:flex;gap:.55rem;margin-top:.9rem;justify-content:flex-end;
+}
+.aw-fraction-dots .dot{
+  width:8px;height:8px;border-radius:50%;
+  background:rgba(139,26,42,.22);
+  border:1px solid rgba(139,26,42,.4);
+  transition:background .4s,box-shadow .4s;
+}
+.aw-fraction-dots .dot.active{
+  background:rgba(225,55,75,.9);
+  border-color:rgba(225,55,75,.8);
+  box-shadow:0 0 8px rgba(225,55,75,.6);
+}
+.aw-card-rule{display:none;}
+.aw-row-label{
   font-family:'Inter',sans-serif;
-  font-style:italic;
+  font-size:clamp(.92rem,1.45vw,1.08rem);
+  line-height:1.9;
+  color:rgba(237,232,227,.78);
+  margin:0 0 .6rem;
+  font-weight:300;
 }
 
 /* Pull quote */
 .aw-quote{
-  display:flex;align-items:center;gap:2rem;
-  margin:0 auto 6rem;max-width:680px;
+  position:relative;z-index:1;
+  display:flex;align-items:center;gap:2.5rem;
+  margin:0 auto 7rem;
+  max-width:780px;
+  padding:0 3rem;
   opacity:0;
 }
 .aw-quote-line{
   flex:1;height:1px;
-  background:linear-gradient(to right,transparent,rgba(139,26,42,.35),transparent);
+  background:linear-gradient(to right,transparent,rgba(139,26,42,.3),transparent);
 }
 .aw-quote-text{
-  font-size:clamp(1.42rem,2.88vw,1.68rem);
-  line-height:1.9;
-  color:rgba(237,232,227,.8);
+  font-size:clamp(1.3rem,2.6vw,1.6rem);
+  line-height:2;
+  color:rgba(237,232,227,.75);
   text-align:center;
   flex:3;
   font-weight:300;
@@ -1042,75 +1190,97 @@ nav.visible{opacity:1}
 
 /* Hotline */
 .awareness-hotline{
+  position:absolute;z-index:2;
   text-align:center;
-  padding:3.5rem 2.5rem;
-  position:relative;
-  border:1px solid rgba(139,26,42,.35);
-  background:radial-gradient(ellipse at 50% 20%,rgba(139,26,42,.12),rgba(139,26,42,.02) 65%,transparent 100%);
-  max-width:560px;margin:0 auto;
-  opacity:0;transform:translateY(16px);
+  padding:1.8rem 1.6rem;
+  border:1px solid rgba(196,132,154,.15);
+  background:
+    radial-gradient(ellipse 100% 55% at 50% 0%, rgba(120,10,24,.45) 0%, transparent 65%),
+    radial-gradient(ellipse 80% 80% at 50% 50%, rgba(8,3,10,.96) 0%, rgba(6,3,8,.98) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.05),
+    0 0 60px rgba(100,8,18,.25),
+    0 20px 50px rgba(0,0,0,.6);
+  max-width:none;margin:0;
+  opacity:0;
 }
 .awareness-hotline.pulse-active{
   animation:hotlinePulse 3.4s ease-in-out infinite;
 }
 .awareness-hotline::before,
 .awareness-hotline::after{
-  content:'';position:absolute;width:20px;height:20px;
-  border:2px solid rgba(196,132,154,.55);pointer-events:none;
+  content:'';position:absolute;width:36px;height:36px;
+  border:1.5px solid rgba(196,132,154,.45);pointer-events:none;
 }
-.awareness-hotline::before{top:-1px;left:-1px;border-right:none;border-bottom:none}
-.awareness-hotline::after{bottom:-1px;right:-1px;border-left:none;border-top:none}
+.awareness-hotline::before{top:-1px;left:-1px;border-right:none;border-bottom:none;}
+.awareness-hotline::after{bottom:-1px;right:-1px;border-left:none;border-top:none;}
 @keyframes hotlinePulse{
   0%,6%,100%{box-shadow:0 0 0 0 rgba(139,26,42,0)}
-  3%{box-shadow:0 0 36px 6px rgba(139,26,42,.4)}
-  12%{box-shadow:0 0 36px 6px rgba(139,26,42,.4)}
+  3%{box-shadow:0 0 36px 6px rgba(139,26,42,.35)}
+  12%{box-shadow:0 0 36px 6px rgba(139,26,42,.35)}
   18%{box-shadow:0 0 0 0 rgba(139,26,42,0)}
 }
 .aw-hotline-tag{
   display:inline-block;
-  font-size:.78rem;letter-spacing:.22em;
-  color:rgba(196,132,154,.6);
+  font-size:.72rem;letter-spacing:.32em;
+  color:rgba(196,132,154,.35);
   font-family:'Inter',sans-serif;
   margin-bottom:1.4rem;
+  text-transform:uppercase;
 }
 .aw-hotline-label{
-  font-size:1.35rem;
-  color:rgba(237,232,227,.8);
-  line-height:1.9;margin-bottom:1.2rem;
+  font-family:'Abhaya Libre','Noto Serif Sinhala',serif;
+  font-size:clamp(.78rem,1.3vw,.92rem);
+  color:rgba(237,232,227,.6);
+  line-height:1.65;margin-bottom:.8rem;
+  font-weight:300;
 }
 .aw-hotline-num{
-  font-family:'Cormorant Garamond',serif;
-  font-size:4.6rem;font-weight:400;
-  color:var(--dusty-rose);
-  letter-spacing:.12em;
+  font-family:'Inter',sans-serif;
+  font-size:clamp(3rem,5vw,5rem);
+  font-weight:800;
+  color:rgba(237,232,227,.96);
+  letter-spacing:-.03em;
+  padding-left:0;
   text-decoration:none;
-  display:inline-block;
+  display:block;
   margin:0 0 .6rem;
-  text-shadow:0 0 28px rgba(196,132,154,.45);
-  transition:text-shadow .3s,color .3s;
-  cursor:pointer;
+  text-shadow:
+    0 0 40px rgba(225,55,75,.45),
+    0 0 100px rgba(196,132,154,.2),
+    0 2px 8px rgba(0,0,0,.6);
+  transition:text-shadow .4s;
 }
 .aw-hotline-num:hover{
-  color:var(--bone-white);
-  text-shadow:0 0 42px rgba(196,132,154,.75);
+  text-shadow:
+    0 0 60px rgba(225,55,75,.7),
+    0 0 120px rgba(196,132,154,.35),
+    0 2px 8px rgba(0,0,0,.6);
 }
 .aw-hotline-sub{
-  font-size:1rem;letter-spacing:.18em;text-transform:uppercase;
-  color:rgba(196,132,154,.6);
+  font-size:.82rem;letter-spacing:.24em;text-transform:uppercase;
+  color:rgba(196,132,154,.5);
   font-family:'Inter',sans-serif;
+  margin-bottom:.8rem;
 }
 .aw-hotline-tap{
-  font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;
-  color:rgba(237,232,227,.3);
+  font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(237,232,227,.22);
   font-family:'Inter',sans-serif;
-  margin-top:.8rem;
 }
 
-@media(max-width:768px){
-  .aw-stats{grid-template-columns:1fr;}
-  .aw-quote{flex-direction:column;gap:1rem;}
-  .aw-quote-line{width:40px;height:1px;flex:none;
-    background:rgba(139,26,42,.35);}
+@media(max-width:900px){
+  /* On narrow screens stack hotline below stat cards, both centred */
+  .awareness-hotline{width:min(420px,88vw) !important; right:auto !important; left:50% !important;}
+}
+@media(max-width:680px){
+  .aw-stack-card{padding:1.6rem 1.4rem;}
+  .aw-card-left{min-width:120px;padding-right:1.4rem;}
+  .aw-card-right{padding-left:1.4rem;}
+  .aw-card-sep{height:52px;}
+  .aw-row-num{font-size:clamp(2.4rem,10vw,3.5rem);}
+  .aw-quote{flex-direction:column;gap:1rem;padding:0 1.5rem;}
+  .aw-quote-line{width:48px;height:1px;flex:none;background:rgba(139,26,42,.3);}
 }
 
 /* ── TRAILER ── */
@@ -1711,10 +1881,10 @@ footer::after{
 <!-- NAVIGATION -->
 <nav id="nav">
   <ul class="nav-links" id="nav-links">
-    <li><a href="#" class="nav-icon-link" aria-label="Home" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;"><img src="icon.png" alt="IONIK"></a></li>
+    <li><a href="#" class="nav-icon-link" aria-label="Home" onclick="history.pushState('',document.title,window.location.pathname+window.location.search);window.scrollTo({top:0,behavior:'smooth'});return false;"><img src="icon.png" alt="IONIK"></a></li>
     <li><a href="#characters">Characters</a></li>
     <li><a href="#crew">Crew</a></li>
-    <li><a href="#trailer">Trailer</a></li>
+    <li><a href="#awareness">Awareness</a></li>
   </ul>
   <div class="nav-hamburger" id="hamburger" role="button" aria-label="Menu" tabindex="0">
     <span></span><span></span><span></span>
@@ -1822,113 +1992,84 @@ footer::after{
 <!-- AWARENESS -->
 <section id="awareness">
   <div class="awareness-bg"></div>
-  <div class="awareness-inner">
+  <div class="awareness-scanlines"></div>
 
-    <div class="awareness-header">
-      <span class="awareness-eyebrow">Beyond The Film</span>
-      <h2 class="awareness-title sinhala">නිහඬකම කිවයුතු ය</h2>
-      <p class="awareness-subtitle serif">The reality behind the screen</p>
-      <div class="awareness-divider"></div>
-      <p class="awareness-lead sinhala">
-        මෙය සිනමා කතාවක් පමණක් නොවේ.<br>
-        <span>මෙය ශ්‍රී ලංකාවේ ජනරාශියකගේ නිහඬ යථාර්ථයයි.</span>
-      </p>
-    </div>
+  <div class="aw-scene" id="aw-scene">
+    <div class="aw-track">
 
-    <!-- Stat cards — placeholder data, replace with real stats -->
-    <div class="aw-stats">
-      <div class="aw-stat">
-        <span class="aw-stat-num">58%</span>
-        <p class="aw-stat-label">of Sri Lankan university students report experiencing cyberbullying in some form</p>
-        <span class="aw-stat-src">Placeholder — replace with source</span>
+      <!-- Text layer: GSAP scrubs it upward then holds it there -->
+      <div class="aw-text-layer" id="aw-text-layer">
+        <div class="awareness-header">
+          <span class="awareness-eyebrow">Beyond The Film</span>
+          <h2 class="awareness-title sinhala">නිහඬකම කිවයුතු ය</h2>
+          <p class="awareness-subtitle serif">The reality behind the screen</p>
+          <div class="awareness-divider"></div>
+          <p class="awareness-lead sinhala">
+            මෙය සිනමා කතාවක් පමණක් නොවේ.<br>
+            <span>මෙය ශ්‍රී ලංකාවේ ජනරාශියකගේ නිහඬ යථාර්ථයයි.</span>
+          </p>
+        </div>
       </div>
-      <div class="aw-stat">
-        <span class="aw-stat-num">1 in 3</span>
-        <p class="aw-stat-label">young people in Sri Lanka say they would not tell anyone if they were being bullied online</p>
-        <span class="aw-stat-src">Placeholder — replace with source</span>
-      </div>
-      <div class="aw-stat">
-        <span class="aw-stat-num">72%</span>
-        <p class="aw-stat-label">of reported cybercrime victims in Sri Lanka are between the ages of 18 and 30</p>
-        <span class="aw-stat-src">Placeholder — replace with source</span>
-      </div>
-    </div>
 
-    <div class="aw-quote">
-      <div class="aw-quote-line"></div>
-      <p class="aw-quote-text sinhala">
-        "නිහඬ කෙනෙකු ගැන ප්‍රශ්න කරන්න.<br>
-        නිහඬකම සෑම විටම ශාන්තිය නොවේ."
-      </p>
-      <div class="aw-quote-line"></div>
-    </div>
-
-    <div class="awareness-hotline" id="awareness-hotline">
-      <span class="aw-hotline-tag">24 / 7 &nbsp;·&nbsp; FREE &nbsp;·&nbsp; CONFIDENTIAL</span>
-      <p class="aw-hotline-label sinhala">ඔබට හෝ ඔබ දන්නා කෙනෙකුට සහයෝගය අවශ්‍ය නම්</p>
-      <a class="aw-hotline-num" href="tel:1926">1926</a>
-      <p class="aw-hotline-sub">Sri Lanka Suicide Prevention Hotline</p>
-      <p class="aw-hotline-tap">Tap to call</p>
-    </div>
-
-  </div>
-</section>
-
-<!-- TRAILER -->
-<section id="trailer">
-  <div class="trailer-inner">
-    <div class="trailer-coming">
-      <span class="trailer-eye" id="trailer-eye">
-        <svg viewBox="0 0 80 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M4 20 C20 4, 60 4, 76 20 C60 36, 20 36, 4 20Z" stroke="rgba(196,132,154,.5)" stroke-width="1" fill="none"/>
-          <circle cx="40" cy="20" r="8" stroke="rgba(196,132,154,.6)" stroke-width="1" fill="rgba(139,26,42,.15)"/>
-          <circle cx="40" cy="20" r="3" fill="rgba(196,132,154,.4)"/>
-        </svg>
-      </span>
-      <h2 class="trailer-coming-title sinhala">ඉදිරියේදී...</h2>
-      <p class="trailer-coming-en serif">The trailer is coming.</p>
-      <div class="trailer-coming-rule"></div>
-      <p class="trailer-coming-hint">Stay tuned — something is being uncovered.</p>
-      <div class="trailer-notify" id="trailer-notify">
-        <span class="trailer-notify-dot"></span>
-        <span>Follow us to know when it drops</span>
+      <!-- Stat cards rise below the text -->
+      <div class="aw-stack-card">
+        <span class="aw-card-idx">01 &nbsp;/&nbsp; 03</span>
+        <div class="aw-card-body">
+          <div class="aw-card-left">
+            <span class="aw-row-num" data-target="58" data-suffix="%">58%</span>
+            <div class="aw-data-bar" data-fill="58"></div>
+          </div>
+          <div class="aw-card-sep"></div>
+          <div class="aw-card-right">
+            <p class="aw-row-label">of Sri Lankan university students report experiencing cyberbullying in some form</p>
+          </div>
+        </div>
       </div>
-      <div class="trailer-socials">
-        <a href="javascript:void(0)" class="trailer-social-link">Instagram</a>
-        <span class="trailer-social-sep">·</span>
-        <a href="javascript:void(0)" class="trailer-social-link">Facebook</a>
-        <span class="trailer-social-sep">·</span>
-        <a href="javascript:void(0)" class="trailer-social-link">YouTube</a>
+
+      <div class="aw-stack-card">
+        <span class="aw-card-idx">02 &nbsp;/&nbsp; 03</span>
+        <div class="aw-card-body">
+          <div class="aw-card-left">
+            <span class="aw-row-num">1 in 3</span>
+            <div class="aw-fraction-dots">
+              <span class="dot active"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+          </div>
+          <div class="aw-card-sep"></div>
+          <div class="aw-card-right">
+            <p class="aw-row-label">young people in Sri Lanka say they would not tell anyone if they were being bullied online</p>
+          </div>
+        </div>
       </div>
+
+      <div class="aw-stack-card">
+        <span class="aw-card-idx">03 &nbsp;/&nbsp; 03</span>
+        <div class="aw-card-body">
+          <div class="aw-card-left">
+            <span class="aw-row-num" data-target="72" data-suffix="%">72%</span>
+            <div class="aw-data-bar" data-fill="72"></div>
+          </div>
+          <div class="aw-card-sep"></div>
+          <div class="aw-card-right">
+            <p class="aw-row-label">of reported cybercrime victims in Sri Lanka are between the ages of 18 and 30</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hotline card — inside aw-track so GSAP can animate it with the stat cards -->
+      <div class="awareness-hotline" id="awareness-hotline">
+        <p class="aw-hotline-label sinhala">ඔබට හෝ ඔබ දන්නා කෙනෙකුට සහයෝගය අවශ්‍ය නම්</p>
+        <a class="aw-hotline-num" href="tel:1926">1926</a>
+        <p class="aw-hotline-sub">Sri Lanka Suicide Prevention Hotline</p>
+      </div>
+
     </div>
   </div>
+
 </section>
 
-<!-- ENDING -->
-<section id="ending">
-  <div class="ending-letter" id="ending-letter">
-    <div class="ending-line sinhala" id="el1">
-      ඔබ දන්නා කෙනෙකු සිනාසෙනවා කියලා...
-    </div>
-    <div class="ending-line sinhala" id="el2" style="color:rgba(237,232,227,.5)">
-      ඔහු හෝ ඇය සතුටින් ඉන්නවා කියන එක නොවෙයි.
-    </div>
-    <div style="height:1px;background:linear-gradient(to right,transparent,rgba(139,26,42,.3),transparent);margin:1.5rem 0"></div>
-    <div class="ending-words">
-      <span class="ending-word sinhala" id="ew1">අහන්න.</span>
-      <span class="ending-word sinhala" id="ew2">බලන්න.</span>
-      <span class="ending-word sinhala" id="ew3">තේරුම් ගන්න.</span>
-    </div>
-    <div class="ending-logo" id="ending-logo">
-      <div class="ending-logo-text sinhala">හන්තානට ඇහෙනවද</div>
-    </div>
-    <div class="ending-social" id="ending-social">
-      <a href="javascript:void(0)">Facebook</a>
-      <a href="javascript:void(0)">Instagram</a>
-      <a href="javascript:void(0)">YouTube</a>
-    </div>
-  </div>
-</section>
 
 <footer>
   <div class="footer-inner">
@@ -2014,8 +2155,8 @@ const CHARACTERS = [
   },
   {
     id:'pragith',evNo:'SUBJECT-06',
-    nameSi:'ප්‍රගීත්',nameEn:'Pragith',
-    image:'Characters/opt/pragith.jpg',
+    nameSi:'ප්‍රගීත්',nameEn:'Prageeth',
+    image:'Characters/opt/prageeth.jpg',
     age:27,
     publicFace:'ධනවත් පවුලේ ළමයෙකු — ආකර්ෂණීය, ස්ව-ප්‍රකාශය කළ, කිසිදා ප්‍රශ්නයකට ලක් නොවූ.',
     hiddenTruth:'That night. That video. That message.',
@@ -2033,7 +2174,7 @@ const CHARACTERS = [
     hiddenTruth:'He knew something was wrong. He said nothing.',
     fear:'නිහඬව සිටීම — ද වරදක්ද?',
     regret:'ඒ රාත්‍රිය, ඔහු ද නිදා සිටියේය.',
-    secret:'He saw Pragith leave. 11:47pm.',
+    secret:'He saw Prageeth leave. 11:47pm.',
     initial:'බා'
   },
   {
@@ -2632,7 +2773,7 @@ function initFilmProgress(){
   const ticksWrap=document.getElementById('film-progress-ticks');
   if(!fill||!frame||!ticksWrap) return;
 
-  const sectionIds=['hero','synopsis','characters','crew','awareness','trailer','ending'];
+  const sectionIds=['hero','synopsis','characters','crew','awareness','ending'];
 
   function maxScroll(){
     return Math.max(1,document.documentElement.scrollHeight-window.innerHeight);
@@ -2641,7 +2782,7 @@ function initFilmProgress(){
   function layoutTicks(){
     ticksWrap.innerHTML='';
     const max=maxScroll();
-    const labels={hero:'Hero',synopsis:'Story',characters:'Characters',crew:'Crew',awareness:'Awareness',trailer:'Trailer',ending:'Ending'};
+    const labels={hero:'Hero',synopsis:'Story',characters:'Characters',crew:'Crew',awareness:'Awareness',ending:'Ending'};
     sectionIds.forEach(id=>{
       const el=document.getElementById(id);
       if(!el) return;
@@ -2789,74 +2930,133 @@ function initScrollStory(triggerSynopsis){
   });
 }
 
-// ─── LIGHT RAYS ───────────────────────────────────────────────────────────────
+// ─── LIGHT RAYS (raw WebGL — ReactBits LightRays shader) ─────────────────────
 function initLightRays(){
   const hero=document.getElementById('hero');
-  const c=document.createElement('canvas');
-  // No mix-blend-mode — draw directly with low canvas opacity so starfield shows through
-  c.style.cssText='position:absolute;inset:0;pointer-events:none;z-index:3;filter:blur(10px);opacity:.55;';
-  hero.insertBefore(c,hero.querySelector('.hero-bg'));
 
-  const ctx=c.getContext('2d');
-  let W,H;
+  const vertSrc=`attribute vec2 position;
+void main(){gl_Position=vec4(position,0.,1.);}`;
 
-  function resize(){
-    // Use window dimensions — offsetWidth returns 0 before first paint
-    W=c.width=window.innerWidth;
-    H=c.height=window.innerHeight;
+  const fragSrc=`precision highp float;
+uniform float iTime;
+uniform vec2  iResolution;
+uniform vec2  rayPos;
+uniform vec2  rayDir;
+uniform vec3  raysColor;
+uniform float raysSpeed;
+uniform float lightSpread;
+uniform float rayLength;
+uniform float fadeDistance;
+uniform vec2  mousePos;
+uniform float mouseInfluence;
+uniform float brightness;
+
+float rayStrength(vec2 src,vec2 refDir,vec2 coord,float sA,float sB,float spd){
+  vec2 s2c=coord-src;
+  float cosA=dot(normalize(s2c),refDir);
+  float spread=pow(max(cosA,0.),1./max(lightSpread,.001));
+  float dist=length(s2c);
+  float maxD=iResolution.x*rayLength;
+  float lenF=clamp((maxD-dist)/maxD,0.,1.);
+  float fadeF=clamp((iResolution.x*fadeDistance-dist)/(iResolution.x*fadeDistance),.5,1.);
+  float base=clamp((.45+.15*sin(cosA*sA+iTime*spd))+(.3+.2*cos(-cosA*sB+iTime*spd)),0.,1.);
+  return base*lenF*fadeF*spread;
+}
+
+void main(){
+  vec2 coord=vec2(gl_FragCoord.x,iResolution.y-gl_FragCoord.y);
+  vec2 finalDir=rayDir;
+  if(mouseInfluence>0.){
+    vec2 mPos=mousePos*iResolution.xy;
+    vec2 toMouse=mPos-rayPos;
+    if(length(toMouse)>0.) finalDir=normalize(mix(rayDir,normalize(toMouse),mouseInfluence));
   }
+  float r1=rayStrength(rayPos,finalDir,coord,36.2214,21.11349,1.5*raysSpeed);
+  float r2=rayStrength(rayPos,finalDir,coord,22.3991,18.0234,1.1*raysSpeed);
+  float ray=(r1*.52+r2*.44)*brightness;
+  vec3 col=vec3(ray)*raysColor;
+  gl_FragColor=vec4(col,clamp(ray*1.1,0.,1.));
+}`;
 
-  // 10 rays fanning from a point above-center, biased downward
-  const NUM=10;
-  const rays=Array.from({length:NUM},(_,i)=>{
-    const spread=Math.PI*0.75;
-    const base=Math.PI/2; // pointing downward
-    return {
-      angle: base + (i/(NUM-1)-.5)*spread,
-      halfW: 0.055+Math.random()*0.055,
-      drift: (Math.random()<.5?1:-1)*(0.00008+Math.random()*0.00014),
-      opacity: 0.55+Math.random()*0.35,
-      phase: Math.random()*Math.PI*2,
-      phaseSpd: 0.0003+Math.random()*0.0007,
-    };
+  // Three ray sources: top-center, bottom-left, bottom-right
+  const sources=[
+    // [posFn(w,h), dirX, dirY, spread, length, brightness, mouseInfluence]
+    {pos:(w,h)=>[w*.5,  -h*.2],  dir:[0,    1   ], spread:.85, len:1.8, bright:1.0,  mi:.12},
+    {pos:(w,h)=>[-w*.05, h*1.1], dir:[.62, -.78 ], spread:.75, len:1.4, bright:.65,  mi:0  },
+    {pos:(w,h)=>[w*1.05, h*1.1], dir:[-.62,-.78 ], spread:.75, len:1.4, bright:.65,  mi:0  },
+  ];
+
+  let mx=.5,my=.5,sx=.5,sy=.5;
+  window.addEventListener('mousemove',e=>{
+    mx=e.clientX/window.innerWidth;
+    my=e.clientY/window.innerHeight;
   });
 
-  function draw(){
-    ctx.clearRect(0,0,W,H);
-    const cx=W*.5, cy=0; // focal point at top-center edge
-    const len=Math.hypot(W,H)*1.2;
+  const instances=sources.map(src=>{
+    const canvas=document.createElement('canvas');
+    canvas.style.cssText='position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3;';
+    hero.insertBefore(canvas,hero.querySelector('.hero-bg'));
 
-    rays.forEach(r=>{
-      r.angle+=r.drift;
-      r.phase+=r.phaseSpd;
-      const pulse=0.5+0.5*Math.sin(r.phase);
-      const op=r.opacity*pulse;
+    const gl=canvas.getContext('webgl',{alpha:true,premultipliedAlpha:false});
+    if(!gl) return null;
 
-      const a1=r.angle-r.halfW, a2=r.angle+r.halfW;
-      const ex=cx+Math.cos(r.angle)*len;
-      const ey=cy+Math.sin(r.angle)*len;
-      const x1=cx+Math.cos(a1)*len, y1=cy+Math.sin(a1)*len;
-      const x2=cx+Math.cos(a2)*len, y2=cy+Math.sin(a2)*len;
+    function compile(type,s){const sh=gl.createShader(type);gl.shaderSource(sh,s);gl.compileShader(sh);return sh;}
+    const prog=gl.createProgram();
+    gl.attachShader(prog,compile(gl.VERTEX_SHADER,vertSrc));
+    gl.attachShader(prog,compile(gl.FRAGMENT_SHADER,fragSrc));
+    gl.linkProgram(prog);gl.useProgram(prog);
 
-      const g=ctx.createLinearGradient(cx,cy,ex,ey);
-      g.addColorStop(0,   `rgba(255,230,170,${op})`);
-      g.addColorStop(0.45,`rgba(210,160,110,${op*.45})`);
-      g.addColorStop(1,   'rgba(150,80,80,0)');
+    const buf=gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+    const posLoc=gl.getAttribLocation(prog,'position');
+    gl.enableVertexAttribArray(posLoc);
+    gl.vertexAttribPointer(posLoc,2,gl.FLOAT,false,0,0);
 
-      ctx.beginPath();
-      ctx.moveTo(cx,cy);
-      ctx.lineTo(x1,y1);
-      ctx.lineTo(x2,y2);
-      ctx.closePath();
-      ctx.fillStyle=g;
-      ctx.fill();
+    const U={};
+    ['iTime','iResolution','rayPos','rayDir','raysColor','raysSpeed','lightSpread',
+     'rayLength','fadeDistance','mousePos','mouseInfluence','brightness']
+    .forEach(n=>U[n]=gl.getUniformLocation(prog,n));
+
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA,gl.ONE);
+
+    gl.uniform3f(U.raysColor,1,.96,.82);
+    gl.uniform1f(U.raysSpeed,1);
+    gl.uniform1f(U.lightSpread,src.spread);
+    gl.uniform1f(U.rayLength,src.len);
+    gl.uniform1f(U.fadeDistance,1.2);
+    gl.uniform1f(U.mouseInfluence,src.mi);
+    gl.uniform1f(U.brightness,src.bright);
+    gl.uniform2f(U.rayDir,src.dir[0],src.dir[1]);
+
+    function resize(){
+      const dpr=Math.min(devicePixelRatio,2);
+      const w=window.innerWidth,h=window.innerHeight;
+      canvas.width=w*dpr;canvas.height=h*dpr;
+      gl.viewport(0,0,canvas.width,canvas.height);
+      gl.uniform2f(U.iResolution,canvas.width,canvas.height);
+      const p=src.pos(canvas.width,canvas.height);
+      gl.uniform2f(U.rayPos,p[0],p[1]);
+    }
+    window.addEventListener('resize',resize);
+    resize();
+
+    return{gl,U};
+  }).filter(Boolean);
+
+  function loop(t){
+    sx=sx*.92+mx*.08;sy=sy*.92+my*.08;
+    instances.forEach((inst,i)=>{
+      const{gl,U}=inst;
+      gl.uniform1f(U.iTime,t*.001);
+      if(sources[i].mi>0) gl.uniform2f(U.mousePos,sx,sy);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.drawArrays(gl.TRIANGLES,0,3);
     });
-    requestAnimationFrame(draw);
+    requestAnimationFrame(loop);
   }
-
-  resize();
-  window.addEventListener('resize',resize);
-  draw();
+  requestAnimationFrame(loop);
 }
 
 // ─── STARFIELD ────────────────────────────────────────────────────────────────
@@ -3165,34 +3365,142 @@ function initScrollAnimations(){
     });
   });
 
-  // Awareness — stats grid (staggered per card)
-  document.querySelectorAll('.aw-stat').forEach((card,i)=>{
-    gsap.to(card,{
-      scrollTrigger:{trigger:'.aw-stats',start:'top 82%'},
-      opacity:1,y:0,duration:1,delay:i*.12,ease:'power3.out'
-    });
-  });
-  // Awareness — pull quote
-  gsap.to('.aw-quote',{
-    scrollTrigger:{trigger:'.aw-quote',start:'top 85%'},
-    opacity:1,duration:1.3,ease:'power2.out'
-  });
-  // Awareness — hotline
-  gsap.to('#awareness-hotline',{
-    scrollTrigger:{trigger:'#awareness-hotline',start:'top 85%'},
-    opacity:1,y:0,duration:1,ease:'power3.out',
-    onComplete:()=>document.getElementById('awareness-hotline').classList.add('pulse-active')
-  });
-  // Awareness — header block
+  // Awareness — header fades in when the scene enters
   gsap.from('.awareness-header',{
-    scrollTrigger:{trigger:'#awareness',start:'top 75%'},
+    scrollTrigger:{trigger:'#aw-scene',start:'top 80%'},
     opacity:0,y:30,duration:1.2,ease:'power3.out'
   });
-  // Trailer — fade in
-  gsap.to('.trailer-coming',{
-    scrollTrigger:{trigger:'#trailer',start:'top 70%'},
-    opacity:1,y:0,duration:1.2,ease:'power3.out'
-  });
+
+  // Awareness — single-timeline sticky scene.
+  // One ScrollTrigger drives one GSAP timeline so there are zero tween conflicts.
+  (function(){
+    const scene     =document.getElementById('aw-scene');
+    const textLayer =document.getElementById('aw-text-layer');
+    if(!scene||!textLayer) return;
+
+    const cards=[...scene.querySelectorAll('.aw-stack-card')];
+    const N  =cards.length;
+    const VH =window.innerHeight;
+    const per=Math.round(VH*.9);   // scroll px per stacking phase
+
+    const eyebrowEl=textLayer.querySelector('.awareness-eyebrow');
+    const leadEl   =textLayer.querySelector('.awareness-lead');
+    const moveUp   =(leadEl&&eyebrowEl)
+      ? (leadEl.offsetTop-eyebrowEl.offsetTop)
+      : Math.round(VH*.35);
+
+    // All durations are in "scroll-pixels" (1 unit = 1px of scroll).
+    // ScrollTrigger maps the full scroll range to the timeline's total duration,
+    // so positions & durations below directly match scroll distance.
+    const rise   =Math.round(VH*.75);          // scroll px: text + card 0 rise together
+    const stackDur=Math.round(per*.72);         // scroll px: each card-stack transition
+    const totalScroll=rise+(N-1)*per+Math.round(VH*.5);
+
+    // Scene must be totalScroll + VH tall: sticky exits when scene.bottom hits
+    // the bottom of the track (100vh), i.e. VH before the scene ends. Adding VH
+    // ensures the sticky zone covers the full animation range.
+    scene.style.height=`${totalScroll+VH}px`;
+
+    const hotlineEl=document.getElementById('awareness-hotline');
+
+    // Dynamic side-by-side positioning so the two elements sit flush together
+    const VW       =window.innerWidth;
+    const cardW    =Math.min(560, Math.round(VW*.44));
+    const hotW     =Math.min(270, Math.round(VW*.2));
+    const sideGap  =Math.max(36, Math.round(VW*.025));   // gap between card and hotline
+    const leftEdge =Math.round((VW - cardW - sideGap - hotW) / 2); // centre the pair
+    const hotLeft  =leftEdge + cardW + sideGap;
+
+    cards.forEach(c=>gsap.set(c,{xPercent:0,yPercent:-50,left:leftEdge,top:'62%',y:VH,width:cardW}));
+    if(hotlineEl) gsap.set(hotlineEl,{xPercent:0,yPercent:-50,left:hotLeft,right:'auto',top:'62%',y:VH,opacity:0,width:hotW});
+
+    // Align hotline top edge to stat card top edge.
+    // Both use yPercent:-50 centred at 62% — if heights differ the tops diverge.
+    // Shift hotline center down by the half-height difference so tops match.
+    requestAnimationFrame(()=>{
+      if(!hotlineEl) return;
+      const cardH=cards[0].offsetHeight;
+      const hotH =hotlineEl.offsetHeight;
+      const diff =(hotH-cardH)/2;
+      if(diff!==0) gsap.set(hotlineEl,{top: VH*0.62 + diff });
+    });
+
+    // ── Master timeline ───────────────────────────────────────────────────
+    const tl=gsap.timeline({
+      scrollTrigger:{
+        trigger:scene,
+        start:'top top',
+        end:`+=${totalScroll}`,
+        scrub:true
+      }
+    });
+
+    // Text scrubs up (no fade) + card 0 + hotline rise simultaneously (0 → rise)
+    tl.to(textLayer,  {y:-moveUp, ease:'none', duration:rise}, 0)
+      .fromTo(cards[0],{y:VH,opacity:0},{y:0,opacity:1, ease:'none', duration:rise}, 0);
+    if(hotlineEl){
+      tl.fromTo(hotlineEl,{y:VH,opacity:0},{y:0,opacity:1, ease:'none', duration:rise}, 0);
+    }
+
+    // Stacking phases: each card rises while the previous is pushed back.
+    // immediateRender:false on push-back/fade tweens is critical — without it
+    // GSAP applies their FROM values ({y:0, opacity:1}) immediately on creation,
+    // overwriting the gsap.set(y:VH) and making cards visible before their turn.
+    for(let i=1;i<N;i++){
+      const s0=(rise)+(i-1)*per;
+      tl.fromTo(cards[i],
+          {y:VH,opacity:0},
+          {y:0,opacity:1, ease:'none', duration:stackDur},
+          s0)
+        .fromTo(cards[i-1],
+          {y:0,scale:1,opacity:1},
+          {y:-VH*.04,scale:.95,opacity:.35, ease:'none', duration:stackDur, immediateRender:false},
+          s0);
+      if(i>=2) tl.fromTo(cards[i-2],
+          {opacity:.35},
+          {opacity:0, ease:'none', duration:stackDur, immediateRender:false},
+          s0);
+    }
+
+    // ── Fire separator + counter once per card (cosmetic, not scroll-driven) ─
+    function fireCard(card){
+      const numEl=card.querySelector('.aw-row-num');
+      const sep  =card.querySelector('.aw-card-sep');
+      if(sep) gsap.to(sep,{scaleY:1,duration:.9,ease:'power2.out'});
+      const target=parseInt(numEl?.dataset.target||'0');
+      const suffix=numEl?.dataset.suffix||'';
+      if(target){
+        const obj={val:0};
+        gsap.to(obj,{val:target,duration:1.5,ease:'power2.out',
+          onUpdate(){numEl.textContent=Math.round(obj.val)+suffix;}});
+      }
+      // Animate data-fill bar
+      const bar=card.querySelector('.aw-data-bar');
+      if(bar){
+        bar.style.setProperty('--fill', bar.dataset.fill+'%');
+        requestAnimationFrame(()=>bar.classList.add('filled'));
+      }
+      // Animate fraction dots (staggered glow-in)
+      const dots=card.querySelectorAll('.aw-fraction-dots .dot');
+      dots.forEach((d,i)=>setTimeout(()=>d.classList.add('active'), i*280));
+    }
+
+    // Card 0 fires at 80% of the rise phase
+    ScrollTrigger.create({trigger:scene,start:`top+=${Math.round(rise*.8)} top`,once:true,onEnter:()=>fireCard(cards[0])});
+    // Cards 1..N-1 fire near the end of their rise
+    for(let i=1;i<N;i++){
+      const fireAt=rise+(i-1)*per+Math.round(stackDur*.85);
+      const idx=i;
+      ScrollTrigger.create({trigger:scene,start:`top+=${fireAt} top`,once:true,onEnter:()=>fireCard(cards[idx])});
+    }
+    // Pulse the hotline card once it has fully risen
+    if(hotlineEl){
+      ScrollTrigger.create({trigger:scene,start:`top+=${Math.round(rise*.95)} top`,once:true,
+        onEnter:()=>hotlineEl.classList.add('pulse-active')});
+    }
+  })();
+
+  // Hotline is now animated inside the awareness IIFE (rises with stat card 0).
 
 }
 
@@ -3550,6 +3858,7 @@ function initCharacters(){
   spotL.className='char-spotlight char-spotlight-left';
   const spotR=document.createElement('div');
   spotR.className='char-spotlight char-spotlight-right';
+  gsap.set([spotL,spotR],{opacity:0});
   stage.appendChild(spotL);
   stage.appendChild(spotR);
 
@@ -3559,7 +3868,7 @@ function initCharacters(){
     '42,126,112',   // Prasadi — dark teal
     '172,60,60',    // Milan — deep red
     '50,106,148',   // Ajit — steel blue
-    '168,76,18',    // Pragith — burnt amber
+    '168,76,18',    // Prageeth — burnt amber
     '172,136,38',   // Bhanu — old gold
     '106,70,172',   // Sneha — violet
     '76,130,80',    // Nirmal — sage green
@@ -3664,6 +3973,16 @@ function initCharacters(){
   // Using the same 0.7 offset for start and end means consecutive cards hand off simultaneously.
   let activeChipIdx=-1;
   const chipOffset=Math.round(cardSlot*0.7);
+  // Spotlight trigger — fires as soon as card 0 starts entering (cardSlot*0.25),
+  // independent of the chip offset so it appears with the first card, not the second.
+  ScrollTrigger.create({
+    trigger:'#characters',
+    start:`top+=${Math.round(cardSlot*.25)} top`,
+    onEnter:    ()=>gsap.to([spotL,spotR],{opacity:1,duration:.7,ease:'power2.out'}),
+    onEnterBack:()=>gsap.to([spotL,spotR],{opacity:1,duration:.7,ease:'power2.out'}),
+    onLeaveBack:()=>gsap.to([spotL,spotR],{opacity:0,duration:.6,ease:'power2.in'}),
+  });
+
   CHARACTERS.forEach((_,i)=>{
     ScrollTrigger.create({
       trigger:'#characters',
@@ -3919,6 +4238,24 @@ function initNav(){
     }
   });
 
+  // Awareness nav link — instant jump only (no smooth scroll).
+  // html { scroll-behavior:smooth } would animate the scroll over ~1s; with
+  // scrub:true the timeline tracks scroll position 1:1, so a smooth animated
+  // scroll would play through card sequences mid-flight. Instant jump avoids this.
+  const awarenessLink=links.querySelector('a[href="#awareness"]');
+  if(awarenessLink){
+    awarenessLink.addEventListener('click',e=>{
+      e.preventDefault();
+      const target=document.getElementById('awareness');
+      if(!target)return;
+      document.documentElement.style.scrollBehavior='auto';
+      target.scrollIntoView({block:'start'});
+      requestAnimationFrame(()=>{document.documentElement.style.scrollBehavior='';});
+      history.replaceState(null,document.title,'#awareness');
+      links.classList.remove('mobile-open');
+    });
+  }
+
   // Nav active state — scroll position based so it reliably clears on leave
   const navAnchors=[...links.querySelectorAll('a[href^="#"]')];
   const sectionIds=navAnchors.map(a=>a.getAttribute('href').slice(1));
@@ -3945,6 +4282,7 @@ function initTrailer(){
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 history.scrollRestoration='manual';
+if(window.location.hash)history.replaceState(null,document.title,window.location.pathname+window.location.search);
 window.scrollTo(0,0);
 // Catch browsers that restore scroll after scripts run
 document.addEventListener('DOMContentLoaded',()=>window.scrollTo(0,0));
@@ -3958,7 +4296,10 @@ if(document.fonts&&document.fonts.ready){
   });
 }
 // Reset before unload so there is nothing to restore on next visit
-window.addEventListener('beforeunload',()=>window.scrollTo(0,0));
+window.addEventListener('beforeunload',()=>{
+  window.scrollTo(0,0);
+  history.replaceState(null,document.title,window.location.pathname+window.location.search);
+});
 document.addEventListener('DOMContentLoaded',()=>{
   const yr=document.getElementById('footer-year');
   if(yr)yr.textContent=new Date().getFullYear();
