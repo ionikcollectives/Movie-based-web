@@ -584,6 +584,13 @@ nav.visible{opacity:1}
 
 /* CHARACTERS — DOSSIER SCROLL */
 #characters{position:relative;background:var(--near-black)}
+/* Fade characters section out to black at the bottom */
+#characters::after{
+  content:'';position:absolute;
+  bottom:0;left:0;right:0;height:220px;
+  background:linear-gradient(to top,var(--near-black) 0%,transparent 100%);
+  pointer-events:none;z-index:3;
+}
 .char-scroll-stage{
   position:sticky;top:0;height:100vh;
   z-index:2;
@@ -1543,90 +1550,78 @@ footer::after{
 }
 
 /* ═══════════════════════════════════════════════════════
-   CREW — Film Contact Sheet
+   CREW — Sticky row-reveal scroll scene
 ═══════════════════════════════════════════════════════ */
-#crew{
-  position:relative;
-  padding:8rem 0 9rem;
-  background:var(--near-black);
-  overflow:hidden;
+/* overflow:hidden must NOT be on #crew — it breaks position:sticky on children */
+#crew{position:relative;background:var(--near-black);}
+/* Transition veil */
+#crew::after{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:260px;
+  background:linear-gradient(to bottom,var(--near-black) 0%,transparent 100%);
+  pointer-events:none;z-index:5;
 }
-#crew::before{
-  content:'';position:absolute;inset:0;
-  background:
-    radial-gradient(ellipse 100% 50% at 50% 0%,rgba(20,36,52,.5) 0%,transparent 65%),
-    radial-gradient(ellipse 70% 35% at 50% 100%,rgba(139,26,42,.09) 0%,transparent 60%);
-  pointer-events:none;
-}
-.crew-inner{
-  position:relative;z-index:1;
-  max-width:1160px;
-  margin:0 auto;
-  padding:0 3rem;
+/* crew-scene gets its height set by JS (totalScroll+VH) */
+.crew-scene{position:relative;}
+/* crew-stage is sticky — needs crew-scene to be taller than 100vh */
+.crew-stage{
+  position:sticky;top:0;height:100vh;overflow:hidden;
+  background:radial-gradient(ellipse 100% 45% at 50% 22%,rgba(20,36,52,.22) 0%,transparent 65%)
+             ,var(--near-black);
 }
 
-/* ── Section header ──────────────────────────────────── */
-.crew-header{text-align:center;margin-bottom:4.5rem;}
+/* ── Section header — pinned at top of stage ── */
+.crew-header{
+  position:absolute;top:0;left:0;right:0;
+  text-align:center;padding:3rem 0 1.4rem;z-index:10;
+  background:linear-gradient(to bottom,var(--near-black) 62%,transparent 100%);
+}
 .crew-header-eyebrow{
   display:block;
   font-family:'Inter',sans-serif;
   font-size:.72rem;letter-spacing:.5em;text-transform:uppercase;
   color:var(--dusty-rose);
-  margin-bottom:1.2rem;
+  margin-bottom:1rem;
 }
 .crew-title-si{
   font-family:'Gemunu Libre','Abhaya Libre','Noto Serif Sinhala',serif;
-  font-size:clamp(2.2rem,5.4vw,3.8rem);
+  font-size:clamp(2rem,5vw,3.4rem);
   font-weight:800;color:var(--bone-white);
-  margin:0 0 .45rem;
+  margin:0 0 .35rem;
 }
 .crew-title-en{
   font-family:'Cormorant Garamond',serif;
-  font-size:clamp(.95rem,1.8vw,1.22rem);
+  font-size:clamp(.9rem,1.6vw,1.1rem);
   font-style:italic;font-weight:300;
   color:rgba(237,232,227,.3);
-  margin:0 0 1.8rem;
-  letter-spacing:.04em;
+  margin:0 0 1.2rem;letter-spacing:.04em;
 }
-.crew-header-holes{
-  display:flex;align-items:center;justify-content:center;gap:5px;
-}
+.crew-header-holes{display:flex;align-items:center;justify-content:center;gap:5px;}
 .crew-header-hole{
   width:9px;height:7px;border-radius:1.5px;
   background:rgba(237,232,227,.09);
   border:1px solid rgba(237,232,227,.07);
 }
 
-/* ── Featured row: Director + Producer ─────────────── */
-.crew-featured{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:1.4rem;
-  margin-bottom:1.4rem;
-  max-width:75%;
-  margin-left:auto;
-  margin-right:auto;
+/* ── Card row — absolutely positioned within stage ── */
+.crew-row{
+  position:absolute;left:0;right:0;
+  display:flex;justify-content:center;align-items:flex-start;
+  gap:1.2rem;padding:0 3rem;z-index:2;
 }
-
-/* ── Main crew grid ──────────────────────────────────── */
-.crew-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:1.2rem;
-}
+.crew-row--featured .crew-card{width:min(272px,25vw);}
+.crew-row--regular  .crew-card{width:min(185px,19.5vw);}
 
 /* ── Card shell ──────────────────────────────────────── */
 .crew-card{
   display:flex;flex-direction:column;
   background:rgb(9,6,12);
   border:1px solid rgba(237,232,227,.06);
-  position:relative;
-  opacity:0;transform:translateY(22px);
-  transition:border-color .4s,transform .45s,box-shadow .45s;
+  position:relative;flex-shrink:0;
+  transition:border-color .4s,box-shadow .45s;
 }
 .crew-card:hover{
   border-color:rgba(237,232,227,.17);
-  transform:translateY(-5px);
   box-shadow:0 18px 48px rgba(0,0,0,.65);
 }
 
@@ -1729,20 +1724,6 @@ footer::after{
 .crew-card--featured .crew-role-text{font-size:.66rem;letter-spacing:.42em;}
 .crew-card--featured .crew-name-text{font-size:clamp(1.05rem,1.85vw,1.3rem);}
 
-/* ── Responsive ──────────────────────────────────────── */
-@media(max-width:960px){
-  .crew-grid{grid-template-columns:repeat(3,1fr);}
-}
-@media(max-width:768px){
-  .crew-inner{padding:0 1.5rem;}
-  .crew-featured{grid-template-columns:1fr 1fr;max-width:100%;}
-  .crew-grid{grid-template-columns:repeat(2,1fr);gap:1rem;}
-  .crew-card--featured .crew-photo{aspect-ratio:3/4;}
-}
-@media(max-width:480px){
-  .crew-featured{grid-template-columns:1fr;}
-  .crew-grid{grid-template-columns:repeat(2,1fr);gap:.75rem;}
-}
 
 
 /* Characters end signal */
@@ -1814,6 +1795,108 @@ footer::after{
   /* Scan line stays — it's a 1px element, no issue */
   /* Loading skip: bigger tap target */
   .loading-skip{font-size:1.38rem;padding:.5rem 1rem;bottom:1.5rem;right:1.5rem}
+}
+
+/* ══════════════════════════════════════════════════════
+   MOBILE RESPONSIVE — comprehensive breakpoints
+══════════════════════════════════════════════════════ */
+
+/* iOS Safari: background-attachment:fixed is broken on mobile WebKit */
+@media(hover:none) and (pointer:coarse){
+  #awareness{background-attachment:scroll;}
+}
+
+/* ── 768px ─────────────────────────────────────────── */
+@media(max-width:768px){
+  /* Nav hamburger: ensure 44×44px tap target */
+  .nav-hamburger{min-width:44px;min-height:44px;justify-content:center;align-items:center;}
+
+  /* Crew header: tighter top padding */
+  .crew-header{padding:2.2rem 1.2rem 1rem;}
+  .crew-title-si{font-size:clamp(1.6rem,5.2vw,2.4rem);}
+  .crew-header-eyebrow{letter-spacing:.3em;}
+
+  /* Synopsis panel: add horizontal breathing room */
+  .synopsis-inner{padding:0 1.2rem;}
+}
+
+/* ── 640px — Crew section mobile layout ───────────── */
+@media(max-width:640px){
+  /* Crew: tighter row padding, bigger cards (2-card rows built by JS) */
+  .crew-row{gap:.7rem;padding:0 1rem;}
+  .crew-row--featured .crew-card{width:min(168px,43vw);}
+  .crew-row--regular  .crew-card{width:min(168px,43vw);}
+
+  /* Crew info bar: slightly smaller text so names fit on narrow cards */
+  .crew-role-text{font-size:.55rem;letter-spacing:.15em;}
+  .crew-name-text{font-size:clamp(.78rem,3.2vw,.95rem);}
+  .crew-card--featured .crew-role-text{font-size:.58rem;letter-spacing:.28em;}
+  .crew-card--featured .crew-name-text{font-size:clamp(.85rem,3.6vw,1.05rem);}
+
+  /* Perf holes: fewer visible at small widths to prevent overflow */
+  .crew-perf{padding:3px 5px;gap:3px;}
+  .crew-perf-hole{width:6px;height:5px;}
+}
+
+/* ── 600px — Dossier character cards ─────────────── */
+@media(max-width:600px){
+  /* Stack the card: photo on top, info below */
+  .dossier-card{
+    flex-direction:column;
+    height:auto;
+    max-height:84vh;
+    width:min(380px,93vw);
+    overflow-y:auto;
+  }
+  .dossier-photo-pane{
+    width:100%;
+    height:200px;
+    flex-shrink:0;
+  }
+  .dossier-info-pane{padding:1.1rem 1.2rem 1.4rem;}
+  .dossier-name-si{font-size:1.85rem;}
+  .dossier-name-en{font-size:.95rem;margin-bottom:.7rem;}
+  .dossier-age-value{font-size:2rem;}
+  .dossier-counter{top:1rem;right:1rem;}
+  .dossier-age-block{margin-top:.6rem;padding-top:.4rem;}
+}
+
+/* ── 480px ─────────────────────────────────────────── */
+@media(max-width:480px){
+  /* Hero: remove left-indent on second title line so it stays within viewport */
+  .hero-title-line--2{padding-left:0;}
+  /* Hero tagline: reduce letter-spacing on tiny screens */
+  .hero-tagline{letter-spacing:.18em;}
+
+  /* Awareness stat cards: switch to column layout so left/right panes stack */
+  .aw-stack-card{flex-direction:column;gap:0;padding:1.4rem 1.2rem 1.6rem;}
+  .aw-card-left{min-width:0;width:100%;padding-right:0;padding-bottom:.9rem;}
+  /* Horizontal separator — scaleY(0→1) still works on a 1px element, gradient rotated */
+  .aw-card-sep{
+    width:48px;height:1px;margin:.4rem 0;
+    background:linear-gradient(to right,transparent,rgba(225,55,75,.9) 25%,rgba(225,55,75,.9) 75%,transparent);
+  }
+  .aw-card-right{padding-left:0;padding-top:.6rem;}
+  .aw-quote{padding:0 1rem;}
+
+  /* Trailer socials: wrap onto two lines, hide dividers */
+  .trailer-socials{flex-wrap:wrap;justify-content:center;gap:.9rem 1.4rem;}
+  .trailer-social-sep{display:none;}
+  .trailer-coming-hint{letter-spacing:.1em;}
+
+  /* Footer: tighter padding */
+  footer{padding:2.2rem 1.2rem 2rem;}
+
+  /* Modal: more padding room for long Sinhala content */
+  .modal-content{padding:2rem 1.1rem;}
+}
+
+/* ── 380px — very small phones (iPhone SE etc.) ───── */
+@media(max-width:380px){
+  .crew-row{padding:0 .6rem;gap:.5rem;}
+  .crew-row--featured .crew-card{width:min(158px,44vw);}
+  .crew-row--regular  .crew-card{width:min(158px,44vw);}
+  .crew-title-si{font-size:1.55rem;}
 }
 
 @media(prefers-reduced-motion:reduce){
@@ -1964,27 +2047,25 @@ footer::after{
 
 <!-- CREW -->
 <section id="crew">
-  <div class="crew-inner">
+  <div class="crew-scene" id="crew-scene">
+    <div class="crew-stage" id="crew-stage">
 
-    <div class="crew-header">
-      <span class="crew-header-eyebrow">Behind the Lens</span>
-      <h2 class="crew-title-si sinhala">නිෂ්පාදන කණ්ඩායම</h2>
-      <p class="crew-title-en">The hands that shaped the truth</p>
-      <div class="crew-header-holes">
-        <div class="crew-header-hole"></div><div class="crew-header-hole"></div>
-        <div class="crew-header-hole"></div><div class="crew-header-hole"></div>
-        <div class="crew-header-hole"></div><div class="crew-header-hole"></div>
-        <div class="crew-header-hole"></div><div class="crew-header-hole"></div>
-        <div class="crew-header-hole"></div><div class="crew-header-hole"></div>
+      <div class="crew-header" id="crew-header">
+        <span class="crew-header-eyebrow">Behind the Lens</span>
+        <h2 class="crew-title-si sinhala">නිෂ්පාදන කණ්ඩායම</h2>
+        <p class="crew-title-en">The hands that shaped the truth</p>
+        <div class="crew-header-holes">
+          <div class="crew-header-hole"></div><div class="crew-header-hole"></div>
+          <div class="crew-header-hole"></div><div class="crew-header-hole"></div>
+          <div class="crew-header-hole"></div><div class="crew-header-hole"></div>
+          <div class="crew-header-hole"></div><div class="crew-header-hole"></div>
+          <div class="crew-header-hole"></div><div class="crew-header-hole"></div>
+        </div>
       </div>
+
+      <!-- .crew-row elements injected by initCrew() -->
+
     </div>
-
-    <!-- Director + Producer — wider featured frames -->
-    <div class="crew-featured" id="crew-featured"></div>
-
-    <!-- Remaining crew — 4-column contact sheet -->
-    <div class="crew-grid" id="crew-grid"></div>
-
   </div>
 </section>
 
@@ -2143,7 +2224,7 @@ const CHARACTERS = [
   },
   {
     id:'ajit',evNo:'SUBJECT-05',
-    nameSi:'අජිත්',nameEn:'Ajit',
+    nameSi:'අජිත්',nameEn:'Ajith',
     image:'Characters/opt/ajit.jpg',
     age:38,
     publicFace:'Senior detective. He smiles often. Moves slowly. Asks questions that seem small — until three days later, they are the only thing that matters. He has seen how these cases end. He is not done yet.',
@@ -2154,103 +2235,19 @@ const CHARACTERS = [
     initial:'අ'
   },
   {
-    id:'pragith',evNo:'SUBJECT-06',
-    nameSi:'ප්‍රගීත්',nameEn:'Prageeth',
-    image:'Characters/opt/prageeth.jpg',
-    age:27,
-    publicFace:'ධනවත් පවුලේ ළමයෙකු — ආකර්ෂණීය, ස්ව-ප්‍රකාශය කළ, කිසිදා ප්‍රශ්නයකට ලක් නොවූ.',
-    hiddenTruth:'That night. That video. That message.',
-    fear:'Evidence. Somewhere. He knows it exists.',
-    regret:'[REDACTED]',
-    secret:'[CLASSIFIED — Pending Prosecution]',
-    initial:'ප්‍ර'
-  },
-  {
-    id:'bhanu',evNo:'SUBJECT-07',
-    nameSi:'බානු',nameEn:'Bhanu',
-    image:'Characters/opt/bhanu.jpg',
-    age:26,
-    publicFace:'මානවවාදී — ශිෂ්‍ය ක්‍රියාකාරිකයෙකු, නිතරම ඉදිරියෙන් සිටිනු.',
-    hiddenTruth:'He knew something was wrong. He said nothing.',
-    fear:'නිහඬව සිටීම — ද වරදක්ද?',
-    regret:'ඒ රාත්‍රිය, ඔහු ද නිදා සිටියේය.',
-    secret:'He saw Prageeth leave. 11:47pm.',
-    initial:'බා'
-  },
-  {
-    id:'sneha',evNo:'SUBJECT-08',
-    nameSi:'ස්නේහා',nameEn:'Sneha',
-    image:'Characters/opt/sneha.jpg',
-    age:25,
-    publicFace:'නිහඬ, විශ්වාසනීය — කාව්‍යාගේ ළඟම මිතුරිය.',
-    hiddenTruth:'She heard crying through a wall. She thought it would pass.',
-    fear:'I should have knocked.',
-    regret:'[REDACTED — Witness Statement 7-C]',
-    secret:'She still has the last message Kavya sent her.',
-    initial:'ස්නේ'
-  },
-  {
-    id:'nirmal',evNo:'SUBJECT-09',
-    nameSi:'නිර්මාල්',nameEn:'Nirmal',
-    image:'Characters/opt/nirmal.jpg',
-    age:32,
-    publicFace:'IT professional. Dedicated. Family man. He built a clean, organized life with clear boundaries — the kind of man who arrives on time and leaves no trace. Some compartments, once sealed, should stay sealed.',
-    hiddenTruth:'His history with Kavya is older than anyone realized. And better hidden.',
-    fear:'That what he buried is not as deep as he thought.',
-    regret:'ඔහු ඇය ළඟ සත්‍ය නොකීවේය. ඒ ඔහු ම දනී.',
-    secret:'[CLASSIFIED — Digital Forensics Report NR-09]',
-    initial:'නි'
-  },
-  {
-    id:'sadeesh',evNo:'SUBJECT-10',
-    nameSi:'සදීශ',nameEn:'Sadeesh',
-    image:'Characters/opt/sadeesh.jpg',
+    id:'piyal',evNo:'SUBJECT-06',
+    nameSi:'පියල්',nameEn:'Piyal',
+    image:null,
     age:0,
-    publicFace:'University student. Friendly face, careful words. He moved in the right circles and stayed out of the wrong conversations — or so he believed. Proximity has a way of making witnesses out of bystanders.',
-    hiddenTruth:'He was present more often than his testimony suggests.',
-    fear:'Being named in something he was only "around" for.',
-    regret:'Saying nothing is still a choice.',
-    secret:'[See cross-reference: SUBJECT-06]',
-    initial:'ස'
-  },
-  {
-    id:'rahal',evNo:'SUBJECT-11',
-    nameSi:'රහල්',nameEn:'Rahal',
-    image:'Characters/opt/rahal.jpg',
-    age:0,
-    publicFace:'A face at the edge of the frame. He moved through campus without friction, without attention. The kind of person who appears in the background of photographs nobody looks at closely — until they have to.',
-    hiddenTruth:'He was seen near the hostel that night. He says he was passing through.',
-    fear:'CCTV. Timestamps. Digital breadcrumbs.',
-    regret:'[REDACTED]',
-    secret:'[See cross-reference: SUBJECT-06]',
-    initial:'ර'
-  },
-  {
-    id:'pissa',evNo:'SUBJECT-12',
-    nameSi:'පිස්සා',nameEn:'Pissa',
-    image:'Characters/opt/pissa.jpg',
-    age:40,
-    publicFace:'Campus-ය ළඟ ජීවත් වෙනවා. He sees everything — the comings, the goings, the things people do when they think no one is watching. The university forgot he existed. That was their mistake.',
-    hiddenTruth:'He was somewhere that night. Nobody asked him. He was never asked anything.',
-    fear:'ඔහු කීවත් කිසිවෙකු ඇහෙනවා ද?',
-    regret:'There was nothing he could do. He told himself that.',
-    secret:'He remembers a face. He still remembers.',
+    publicFace:'ඔහු නිතරම ඒ ස්ථානයේ සිටියේය — නමුත් කිසිවෙකු ඔහු ගැන නොතේරුම්ගත්තේය. The kind of person who blends into every room and remembers everything said in it.',
+    hiddenTruth:'He was closer to the events than anyone knew. The distance he kept was deliberate.',
+    fear:'That somebody checked the timestamps.',
+    regret:'ඔහු නිහඬව සිටියේය. ඒ ඔහු ද දනී.',
+    secret:'[RESTRICTED — Cross-reference SUBJECT-09]',
     initial:'පි'
   },
   {
-    id:'kumara',evNo:'SUBJECT-13',
-    nameSi:'කුමාර',nameEn:'Kumara',
-    image:'Characters/opt/kumara.jpg',
-    age:0,
-    publicFace:'Officer Kumara. Present at every scene. Takes careful notes. Asks the right questions at the right time — when told to. A reliable man in an unpredictable investigation. He misses very little.',
-    hiddenTruth:'He follows orders. He knows more than he says. Those two things are not always the same.',
-    fear:'That the case closes before the truth does.',
-    regret:'There were questions he did not ask. He was waiting to be told.',
-    secret:'[See Incident Report KMR-13]',
-    initial:'කු'
-  },
-  {
-    id:'kavya-amma',evNo:'SUBJECT-14',
+    id:'kavya-amma',evNo:'SUBJECT-07',
     nameSi:'කාව්‍යා අම්මා',nameEn:"Kavya's Mother",
     image:'Characters/opt/kavya-amma.jpg',
     age:53,
@@ -2262,7 +2259,7 @@ const CHARACTERS = [
     initial:'කාඅ'
   },
   {
-    id:'kavya-thaththa',evNo:'SUBJECT-15',
+    id:'kavya-thaththa',evNo:'SUBJECT-08',
     nameSi:'කාව්‍යා තාත්තා',nameEn:"Kavya's Father",
     image:'Characters/opt/kavya-thaththa.jpg',
     age:57,
@@ -2272,26 +2269,110 @@ const CHARACTERS = [
     regret:'The last time he heard her voice, he was distracted. He did not listen fully.',
     secret:'[RESTRICTED — Parental Interview Log MH-15]',
     initial:'කාතා'
+  },
+  {
+    id:'pragith',evNo:'SUBJECT-09',
+    nameSi:'ප්‍රගීත්',nameEn:'Prageeth',
+    image:'Characters/opt/prageeth.jpg',
+    age:27,
+    publicFace:'ධනවත් පවුලේ ළමයෙකු — ආකර්ෂණීය, ස්ව-ප්‍රකාශය කළ, කිසිදා ප්‍රශ්නයකට ලක් නොවූ.',
+    hiddenTruth:'That night. That video. That message.',
+    fear:'Evidence. Somewhere. He knows it exists.',
+    regret:'[REDACTED]',
+    secret:'[CLASSIFIED — Pending Prosecution]',
+    initial:'ප්‍ර'
+  },
+  {
+    id:'sneha',evNo:'SUBJECT-10',
+    nameSi:'ස්නේහා',nameEn:'Sneha',
+    image:'Characters/opt/sneha.jpg',
+    age:25,
+    publicFace:'නිහඬ, විශ්වාසනීය — කාව්‍යාගේ ළඟම මිතුරිය.',
+    hiddenTruth:'She heard crying through a wall. She thought it would pass.',
+    fear:'I should have knocked.',
+    regret:'[REDACTED — Witness Statement 7-C]',
+    secret:'She still has the last message Kavya sent her.',
+    initial:'ස්නේ'
+  },
+  {
+    id:'kumara',evNo:'SUBJECT-11',
+    nameSi:'කුමාර',nameEn:'Kumara',
+    image:'Characters/opt/kumara.jpg',
+    age:0,
+    publicFace:'Officer Kumara. Present at every scene. Takes careful notes. Asks the right questions at the right time — when told to. A reliable man in an unpredictable investigation. He misses very little.',
+    hiddenTruth:'He follows orders. He knows more than he says. Those two things are not always the same.',
+    fear:'That the case closes before the truth does.',
+    regret:'There were questions he did not ask. He was waiting to be told.',
+    secret:'[See Incident Report KMR-13]',
+    initial:'කු'
+  },
+  {
+    id:'bhanu',evNo:'SUBJECT-12',
+    nameSi:'බානු',nameEn:'Bhanu',
+    image:'Characters/opt/bhanu.jpg',
+    age:26,
+    publicFace:'මානවවාදී — ශිෂ්‍ය ක්‍රියාකාරිකයෙකු, නිතරම ඉදිරියෙන් සිටිනු.',
+    hiddenTruth:'He knew something was wrong. He said nothing.',
+    fear:'නිහඬව සිටීම — ද වරදක්ද?',
+    regret:'ඒ රාත්‍රිය, ඔහු ද නිදා සිටියේය.',
+    secret:'He saw Prageeth leave. 11:47pm.',
+    initial:'බා'
+  },
+  {
+    id:'nirmal',evNo:'SUBJECT-13',
+    nameSi:'නිර්මාල්',nameEn:'Nirmal',
+    image:'Characters/opt/nirmal.jpg',
+    age:32,
+    publicFace:'IT professional. Dedicated. Family man. He built a clean, organized life with clear boundaries — the kind of man who arrives on time and leaves no trace. Some compartments, once sealed, should stay sealed.',
+    hiddenTruth:'His history with Kavya is older than anyone realized. And better hidden.',
+    fear:'That what he buried is not as deep as he thought.',
+    regret:'ඔහු ඇය ළඟ සත්‍ය නොකීවේය. ඒ ඔහු ම දනී.',
+    secret:'[CLASSIFIED — Digital Forensics Report NR-09]',
+    initial:'නි'
+  },
+  {
+    id:'rahal',evNo:'SUBJECT-14',
+    nameSi:'රහල්',nameEn:'Rahal',
+    image:'Characters/opt/rahal.jpg',
+    age:0,
+    publicFace:'A face at the edge of the frame. He moved through campus without friction, without attention. The kind of person who appears in the background of photographs nobody looks at closely — until they have to.',
+    hiddenTruth:'He was seen near the hostel that night. He says he was passing through.',
+    fear:'CCTV. Timestamps. Digital breadcrumbs.',
+    regret:'[REDACTED]',
+    secret:'[See cross-reference: SUBJECT-09]',
+    initial:'ර'
+  },
+  {
+    id:'sadeesh',evNo:'SUBJECT-15',
+    nameSi:'සදීශ',nameEn:'Shadeesa',
+    image:'Characters/opt/sadeesh.jpg',
+    age:0,
+    publicFace:'University student. Friendly face, careful words. He moved in the right circles and stayed out of the wrong conversations — or so he believed. Proximity has a way of making witnesses out of bystanders.',
+    hiddenTruth:'He was present more often than his testimony suggests.',
+    fear:'Being named in something he was only "around" for.',
+    regret:'Saying nothing is still a choice.',
+    secret:'[See cross-reference: SUBJECT-09]',
+    initial:'ස'
   }
 ];
 
 // ─── CREW DATA ────────────────────────────────────────────────────────────────
 // Ordered by standard film credit hierarchy
 const CREW=[
-  {role:'Produced by',                             name:'Rimzan Shaheed',             featured:true, photo:'Crew/Producer.jpeg'},
-  {role:'Directed by',                             name:'Shirly P. Delankawala',      featured:true, photo:'Crew/Director.jpeg'},
-  {role:'Written by',                              name:'Vishwa Vijewardana',                        photo:'Crew/Writer2.jpeg'},
-  {role:'Written by',                              name:'Priyanath Vidanapathirana',                 photo:'Crew/Writer.jpeg'},
-  {role:'Director of Photography',                 name:'Chandana Jayasinghe',                       photo:'Crew/DOP.jpeg'},
-  {role:'Edited by',                               name:'Rangana Sinharage',                         photo:'Crew/Editor.jpeg'},
-  {role:'Original Score by',                       name:'Amith Guru',                                photo:'Crew/Music Director.jpeg'},
-  {role:'Makeup Design by',                        name:'Priyantha S. Wanninayake',                  photo:'Crew/Makeup Artist.jpeg'},
-  {role:'Production Design by',                    name:'Sampath Wanniarachchi',                     photo:'Crew/Art Director.jpeg'},
-  {role:'Assistant Director',                      name:'Chaminda Udawela',                          photo:'Crew/Assistant Director.jpeg'},
-  {role:'Production Manager',                      name:'Janaka B. Rathnayaka',                      photo:'Crew/Production Manager.jpeg'},
-  {role:'Costume Design by',                       name:'Suresh Madusanka',                          photo:'Crew/Costume Designer.jpeg'},
-  {role:'Still Photography by',                    name:'Dammika Pathirathna',                       photo:'Crew/Still  Photography.jpeg'},
-  {role:'Colour Grading & Digital Intermediate',   name:'Dinidu Jagoda',                             photo:'Crew/Colorist.jpeg'},
+  {role:'Produced by',          name:'Rimzan Shaheed',            featured:true, photo:'Crew/Producer.jpeg'},
+  {role:'Directed by',          name:'Shirly P. Delankawala',     featured:true, photo:'Crew/Director.jpeg'},
+  {role:'Written by',           name:'Vishwa Vijewardana',                       photo:'Crew/Writer2.jpeg'},
+  {role:'Written by',           name:'Priyanath Vidanapathirana',                photo:'Crew/Writer.jpeg'},
+  {role:'Director of Photography', name:'Chandana Jayasinghe',                  photo:'Crew/DOP.jpeg'},
+  {role:'Edited by',            name:'Rangana Sinharage',                        photo:'Crew/Editor.jpeg'},
+  {role:'Original Score by',    name:'Amith Guru',                               photo:'Crew/Music Director.jpeg'},
+  {role:'Makeup Design by',     name:'Priyantha S. Wanninayake',                 photo:'Crew/Makeup Artist.jpeg'},
+  {role:'Production Design by', name:'Sampath Wanniarachchi',                    photo:'Crew/Art Director.jpeg'},
+  {role:'Assistant Director',   name:'Chaminda Udawela',                         photo:'Crew/Assistant Director.jpeg'},
+  {role:'Production Manager',   name:'Janaka B. Rathnayaka',                     photo:'Crew/Production Manager.jpeg'},
+  {role:'Costume Design by',    name:'Suresh Madusanka',                         photo:'Crew/Costume Designer.jpeg'},
+  {role:'Still Photography by', name:'Dammika Pathirathna',                      photo:'Crew/Still  Photography.jpeg'},
+  {role:'Colour Grading by',    name:'Dinidu Jagoda',                            photo:'Crew/Colorist.jpeg'},
 ];
 
 const TIMELINE = [
@@ -3163,6 +3244,7 @@ function initStarfield(){
   hero.style.overflow='hidden';
 }
 
+
 // ─── HERO ─────────────────────────────────────────────────────────────────────
 function initHero(){
   const hero=document.getElementById('hero');
@@ -3335,6 +3417,8 @@ function initHero(){
     scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:1},
     y:60,ease:'none'
   });
+
+
 }
 
 // ─── SCROLL ANIMATIONS ────────────────────────────────────────────────────────
@@ -3403,27 +3487,43 @@ function initScrollAnimations(){
 
     const hotlineEl=document.getElementById('awareness-hotline');
 
-    // Dynamic side-by-side positioning so the two elements sit flush together
-    const VW       =window.innerWidth;
-    const cardW    =Math.min(560, Math.round(VW*.44));
-    const hotW     =Math.min(270, Math.round(VW*.2));
-    const sideGap  =Math.max(36, Math.round(VW*.025));   // gap between card and hotline
-    const leftEdge =Math.round((VW - cardW - sideGap - hotW) / 2); // centre the pair
-    const hotLeft  =leftEdge + cardW + sideGap;
+    // Layout changes at 680px: side-by-side on desktop, stacked on mobile
+    const VW         = window.innerWidth;
+    const isMobileAw = VW <= 680;
 
-    cards.forEach(c=>gsap.set(c,{xPercent:0,yPercent:-50,left:leftEdge,top:'62%',y:VH,width:cardW}));
-    if(hotlineEl) gsap.set(hotlineEl,{xPercent:0,yPercent:-50,left:hotLeft,right:'auto',top:'62%',y:VH,opacity:0,width:hotW});
+    let cardW, hotW, leftEdge, hotLeft, cardTop, hotTop;
+    if(isMobileAw){
+      // Mobile: both cards centred, hotline sits below stat card
+      cardW     = Math.round(VW * .88);
+      hotW      = Math.round(VW * .82);
+      leftEdge  = Math.round((VW - cardW) / 2);
+      hotLeft   = Math.round((VW - hotW)  / 2);
+      cardTop   = '38%';
+      hotTop    = '75%';
+    } else {
+      // Desktop: side by side
+      cardW     = Math.min(560, Math.round(VW*.44));
+      hotW      = Math.min(270, Math.round(VW*.2));
+      const sideGap = Math.max(36, Math.round(VW*.025));
+      leftEdge  = Math.round((VW - cardW - sideGap - hotW) / 2);
+      hotLeft   = leftEdge + cardW + sideGap;
+      cardTop   = '62%';
+      hotTop    = '62%';
+    }
 
-    // Align hotline top edge to stat card top edge.
-    // Both use yPercent:-50 centred at 62% — if heights differ the tops diverge.
-    // Shift hotline center down by the half-height difference so tops match.
-    requestAnimationFrame(()=>{
-      if(!hotlineEl) return;
-      const cardH=cards[0].offsetHeight;
-      const hotH =hotlineEl.offsetHeight;
-      const diff =(hotH-cardH)/2;
-      if(diff!==0) gsap.set(hotlineEl,{top: VH*0.62 + diff });
-    });
+    cards.forEach(c=>gsap.set(c,{xPercent:0,yPercent:-50,left:leftEdge,top:cardTop,y:VH,width:cardW}));
+    if(hotlineEl) gsap.set(hotlineEl,{xPercent:0,yPercent:-50,left:hotLeft,right:'auto',top:hotTop,y:VH,opacity:0,width:hotW});
+
+    // Desktop only: align hotline top edge to stat card top edge (heights may differ)
+    if(!isMobileAw){
+      requestAnimationFrame(()=>{
+        if(!hotlineEl) return;
+        const cardH=cards[0].offsetHeight;
+        const hotH =hotlineEl.offsetHeight;
+        const diff =(hotH-cardH)/2;
+        if(diff!==0) gsap.set(hotlineEl,{top: VH*0.62 + diff });
+      });
+    }
 
     // ── Master timeline ───────────────────────────────────────────────────
     const tl=gsap.timeline({
@@ -4130,65 +4230,119 @@ function initTimeline(){
 
 // ─── CREW ─────────────────────────────────────────────────────────────────────
 function initCrew(){
-  const featuredWrap=document.getElementById('crew-featured');
-  const gridWrap=document.getElementById('crew-grid');
-  if(!featuredWrap||!gridWrap)return;
+  const scene  = document.getElementById('crew-scene');
+  const stage  = document.getElementById('crew-stage');
+  const header = document.getElementById('crew-header');
+  if(!scene||!stage||!header) return;
 
-  const seg=new Intl.Segmenter();
-  const holes=(n)=>Array(n).fill('<div class="crew-perf-hole"></div>').join('');
+  const seg     = new Intl.Segmenter();
+  const mkHoles = n => Array(n).fill('<div class="crew-perf-hole"></div>').join('');
+  const chunk   = (arr,n) => { const r=[]; for(let i=0;i<arr.length;i+=n) r.push(arr.slice(i,i+n)); return r; };
 
-  CREW.forEach((member,i)=>{
-    const card=document.createElement('div');
-    card.className='crew-card'+(member.featured?' crew-card--featured':'');
+  // Row grouping: featured pair first, then groups of 4 (or 2 on narrow screens)
+  const featured   = CREW.filter(m => m.featured);
+  const regular    = CREW.filter(m => !m.featured);
+  const chunkSize  = window.innerWidth < 640 ? 2 : 4;
+  const rows       = [featured, ...chunk(regular, chunkSize)];
 
-    // First grapheme cluster as placeholder initial
-    const initial=[...seg.segment(member.name)][0]?.segment||'?';
-    const frame=String(i+1).padStart(3,'0');
-    const holeCount=member.featured?12:8;
-
-    const imgAttr=member.photo?`data-src="${member.photo}"`:'';
-    card.innerHTML=`
-      <div class="crew-perf crew-perf--top">${holes(holeCount)}<span class="crew-perf-counter">${frame} ▲</span></div>
-      <div class="crew-photo">
-        ${member.photo?`<img alt="${member.name}" ${imgAttr}>`:''}
-        ${member.photo?'':` <span class="crew-photo-initial">${initial}</span>`}
-        <div class="crew-scanline"></div>
-      </div>
-      <div class="crew-perf crew-perf--bot">${holes(holeCount)}<span class="crew-perf-counter">EXP·${frame}</span></div>
-      <div class="crew-info">
-        <span class="crew-role-text">${member.role}</span>
-        <span class="crew-name-text">${member.name}</span>
-      </div>`;
-
-    (member.featured?featuredWrap:gridWrap).appendChild(card);
+  // Build DOM for each row (synchronously — needed so offsetHeight is readable below)
+  const rowEls = rows.map((members, ri) => {
+    const row = document.createElement('div');
+    row.className = 'crew-row' + (ri===0 ? ' crew-row--featured' : ' crew-row--regular');
+    members.forEach(member => {
+      const card  = document.createElement('div');
+      card.className = 'crew-card' + (member.featured ? ' crew-card--featured' : '');
+      const init  = [...seg.segment(member.name)][0]?.segment || '?';
+      const frame = String(CREW.indexOf(member)+1).padStart(3,'0');
+      const hn    = member.featured ? 12 : 8;
+      card.innerHTML = `
+        <div class="crew-perf crew-perf--top">${mkHoles(hn)}<span class="crew-perf-counter">${frame} ▲</span></div>
+        <div class="crew-photo">
+          ${member.photo ? `<img alt="${member.name}" data-src="${member.photo}">` : `<span class="crew-photo-initial">${init}</span>`}
+          <div class="crew-scanline"></div>
+        </div>
+        <div class="crew-perf crew-perf--bot">${mkHoles(hn)}<span class="crew-perf-counter">EXP·${frame}</span></div>
+        <div class="crew-info">
+          <span class="crew-role-text">${member.role}</span>
+          <span class="crew-name-text">${member.name}</span>
+        </div>`;
+      row.appendChild(card);
+    });
+    stage.appendChild(row);
+    return row;
   });
 
-  // Lazy-load crew photos via IntersectionObserver
-  const lazyImgs=[...document.querySelectorAll('.crew-photo img[data-src]')];
-  if('IntersectionObserver' in window){
-    const imgObs=new IntersectionObserver(entries=>{
-      entries.forEach(entry=>{
-        if(!entry.isIntersecting)return;
-        const img=entry.target;
-        img.src=img.dataset.src;
-        img.addEventListener('load',()=>img.classList.add('loaded'),{once:true});
-        imgObs.unobserve(img);
-      });
-    },{rootMargin:'200px'});
-    lazyImgs.forEach(img=>imgObs.observe(img));
-  } else {
-    lazyImgs.forEach(img=>{img.src=img.dataset.src;img.addEventListener('load',()=>img.classList.add('loaded'),{once:true});});
-  }
+  // Load all crew photos upfront — they're small and off-screen via transform, so
+  // IntersectionObserver won't fire reliably for them
+  stage.querySelectorAll('.crew-photo img[data-src]').forEach(img => {
+    img.src = img.dataset.src;
+    img.addEventListener('load', () => img.classList.add('loaded'), {once:true});
+  });
 
-  // Staggered scroll reveal
-  const allCards=[...document.querySelectorAll('.crew-card')];
-  ScrollTrigger.create({
-    trigger:'#crew',start:'top 78%',once:true,
-    onEnter(){
-      allCards.forEach((card,i)=>{
-        gsap.to(card,{opacity:1,y:0,duration:.75,delay:i*.055,ease:'power3.out'});
-      });
+  // ── Build scroll animation (all synchronous — NO requestAnimationFrame) ──────
+  // Accessing offsetHeight here forces a synchronous layout reflow. That's fine
+  // for 4 rows and is necessary so scene.style.height is set BEFORE ScrollTrigger
+  // is created (sticky won't work otherwise).
+  const VH      = window.innerHeight;
+  const VW      = window.innerWidth;
+  const headerH = header.offsetHeight;
+  const gap     = 24; // px between header bottom and card area top
+
+  // Position each row centred in the space below the header
+  rowEls.forEach(row => {
+    const rowH   = row.offsetHeight;
+    const availH = VH - headerH - gap;
+    const topPos = headerH + gap + Math.max(0, (availH - rowH) / 2);
+    // top = landing position; y=VH pushes it below the viewport initially
+    gsap.set(row, { top: topPos, y: VH });
+  });
+
+  // Scroll budget — units are pixels (scrub value adds lag so animation coasts)
+  // Longer phases = more scroll required = slower-feeling motion.
+  const riseLen = Math.round(VH * 1.10);
+  const holdLen = Math.round(VH * 0.22);
+  const exitLen = Math.round(VH * 0.80);
+  // Step between row starts = rise + hold (rows overlap during exit)
+  const step        = riseLen + holdLen;
+  const totalScroll = rows.length * step + exitLen + Math.round(VH * 0.5);
+
+  // CRITICAL: set scene height BEFORE creating the ScrollTrigger.
+  // CSS sticky requires the parent to be taller than the sticky element;
+  // ScrollTrigger also needs this to compute the correct end position.
+  scene.style.height = `${totalScroll + VH}px`;
+
+  const tl = gsap.timeline({
+    scrollTrigger:{
+      trigger: scene,
+      start:   'top top',
+      end:     `+=${totalScroll}`,
+      scrub:   1.4   // seconds the animation lags behind scroll — gives inertia
     }
+  });
+
+  rowEls.forEach((row, ri) => {
+    const cards = [...row.querySelectorAll('.crew-card')];
+    const N     = cards.length;
+    const mid   = Math.ceil(N / 2);
+    // Each row starts rising exactly when the previous row's hold ends
+    const s0        = ri * step;
+    const exitStart = s0 + riseLen + holdLen;
+
+    // Phase 1: row rises from below into view
+    tl.fromTo(row, {y: VH}, {y: 0, ease:'none', duration: riseLen}, s0);
+
+    // Phase 2: cards split — left half exits left, right half exits right.
+    // The NEXT row is already rising simultaneously, giving the cascade feel.
+    cards.forEach((card, ci) => {
+      const goLeft = ci < mid;
+      const depth  = goLeft ? (mid - 1 - ci) : (ci - mid);
+      const xDest  = (goLeft ? -1 : 1) * VW * (1.08 + depth * 0.12);
+      tl.fromTo(card,
+        { x: 0, opacity: 1 },
+        { x: xDest, opacity: 0, ease:'power2.in', duration: exitLen },
+        exitStart
+      );
+    });
   });
 }
 
