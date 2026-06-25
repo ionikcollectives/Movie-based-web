@@ -1277,8 +1277,7 @@ nav.visible{opacity:1}
 }
 
 @media(max-width:900px){
-  /* On narrow screens stack hotline below stat cards, both centred */
-  .awareness-hotline{width:min(420px,88vw) !important; right:auto !important; left:50% !important;}
+  /* JS handles all hotline positioning — no overrides needed here */
 }
 @media(max-width:680px){
   .aw-stack-card{padding:1.6rem 1.4rem;}
@@ -1772,8 +1771,8 @@ footer::after{
   .cork-board{padding:1.5rem}
   /* Modal: reduce padding so text is readable */
   .modal-content{padding:1.5rem 1.25rem}
-  /* Loading hint: larger tap target and readable size */
-  #loading-gate-hint{font-size:1.31rem;letter-spacing:.2em}
+  /* Loading hint: reduce letter-spacing so text doesn't overflow narrow screens */
+  #loading-gate-hint{font-size:1.1rem;letter-spacing:.12em;white-space:normal;text-align:center;padding:0 1.5rem;max-width:100%;}
   /* Loading text: tighter width so long Sinhala lines don't overflow */
   .loading-text{width:96%;font-size:clamp(1.48rem,6.3vw,1.98rem)}
   /* Character cards: ensure no horizontal overflow */
@@ -1795,6 +1794,8 @@ footer::after{
   /* Scan line stays — it's a 1px element, no issue */
   /* Loading skip: bigger tap target */
   .loading-skip{font-size:1.38rem;padding:.5rem 1rem;bottom:1.5rem;right:1.5rem}
+  /* Loading hint: minimal spacing on very small screens */
+  #loading-gate-hint{letter-spacing:.06em;font-size:1rem;}
 }
 
 /* ══════════════════════════════════════════════════════
@@ -1844,21 +1845,22 @@ footer::after{
   .dossier-card{
     flex-direction:column;
     height:auto;
-    max-height:84vh;
+    max-height:92vh;
     width:min(380px,93vw);
     overflow-y:auto;
   }
   .dossier-photo-pane{
     width:100%;
-    height:200px;
+    height:clamp(260px,72vw,340px);
     flex-shrink:0;
+  }
+  .dossier-photo-img{
+    object-position:center 12%;
   }
   .dossier-info-pane{padding:1.1rem 1.2rem 1.4rem;}
   .dossier-name-si{font-size:1.85rem;}
   .dossier-name-en{font-size:.95rem;margin-bottom:.7rem;}
-  .dossier-age-value{font-size:2rem;}
   .dossier-counter{top:1rem;right:1rem;}
-  .dossier-age-block{margin-top:.6rem;padding-top:.4rem;}
 }
 
 /* ── 480px ─────────────────────────────────────────── */
@@ -2025,7 +2027,7 @@ footer::after{
   <div class="char-scroll-stage" id="char-stage">
     <div class="char-stage-header">
 <h2 class="section-title-si sinhala" style="font-size:2.19rem;margin:.3rem 0">චරිත</h2>
-      <p class="section-title-en serif" style="font-size:1.23rem">Faces</p>
+      <p class="section-title-en serif" style="font-size:1.23rem">Cast</p>
     </div>
     <div id="char-cards-container">
       <!-- Filled by JS -->
@@ -2237,7 +2239,7 @@ const CHARACTERS = [
   {
     id:'piyal',evNo:'SUBJECT-06',
     nameSi:'පියල්',nameEn:'Piyal',
-    image:null,
+    image:'Characters/opt/pissa.jpg',
     age:0,
     publicFace:'ඔහු නිතරම ඒ ස්ථානයේ සිටියේය — නමුත් කිසිවෙකු ඔහු ගැන නොතේරුම්ගත්තේය. The kind of person who blends into every room and remembers everything said in it.',
     hiddenTruth:'He was closer to the events than anyone knew. The distance he kept was deliberate.',
@@ -2345,7 +2347,7 @@ const CHARACTERS = [
   {
     id:'sadeesh',evNo:'SUBJECT-15',
     nameSi:'සදීශ',nameEn:'Shadeesa',
-    image:'Characters/opt/sadeesh.jpg',
+    image:'Characters/opt/sadeesha_opt.jpg',
     age:0,
     publicFace:'University student. Friendly face, careful words. He moved in the right circles and stayed out of the wrong conversations — or so he believed. Proximity has a way of making witnesses out of bystanders.',
     hiddenTruth:'He was present more often than his testimony suggests.',
@@ -2365,6 +2367,7 @@ const CREW=[
   {role:'Written by',           name:'Priyanath Vidanapathirana',                photo:'Crew/Writer.jpeg'},
   {role:'Director of Photography', name:'Chandana Jayasinghe',                  photo:'Crew/DOP.jpeg'},
   {role:'Edited by',            name:'Rangana Sinharage',                        photo:'Crew/Editor.jpeg'},
+  {role:'Colour Grading by',    name:'Dinidu Jagoda',                            photo:'Crew/Colorist.jpeg'},
   {role:'Original Score by',    name:'Amith Guru',                               photo:'Crew/Music Director.jpeg'},
   {role:'Makeup Design by',     name:'Priyantha S. Wanninayake',                 photo:'Crew/Makeup Artist.jpeg'},
   {role:'Production Design by', name:'Sampath Wanniarachchi',                    photo:'Crew/Art Director.jpeg'},
@@ -2372,7 +2375,6 @@ const CREW=[
   {role:'Production Manager',   name:'Janaka B. Rathnayaka',                     photo:'Crew/Production Manager.jpeg'},
   {role:'Costume Design by',    name:'Suresh Madusanka',                         photo:'Crew/Costume Designer.jpeg'},
   {role:'Still Photography by', name:'Dammika Pathirathna',                      photo:'Crew/Still  Photography.jpeg'},
-  {role:'Colour Grading by',    name:'Dinidu Jagoda',                            photo:'Crew/Colorist.jpeg'},
 ];
 
 const TIMELINE = [
@@ -4040,14 +4042,9 @@ function initCharacters(){
       </div>
       <div class="dossier-info-pane">
         <div class="dossier-counter">${String(i+1).padStart(2,'0')} / ${String(N).padStart(2,'0')}</div>
-        <div class="dossier-ev-no">${c.evNo}</div>
         <div class="dossier-name-si sinhala">${c.nameSi}</div>
         <div class="dossier-name-en serif">${c.nameEn}</div>
         <div class="dossier-divider"></div>
-        <div class="dossier-age-block">
-          <div class="dossier-age-label">Age</div>
-          <div class="dossier-age-value">${c.age}</div>
-        </div>
       </div>
       `;
 
