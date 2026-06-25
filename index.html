@@ -712,7 +712,7 @@ nav.visible{opacity:1}
 }
 .dossier-photo-img{
   position:absolute;inset:0;width:100%;height:100%;
-  object-fit:cover;object-position:center 20%;
+  object-fit:cover;object-position:center bottom;
   z-index:1;
 }
 /* Right info pane */
@@ -720,7 +720,8 @@ nav.visible{opacity:1}
   flex:1;
   padding:2rem 1.8rem 1.6rem;
   position:relative;overflow:hidden;
-  display:flex;flex-direction:column;justify-content:flex-start;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  text-align:center;
 }
 /* Overlays (grain, vignette, crack) span full card */
 .dossier-grain{
@@ -748,17 +749,20 @@ nav.visible{opacity:1}
 }
 .dossier-name-si{
   font-family:'Gemunu Libre','Abhaya Libre','Noto Serif Sinhala',serif;
-  font-size:3.1rem;font-weight:800;color:var(--bone-white);
-  margin-bottom:.2rem;line-height:1.2;
+  font-size:4rem;font-weight:800;color:var(--bone-white);
+  margin-bottom:.3rem;line-height:1.2;
+  width:100%;
 }
 .dossier-name-en{
   font-family:'Cormorant Garamond',serif;
-  font-size:1.18rem;font-style:italic;
-  color:rgba(var(--char-rgb),.75);margin-bottom:1rem;
+  font-size:1.5rem;font-style:italic;
+  color:rgba(var(--char-rgb),.75);margin-bottom:1.2rem;
+  width:100%;
 }
 .dossier-divider{
   height:1px;
-  background:linear-gradient(to right,rgba(var(--char-rgb),.7),rgba(var(--char-rgb),.1),transparent);
+  width:100%;
+  background:linear-gradient(to right,transparent,rgba(var(--char-rgb),.7),transparent);
   margin-bottom:1rem;
 }
 .dossier-age-block{margin-top:auto;padding-top:.5rem;}
@@ -1281,10 +1285,15 @@ nav.visible{opacity:1}
 }
 @media(max-width:680px){
   .aw-stack-card{padding:1.6rem 1.4rem;}
-  .aw-card-left{min-width:120px;padding-right:1.4rem;}
-  .aw-card-right{padding-left:1.4rem;}
-  .aw-card-sep{height:52px;}
+  .aw-card-body{flex-direction:column;align-items:flex-start;gap:.5rem;}
+  .aw-card-left{min-width:0;width:100%;padding-right:0;text-align:left;}
+  .aw-card-sep{
+    width:48px;height:1px;margin:.2rem 0;
+    background:linear-gradient(to right,transparent,rgba(225,55,75,.9) 25%,rgba(225,55,75,.9) 75%,transparent);
+  }
+  .aw-card-right{padding-left:0;width:100%;}
   .aw-row-num{font-size:clamp(2.4rem,10vw,3.5rem);}
+  .aw-fraction-dots{justify-content:flex-start;}
   .aw-quote{flex-direction:column;gap:1rem;padding:0 1.5rem;}
   .aw-quote-line{width:48px;height:1px;flex:none;background:rgba(139,26,42,.3);}
 }
@@ -1515,8 +1524,7 @@ nav.visible{opacity:1}
 /* FOOTER */
 footer{
   position:relative;
-  padding:3.5rem 2rem 2.5rem;
-  text-align:center;
+  padding:2.5rem 2.5rem 2rem;
   background:linear-gradient(to bottom,rgba(10,5,9,0),rgba(10,5,9,.95) 30%,var(--near-black));
   overflow:hidden;
 }
@@ -1525,27 +1533,50 @@ footer::before{
   height:1px;
   background:linear-gradient(to right,transparent,rgba(139,26,42,.35) 40%,rgba(139,26,42,.35) 60%,transparent);
 }
-footer::after{
-  content:'';position:absolute;
-  top:0;left:50%;transform:translateX(-50%);
-  width:200px;height:60px;
-  background:radial-gradient(ellipse at 50% 0%,rgba(139,26,42,.18),transparent 70%);
-  pointer-events:none;
-}
 .footer-inner{
   position:relative;z-index:1;
+  display:flex;align-items:center;justify-content:space-between;
 }
-.footer-mark{
-  font-family:'Gemunu Libre','Abhaya Libre',serif;
-  font-size:1.68rem;font-weight:700;
-  color:rgba(237,232,227,.12);
-  letter-spacing:.18em;
-  display:block;margin-bottom:1.1rem;
+.footer-center{
+  position:absolute;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:.35rem;
 }
+.footer-title{
+  height:72px;width:auto;object-fit:contain;
+}
+.footer-tagline{
+  height:36px;width:auto;object-fit:contain;opacity:.9;
+}
+.footer-logo-left,.footer-logo-right{
+  height:62px;width:auto;object-fit:contain;flex-shrink:0;
+}
+.footer-rule{
+  margin:1.6rem 0 1.4rem;
+  border:none;height:1px;
+  background:linear-gradient(to right,transparent,rgba(237,232,227,.1) 30%,rgba(237,232,227,.1) 70%,transparent);
+}
+.footer-meta{
+  text-align:center;display:flex;flex-direction:column;align-items:center;gap:.55rem;
+}
+.footer-hotline-note{
+  font-size:.82rem;letter-spacing:.06em;color:rgba(237,232,227,.45);font-family:'Inter',sans-serif;
+}
+.footer-hotline-link{
+  color:var(--dusty-rose);text-decoration:none;font-weight:600;
+}
+.footer-hotline-link:hover{text-decoration:underline;}
+.footer-links{
+  display:flex;align-items:center;gap:.6rem;font-size:.78rem;letter-spacing:.08em;font-family:'Inter',sans-serif;
+}
+.footer-links a{color:rgba(237,232,227,.35);text-decoration:none;transition:color .2s;}
+.footer-links a:hover{color:rgba(237,232,227,.7);}
+.footer-sep{color:rgba(237,232,227,.2);}
 .footer-copy{
-  font-size:.98rem;letter-spacing:.1em;
-  color:rgba(237,232,227,.3);font-family:'Inter',sans-serif;
-  line-height:1.8;
+  font-size:.78rem;letter-spacing:.1em;color:rgba(237,232,227,.25);font-family:'Inter',sans-serif;
+}
+.footer-disclaimer{
+  font-size:.72rem;letter-spacing:.04em;color:rgba(237,232,227,.18);font-family:'Inter',sans-serif;
+  max-width:560px;line-height:1.7;
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -1845,21 +1876,21 @@ footer::after{
   .dossier-card{
     flex-direction:column;
     height:auto;
-    max-height:96vh;
+    max-height:94vh;
     width:min(380px,93vw);
-    overflow-y:auto;
+    overflow-y:hidden;
   }
   .dossier-photo-pane{
     width:100%;
-    height:clamp(340px,58vh,480px);
+    height:clamp(300px,58vh,440px);
     flex-shrink:0;
   }
   .dossier-photo-img{
-    object-position:center top;
+    object-position:center bottom;
   }
-  .dossier-info-pane{padding:1rem 1.2rem 1.2rem;}
-  .dossier-name-si{font-size:1.85rem;}
-  .dossier-name-en{font-size:.95rem;margin-bottom:.5rem;}
+  .dossier-info-pane{padding:.8rem 1.2rem 1rem;}
+  .dossier-name-si{font-size:1.75rem;}
+  .dossier-name-en{font-size:.9rem;margin-bottom:.4rem;}
   .dossier-counter{top:1rem;right:1rem;}
 }
 
@@ -1870,15 +1901,16 @@ footer::after{
   /* Hero tagline: reduce letter-spacing on tiny screens */
   .hero-tagline{letter-spacing:.18em;}
 
-  /* Awareness stat cards: switch to column layout so left/right panes stack */
-  .aw-stack-card{flex-direction:column;gap:0;padding:1.4rem 1.2rem 1.6rem;}
-  .aw-card-left{min-width:0;width:100%;padding-right:0;padding-bottom:.9rem;}
-  /* Horizontal separator — scaleY(0→1) still works on a 1px element, gradient rotated */
+  /* Awareness stat cards: stack number above description */
+  .aw-stack-card{padding:1.4rem 1.2rem 1.6rem;}
+  .aw-card-body{flex-direction:column;align-items:flex-start;gap:.6rem;}
+  .aw-card-left{min-width:0;width:100%;padding-right:0;padding-bottom:0;text-align:left;}
   .aw-card-sep{
-    width:48px;height:1px;margin:.4rem 0;
+    width:48px;height:1px;margin:.2rem 0;
     background:linear-gradient(to right,transparent,rgba(225,55,75,.9) 25%,rgba(225,55,75,.9) 75%,transparent);
   }
-  .aw-card-right{padding-left:0;padding-top:.6rem;}
+  .aw-card-right{padding-left:0;padding-top:0;width:100%;}
+  .aw-fraction-dots{justify-content:flex-start;}
   .aw-quote{padding:0 1rem;}
 
   /* Trailer socials: wrap onto two lines, hide dividers */
@@ -1887,7 +1919,11 @@ footer::after{
   .trailer-coming-hint{letter-spacing:.1em;}
 
   /* Footer: tighter padding */
-  footer{padding:2.2rem 1.2rem 2rem;}
+  footer{padding:1.8rem 1.2rem 1.5rem;}
+  .footer-title{height:52px;}
+  .footer-tagline{height:26px;}
+  .footer-logo-left,.footer-logo-right{height:44px;}
+  .footer-disclaimer{font-size:.68rem;padding:0 .5rem;}
 
   /* Modal: more padding room for long Sinhala content */
   .modal-content{padding:2rem 1.1rem;}
@@ -2154,10 +2190,29 @@ footer::after{
 </section>
 
 
-<footer>
+<footer id="site-footer">
   <div class="footer-inner">
-    <span class="footer-mark">හන්තානට ඇහෙනවද</span>
-    <p class="footer-copy">© <span id="footer-year">2025</span> IONIK. All rights reserved.<br>"හන්තානට ඇහෙනවද" is a work of fiction.</p>
+    <img class="footer-logo-left" src="cmp.png" alt="CMP">
+    <div class="footer-center">
+      <img class="footer-title" src="movie title white.png" alt="Movie Title">
+      <img class="footer-tagline" src="movie tagline.png" alt="Movie Tagline">
+    </div>
+    <img class="footer-logo-right" src="ionik.png" alt="IONIK">
+  </div>
+
+  <div class="footer-rule"></div>
+
+  <div class="footer-meta">
+    <p class="footer-hotline-note">If you or someone you know is struggling — call <a href="tel:1926" class="footer-hotline-link">1926</a> · Sri Lanka Suicide Prevention Hotline</p>
+    <div class="footer-links">
+      <a href="mailto:ionik@gmail.com">Contact</a>
+      <span class="footer-sep">·</span>
+      <a href="#">Privacy Policy</a>
+      <span class="footer-sep">·</span>
+      <a href="#">Terms of Use</a>
+    </div>
+    <p class="footer-copy">© <span id="footer-year">2025</span> IONIK Collectives. All rights reserved.</p>
+    <p class="footer-disclaimer">"හන්තානට ඇහෙනවද" is a work of fiction. All names, characters, and incidents are products of the creators' imagination and are used fictitiously.</p>
   </div>
 </footer>
 
@@ -3471,7 +3526,7 @@ function initScrollAnimations(){
 
     const eyebrowEl=textLayer.querySelector('.awareness-eyebrow');
     const leadEl   =textLayer.querySelector('.awareness-lead');
-    const moveUp   =(leadEl&&eyebrowEl)
+    const moveUpBase =(leadEl&&eyebrowEl)
       ? (leadEl.offsetTop-eyebrowEl.offsetTop)
       : Math.round(VH*.35);
 
@@ -3495,13 +3550,13 @@ function initScrollAnimations(){
 
     let cardW, hotW, leftEdge, hotLeft, cardTop, hotTop;
     if(isMobileAw){
-      // Mobile: both cards centred, hotline sits below stat card
+      // Mobile: cards centred via left:50%+xPercent:-50 (viewport-independent)
       cardW     = Math.round(VW * .88);
-      hotW      = Math.round(VW * .82);
-      leftEdge  = Math.round((VW - cardW) / 2);
-      hotLeft   = Math.round((VW - hotW)  / 2);
-      cardTop   = '38%';
-      hotTop    = '75%';
+      hotW      = Math.round(VW * .84);
+      leftEdge  = '50%';
+      hotLeft   = '50%';
+      cardTop   = '42%';
+      hotTop    = '80%';
     } else {
       // Desktop: side by side
       cardW     = Math.min(560, Math.round(VW*.44));
@@ -3513,8 +3568,9 @@ function initScrollAnimations(){
       hotTop    = '62%';
     }
 
-    cards.forEach(c=>gsap.set(c,{xPercent:0,yPercent:-50,left:leftEdge,top:cardTop,y:VH,width:cardW}));
-    if(hotlineEl) gsap.set(hotlineEl,{xPercent:0,yPercent:-50,left:hotLeft,right:'auto',top:hotTop,y:VH,opacity:0,width:hotW});
+    const xPct = isMobileAw ? -50 : 0;
+    cards.forEach(c=>gsap.set(c,{xPercent:xPct,yPercent:-50,left:leftEdge,top:cardTop,y:VH,width:cardW}));
+    if(hotlineEl) gsap.set(hotlineEl,{xPercent:xPct,yPercent:-50,left:hotLeft,right:'auto',top:hotTop,y:VH,opacity:0,width:hotW});
 
     // Desktop only: align hotline top edge to stat card top edge (heights may differ)
     if(!isMobileAw){
@@ -3536,6 +3592,11 @@ function initScrollAnimations(){
         scrub:true
       }
     });
+
+    // On mobile: push text fully off-screen so stat cards own the full viewport
+    const moveUp = isMobileAw
+      ? (textLayer.offsetHeight + Math.round(VH * 0.2))
+      : moveUpBase;
 
     // Text scrubs up (no fade) + card 0 + hotline rise simultaneously (0 → rise)
     tl.to(textLayer,  {y:-moveUp, ease:'none', duration:rise}, 0)
@@ -4285,11 +4346,10 @@ function initCrew(){
   const headerH = header.offsetHeight;
   const gap     = 24; // px between header bottom and card area top
 
-  // Position each row centred in the space below the header
+  // Position each row centred in the full viewport height
   rowEls.forEach(row => {
     const rowH   = row.offsetHeight;
-    const availH = VH - headerH - gap;
-    const topPos = headerH + gap + Math.max(0, (availH - rowH) / 2);
+    const topPos = Math.round(Math.max(headerH + gap, (VH - rowH) / 2));
     // top = landing position; y=VH pushes it below the viewport initially
     gsap.set(row, { top: topPos, y: VH });
   });
@@ -4462,6 +4522,23 @@ document.addEventListener('DOMContentLoaded',()=>{
   initTrailer();
   initLoading();
   document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+  // Float audio-toggle above footer when footer enters view
+  const footer=document.getElementById('site-footer');
+  const audioBtn=document.getElementById('audio-toggle');
+  if(footer&&audioBtn){
+    const obs=new IntersectionObserver(entries=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          audioBtn.style.bottom=(footer.offsetHeight+16)+'px';
+          audioBtn.style.transition='bottom .35s ease';
+        } else {
+          audioBtn.style.bottom='2rem';
+        }
+      });
+    },{threshold:0.01});
+    obs.observe(footer);
+  }
 });
 </script>
 </body>
