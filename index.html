@@ -749,13 +749,13 @@ nav.visible{opacity:1}
 }
 .dossier-name-si{
   font-family:'Gemunu Libre','Abhaya Libre','Noto Serif Sinhala',serif;
-  font-size:4rem;font-weight:800;color:var(--bone-white);
+  font-size:4.8rem;font-weight:800;color:var(--bone-white);
   margin-bottom:.3rem;line-height:1.2;
   width:100%;
 }
 .dossier-name-en{
   font-family:'Cormorant Garamond',serif;
-  font-size:1.5rem;font-style:italic;
+  font-size:1.8rem;font-style:italic;
   color:rgba(var(--char-rgb),.75);margin-bottom:1.2rem;
   width:100%;
 }
@@ -1575,8 +1575,24 @@ footer::before{
   font-size:.78rem;letter-spacing:.1em;color:rgba(237,232,227,.25);font-family:'Inter',sans-serif;
 }
 .footer-disclaimer{
-  font-size:.72rem;letter-spacing:.04em;color:rgba(237,232,227,.18);font-family:'Inter',sans-serif;
+  font-size:.72rem;letter-spacing:.04em;color:rgba(237,232,237,.18);font-family:'Inter',sans-serif;
   max-width:560px;line-height:1.7;
+}
+.footer-socials{
+  display:flex;align-items:center;gap:1.1rem;margin:.4rem 0 .2rem;
+}
+.footer-social-icon{
+  display:flex;align-items:center;justify-content:center;
+  width:36px;height:36px;border-radius:50%;
+  border:1px solid rgba(237,232,227,.18);
+  color:rgba(237,232,227,.45);
+  text-decoration:none;
+  transition:border-color .3s,color .3s,box-shadow .3s;
+}
+.footer-social-icon:hover{
+  border-color:rgba(196,132,154,.6);
+  color:var(--dusty-rose);
+  box-shadow:0 0 14px rgba(196,132,154,.2);
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -1882,15 +1898,15 @@ footer::before{
   }
   .dossier-photo-pane{
     width:100%;
-    height:clamp(300px,58vh,440px);
+    height:clamp(320px,62vh,460px);
     flex-shrink:0;
   }
   .dossier-photo-img{
     object-position:center bottom;
   }
-  .dossier-info-pane{padding:.8rem 1.2rem 1rem;}
-  .dossier-name-si{font-size:1.75rem;}
-  .dossier-name-en{font-size:.9rem;margin-bottom:.4rem;}
+  .dossier-info-pane{padding:1.2rem 1.4rem 1.4rem;min-height:110px;}
+  .dossier-name-si{font-size:2.4rem;}
+  .dossier-name-en{font-size:1.15rem;margin-bottom:.5rem;}
   .dossier-counter{top:1rem;right:1rem;}
 }
 
@@ -2132,7 +2148,7 @@ footer::before{
 
       <!-- Stat cards rise below the text -->
       <div class="aw-stack-card">
-        <span class="aw-card-idx">01 &nbsp;/&nbsp; 03</span>
+        <span class="aw-card-idx">01 &nbsp;/&nbsp; 05</span>
         <div class="aw-card-body">
           <div class="aw-card-left">
             <span class="aw-row-num" data-target="58" data-suffix="%">58%</span>
@@ -2140,39 +2156,73 @@ footer::before{
           </div>
           <div class="aw-card-sep"></div>
           <div class="aw-card-right">
-            <p class="aw-row-label">of Sri Lankan university students report experiencing cyberbullying in some form</p>
+            <p class="aw-row-label">of Sri Lankan university students report experiencing cyberbullying in some form — many incidents go unreported</p>
           </div>
         </div>
       </div>
 
       <div class="aw-stack-card">
-        <span class="aw-card-idx">02 &nbsp;/&nbsp; 03</span>
+        <span class="aw-card-idx">02 &nbsp;/&nbsp; 05</span>
         <div class="aw-card-body">
           <div class="aw-card-left">
-            <span class="aw-row-num">1 in 3</span>
+            <span class="aw-row-num" data-target="15" data-suffix="%">15%</span>
+            <div class="aw-data-bar" data-fill="15"></div>
+          </div>
+          <div class="aw-card-sep"></div>
+          <div class="aw-card-right">
+            <p class="aw-row-label">of young Sri Lankans aged 13–17 seriously considered suicide in the past year — cyberbullying is among the key contributing factors</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="aw-stack-card">
+        <span class="aw-card-idx">03 &nbsp;/&nbsp; 05</span>
+        <div class="aw-card-body">
+          <div class="aw-card-left">
+            <span class="aw-row-num">1 in 10</span>
             <div class="aw-fraction-dots">
               <span class="dot active"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
               <span class="dot"></span>
               <span class="dot"></span>
             </div>
           </div>
           <div class="aw-card-sep"></div>
           <div class="aw-card-right">
-            <p class="aw-row-label">young people in Sri Lanka say they would not tell anyone if they were being bullied online</p>
+            <p class="aw-row-label">Sri Lankan students aged 13–17 reported actually attempting suicide — rates are higher among girls than boys</p>
           </div>
         </div>
       </div>
 
       <div class="aw-stack-card">
-        <span class="aw-card-idx">03 &nbsp;/&nbsp; 03</span>
+        <span class="aw-card-idx">04 &nbsp;/&nbsp; 05</span>
         <div class="aw-card-body">
           <div class="aw-card-left">
-            <span class="aw-row-num" data-target="72" data-suffix="%">72%</span>
-            <div class="aw-data-bar" data-fill="72"></div>
+            <span class="aw-row-num" data-target="40" data-suffix="%">40%</span>
+            <div class="aw-data-bar" data-fill="40"></div>
           </div>
           <div class="aw-card-sep"></div>
           <div class="aw-card-right">
-            <p class="aw-row-label">of reported cybercrime victims in Sri Lanka are between the ages of 18 and 30</p>
+            <p class="aw-row-label">of all cybercrime victims in Sri Lanka are students between the ages of 15 and 21</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="aw-stack-card">
+        <span class="aw-card-idx">05 &nbsp;/&nbsp; 05</span>
+        <div class="aw-card-body">
+          <div class="aw-card-left">
+            <span class="aw-row-num">~2,000</span>
+          </div>
+          <div class="aw-card-sep"></div>
+          <div class="aw-card-right">
+            <p class="aw-row-label">cyberbullying incidents were officially reported in Sri Lanka in 2024 alone — nearly half involving sexual harassment online</p>
           </div>
         </div>
       </div>
@@ -2197,10 +2247,25 @@ footer::before{
       <img class="footer-title" src="movie title white.png" alt="Movie Title">
       <img class="footer-tagline" src="movie tagline.png" alt="Movie Tagline">
     </div>
-    <img class="footer-logo-right" src="ionik.png" alt="IONIK">
+    <a href="https://www.ionikcollectives.com/" target="_blank" rel="noopener noreferrer"><img class="footer-logo-right" src="ionik.png" alt="IONIK"></a>
   </div>
 
   <div class="footer-rule"></div>
+
+  <div class="footer-socials">
+    <a class="footer-social-icon" href="https://www.instagram.com/ceylonmotionpictures?igsh=cjFqbzQxNmcyaGU5&utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+        <circle cx="12" cy="12" r="4"/>
+        <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+      </svg>
+    </a>
+    <a class="footer-social-icon" href="https://www.facebook.com/share/14cEkmrCYBH/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+      </svg>
+    </a>
+  </div>
 
   <div class="footer-meta">
     <p class="footer-hotline-note">If you or someone you know is struggling — call <a href="tel:1926" class="footer-hotline-link">1926</a> · Sri Lanka Suicide Prevention Hotline</p>
@@ -2305,7 +2370,7 @@ const CHARACTERS = [
   },
   {
     id:'kavya-amma',evNo:'SUBJECT-07',
-    nameSi:'කාව්‍යා අම්මා',nameEn:"Kavya's Mother",
+    nameSi:'විශාකා',nameEn:'Vishaka',
     image:'Characters/opt/kavya-amma.jpg',
     age:53,
     publicFace:'උඩරට ජාතිකත්වයෙන්. She raised her daughters with quiet sacrifice and no complaint. ඇය සෑම දිනම රෑ ඇවිළෙන ලාම්පපු දල්වනවා. She still does. She is waiting for a call that will not come.',
@@ -2317,7 +2382,7 @@ const CHARACTERS = [
   },
   {
     id:'kavya-thaththa',evNo:'SUBJECT-08',
-    nameSi:'කාව්‍යා තාත්තා',nameEn:"Kavya's Father",
+    nameSi:'මහින්ද',nameEn:'Mahinda',
     image:'Characters/opt/kavya-thaththa.jpg',
     age:57,
     publicFace:'A quiet man. ඔහු කතා කරන්නේ ඉතා අඩුවෙන් — නමුත් ඔහු කියන සෑම දෙයකම අදහස් ඇත. He carried his family through difficult seasons with a stillness others mistook for strength. He did not see it coming. That is what stays with him.',
@@ -3589,7 +3654,7 @@ function initScrollAnimations(){
         trigger:scene,
         start:'top top',
         end:`+=${totalScroll}`,
-        scrub:true
+        scrub:2.2
       }
     });
 
@@ -4043,7 +4108,10 @@ function initCharacters(){
     '70,80,118',    // Kavya's Father — navy grey
   ];
 
-  const CW=Math.min(820,window.innerWidth*.90);
+  const isMobileCard=window.innerWidth<600;
+  const CW=isMobileCard
+    ? Math.min(380,Math.round(window.innerWidth*.93))
+    : Math.min(820,Math.round(window.innerWidth*.90));
   const CH=Math.min(500,window.innerHeight*.72);
 
   const cardSlot=Math.round(window.innerHeight*.9);
