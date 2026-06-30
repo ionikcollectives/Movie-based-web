@@ -1107,6 +1107,8 @@ nav.visible{opacity:1}
   padding-right:3rem;
   text-align:right;
   min-width:200px;
+  max-width:240px;
+  overflow:visible;
 }
 .aw-card-sep{
   width:1px;
@@ -1124,7 +1126,7 @@ nav.visible{opacity:1}
 .aw-row-num{
   display:block;
   font-family:'Inter',sans-serif;
-  font-size:clamp(3rem,5.8vw,5rem);
+  font-size:clamp(2.6rem,4.5vw,4.2rem);
   font-weight:800;
   color:rgba(237,232,227,.96);
   line-height:1;
@@ -2219,6 +2221,7 @@ footer::before{
         <div class="aw-card-body">
           <div class="aw-card-left">
             <span class="aw-row-num">~2,000</span>
+            <div class="aw-data-bar" data-fill="100"></div>
           </div>
           <div class="aw-card-sep"></div>
           <div class="aw-card-right">
