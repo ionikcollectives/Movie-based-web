@@ -1,0 +1,8 @@
+# Raw camera-original photos — kept locally for re-export, never committed.
+# Only the optimized derivatives in Gallery/opt/ and Gallery/Marquee/opt/ ship to the site.
+/Gallery/*.jpg
+/Gallery/*.jpeg
+/Gallery/Marquee/*.jpg
+/Gallery/Marquee/*.jpeg
+!/Gallery/opt/
+!/Gallery/Marquee/opt/
